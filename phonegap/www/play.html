@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+      <title>GOthello</title>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+      <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+      <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+      <link rel="stylesheet" href="css/play.css">
+      <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+      <script>
+      $(document).bind("mobileinit",function(){
+        $.mobile.changePage.defaults.changeHash = false;
+        $.mobile.hashListeningEnabled = false;
+        $.mobile.pushStateEnabled = false;
+      });
+      </script>
+      <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+  </head>
+  <body>
+    <div data-role="page" id="home">
+      <div data-role="header">
+        <h3>GOthello!</h3>
+      </div>
+      <div data-role="content">
+        <div class="scroll_wrapper ui-content" data-isscroll>
+          <ul data-role="listview" id="home_menu" data-theme="a">
+            <li><a href="#board" data-transition="flip">Single Player</a></li>
+            <li><a href="#board" data-transition="flip">Multiplayer</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div data-role="page" id="board">
+      <div class="board-file a">
+        <div class="board-rank 1"></div>
+        <div class="board-rank 2"></div>
+        <div class="board-rank 3"></div>
+        <div class="board-rank 4"></div>
+        <div class="board-rank 5"></div>
+        <div class="board-rank 6"></div>
+        <div class="board-rank 7"></div>
+      </div>
+      <div class="board-file b"></div>
+      <div class="board-file c"></div>
+      <div class="board-file d"></div>
+      <div class="board-file e"></div>
+      <div class="board-file f"></div>
+      <div class="board-file g"></div>
+    </div>
+  </body>
+</html>
