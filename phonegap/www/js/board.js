@@ -56,6 +56,14 @@ var GT.Board = function(wdt, hgt) {
 }
 
 /**
+ * Return the board's tiles
+ * @return {Array<Array<Tile>>} The board's tiles
+ */
+GT.Board.prototype.tiles = function() {
+	return this._tiles;
+}
+
+/**
  * Return the board's width
  * @return {int} The board's width
  */
