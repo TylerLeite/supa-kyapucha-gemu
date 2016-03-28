@@ -227,10 +227,3 @@ GT.Board.prototype.place = function(x, y, turn) {
 
 	return true;
 }
-
-/**
- * Render the board
- */
-GT.Board.prototype.draw = function() {
-	return;
-}
