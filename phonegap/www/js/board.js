@@ -5,9 +5,9 @@ if (GT == null || typeof(GT) != "object") { var GT = new Object();}
  */
 GT.Tile = {
     UNDEFINED : 0,
-	EMPTY: 1,
-    PLAYER1: 2,
-    PLAYER2: 3
+	EMPTY: 3,
+    PLAYER1: 1,
+    PLAYER2: 2
 }
 
 /**
@@ -25,6 +25,11 @@ GT.validTile = function(tile) {
 	return false;
 }
 
+/**
+ * Check whether a tile is a valid choice
+ * @param {Tile} tile The current turn
+ * @return {Tile} Whose turn it must be by process of elimination
+ */
 GT.oppTurn = function(turn) {
 	if (turn == Tile.PLAYER1) {
 		return Tile.PLAYER2;
