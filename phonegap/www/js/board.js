@@ -1,14 +1,14 @@
-if (GT == null || typeof(GT) != "object") { var GT = new Object();}
+if (GT === null || typeof(GT) != "object") { var GT = new Object();}
 
 /**
  * Tile enumeration
  */
 GT.Tile = {
     UNDEFINED : 0,
-	EMPTY: 3,
+	  EMPTY: 3,
     PLAYER1: 1,
     PLAYER2: 2
-}
+};
 
 /**
  * Check whether a tile is a valid choice
@@ -16,14 +16,14 @@ GT.Tile = {
  * @return {boolean} Whether the tile is valid
  */
 GT.validTile = function(tile) {
-	for (t : GT.Tile) {
+	for (var t in GT.Tile) {
 		if (t == tile) {
 			return true;
 		}
 	}
 
 	return false;
-}
+};
 
 /**
  * Check whether a tile is a valid choice
@@ -38,7 +38,7 @@ GT.oppTurn = function(turn) {
 	} else {
 		return Tile.UNDEFINED;
 	}
-}
+};
 
 /**
  * @constructor
@@ -47,13 +47,13 @@ var GT.Board = function(wdt, hgt) {
 	this._width = wdt;
 	this._height = hgt;
 
-	this._tiles = new Array(height);
-	for (var i = 0; i < height; i++) {
-		this._tiles[i] = new Array(width);
+	this._tiles = new Array(hgt);
+	for (var i = 0; i < hgt; i++) {
+		this._tiles[i] = new Array(wdt);
 	}
 
-	this.reset();
-}
+	this.Board.reset();
+};
 
 /**
  * Return the board's tiles
@@ -61,7 +61,7 @@ var GT.Board = function(wdt, hgt) {
  */
 GT.Board.prototype.tiles = function() {
 	return this._tiles;
-}
+};
 
 /**
  * Return the board's width
@@ -69,7 +69,7 @@ GT.Board.prototype.tiles = function() {
  */
 GT.Board.prototype.wdt = function() {
 	return this._width;
-}
+};
 
 /**
  * Return the board's height
@@ -77,20 +77,20 @@ GT.Board.prototype.wdt = function() {
  */
 GT.Board.prototype.hgt = function() {
 	return this._height;
-}
+};
 
 /**
  * Clear the board, setting all times to be empty
  */
 GT.Board.prototype.reset = function() {
 	for (var y = 0; y < this.hgt(); y++) {
-		for var x = 0; x < this.wdt(); x++) {
+		for (var x = 0; x < this.wdt(); x++) {
 			this._tiles[y][x] = GT.Tile.EMPTY;
 		}
 	}
 
 	this.emptySquares = this.hgt() * this.wdt();
-}
+};
 
 /**
  * Return whether the (x, y) is a valid position on the board
@@ -98,7 +98,7 @@ GT.Board.prototype.reset = function() {
  * @param {int} y Y position to check
  * @return {boolean} Whether the position falls within the board's boundaries
  */
-GT.Board.prototype.inBounds(x, y) {
+GT.Board.prototype.inBounds = function(x, y) {
 	if (x >= this.width || x < 0) {
 		return false;
 	} else if (y >= this.height || y < 0) {
@@ -106,7 +106,7 @@ GT.Board.prototype.inBounds(x, y) {
 	} else {
 		return true;
 	}
-}
+};
 
 /**
  * Set the tile at (x, y)
@@ -122,7 +122,7 @@ GT.Board.prototype.set = function(x, y, tile) {
 		this._tiles[y][x] = tile;
 		return true;
 	}
-}
+};
 
 /**
  * Get a tile from the position (x, y) on the board
@@ -136,7 +136,7 @@ GT.Board.prototype.get = function(x, y) {
 	} else {
 		return this._tiles[y][x];
 	}
-}
+};
 
 /**
  * Find the most dominant tile
@@ -146,8 +146,8 @@ GT.Board.prototype.get = function(x, y) {
 GT.Board.prototype.dominance = function() {
 	// Find counts of each player's tile
 	var cts = [0, 0];
-	for (var row : this._tiles) {
-		for (var tile : row) {
+	for (var row in this._tiles) {
+		for (var tile in row) {
 			if (tile == GT.Tile.PLAYER1) {
 				cts[0] += 1;
 			} else if (tile == GT.Tile.PLAYER2) {
@@ -164,7 +164,7 @@ GT.Board.prototype.dominance = function() {
 	} else {
 		return GT.tile.EMPTY;
 	}
-}
+};
 
 /**
  * Checks if a move will cause a capture in a given direction, perform any captures
@@ -195,7 +195,7 @@ GT.Board.prototype.checkReversi = function(sx, sy, xdir, ydir, turn) {
 			return false;
 		}
 	}
-}
+};
 
 /**
  * Attempt to place a piece on the given tile
@@ -226,4 +226,4 @@ GT.Board.prototype.place = function(x, y, turn) {
 	}
 
 	return true;
-}
+};
