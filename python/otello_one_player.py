@@ -9,30 +9,30 @@ class Game():
 		self.input = logic.Input()
 		self.output = logic.Output()
 		self.ai = ai.BeginnerAI()
-		
+
 	def setup_ai(self):
 		self.ai.OT_set_side('O')
 		self.ai.OT_set_dimensions(self.board.wdt, self.board.hgt)
-		
+
 	def run(self):
 		self.output.welcome()
 		self.setup_ai()
 		while (self.running):
 			self.game()
-		
+
 	def gamestate(self):
 		gs = []
 		for y in self.board.board:
 			for x in y:
 				gs.append(x)
 		return gs
-		
+
 	def game(self):
 		#randomly make player X or O
-	
+
 		self.output.to_move(self.turn)
 		self.board.draw()
-		
+
 		if self.board.full():
 			x_ct, o_ct = self.board.dominance()
 			if x_ct > o_ct:
@@ -44,7 +44,7 @@ class Game():
 			self.board.reset()
 			self.turn = 'X'
 			return
-			
+
 		legal_move = False
 		while not legal_move:
 			action = ''
@@ -54,7 +54,7 @@ class Game():
 			else:
 				self.ai.OT_update_board(self.gamestate())
 				action = self.ai.OT_get_move().lower()
-			
+
 			if action == 'f':
 				self.output.player_forfeit(self.turn)
 				self.board.reset()
@@ -71,10 +71,10 @@ class Game():
 							self.turn = "O"
 						else:
 							self.turn = "X"
-				
+
 				if not legal_move:
 					self.output.illegal_move()
-					
-if __name__ == "__main__":				
+
+if __name__ == "__main__":
 	g = Game()
 	g.run()

@@ -43,7 +43,7 @@ GT.oppTurn = function(turn) {
 /**
  * @constructor
  */
-var GT.Board = function(wdt, hgt) {
+GT.Board = function(wdt, hgt) {
 	this._width = wdt;
 	this._height = hgt;
 
