@@ -32,37 +32,71 @@
       </div>
     </div>
     <div data-role="page" id="board">
+      <center>
+        <div class="game-board">
+
+        </div>
+      </center>
     </div>
   </body>
   <script>
+    /*
+    * This function returns the next character in the alphabet
+    */
     function nextChar(c) {
       return String.fromCharCode(c.charCodeAt(0) + 1);
     }
+
     $(".single").click(function(){
     });
+
+    /*
+    * Initialize the board (should eventually look for a configuration file
+    * instead of just hard coding the size)
+    */
     var s_board = new GT.Board(7,7);
     var s_array = s_board.tiles();
-    file_wdt = (1/s_board.wdt())*100;
-    rank_hgt = (1/s_board.hgt())*100;
+
+    /*
+    * Calculate the maximum height and width of each square, then take the
+    * smaller of the two and use that as the square size. Minus 20 takes into
+    * account the padding used.
+    */
+    var file_wdt = (1/s_board.wdt())*($(window).width()-20);
+    var rank_hgt = (1/s_board.hgt())*($(window).height()-20);
     if (file_wdt <= rank_hgt){
       rank_hgt = file_wdt;
     }
     else{
       file_wdt = rank_hgt;
     }
-    console.log(file_wdt);
+
+    /*
+    * For the width of the board, add file columns
+    */
     var letter = 'a';
     for (var i = 0; i < s_board.wdt(); i++){
-      $('#board').append('<div class="board-file '+letter+'"></div>');
+      $('.game-board').append('<div class="board-file '+letter+'"></div>');
       letter = nextChar(letter);
     }
+
+    /*
+    * In each file column, for the height of the board, add rank squares
+    */
     $('.board-file').each(function(){
       number = 1;
       for (var i = 0; i < s_board.hgt(); i++){
         $(this).append('<div class="board-rank '+number+'"></div>');
         number+=1;
       }
-      console.log(this);
     });
+
+    /*
+    * Change the height and width of the columns and rows to fit the screen
+    * minus 20 takes into account 10 px of padding on top and bottom
+    */
+    $('.board-file').css("width",file_wdt.toString());
+    $('.board-file').css("height",($(window).height()-20).toString());
+    $('.board-rank').css("height",rank_hgt.toString());
   </script>
 </html>
