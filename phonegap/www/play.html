@@ -25,30 +25,44 @@
       <div data-role="content">
         <div class="scroll_wrapper ui-content" data-isscroll>
           <ul data-role="listview" id="home_menu" data-theme="a">
-            <li><a href="#board" data-transition="flip">Single Player</a></li>
-            <li><a href="#board" data-transition="flip">Multiplayer</a></li>
+            <li><a class="single" href="#board" data-transition="flip">Single Player</a></li>
+            <li><a class="double" href="#board" data-transition="flip">Multiplayer</a></li>
           </ul>
         </div>
       </div>
     </div>
     <div data-role="page" id="board">
-      <div class="board-file a">
-        <div class="board-rank 1"></div>
-        <div class="board-rank 2"></div>
-        <div class="board-rank 3"></div>
-        <div class="board-rank 4"></div>
-        <div class="board-rank 5"></div>
-        <div class="board-rank 6"></div>
-        <div class="board-rank 7"></div>
-      </div>
-      <div class="board-file b"></div>
-      <div class="board-file c"></div>
-      <div class="board-file d"></div>
-      <div class="board-file e"></div>
-      <div class="board-file f"></div>
-      <div class="board-file g"></div>
     </div>
   </body>
   <script>
+    function nextChar(c) {
+      return String.fromCharCode(c.charCodeAt(0) + 1);
+    }
+    $(".single").click(function(){
+    });
+    var s_board = new GT.Board(7,7);
+    var s_array = s_board.tiles();
+    file_wdt = (1/s_board.wdt())*100;
+    rank_hgt = (1/s_board.hgt())*100;
+    if (file_wdt <= rank_hgt){
+      rank_hgt = file_wdt;
+    }
+    else{
+      file_wdt = rank_hgt;
+    }
+    console.log(file_wdt);
+    var letter = 'a';
+    for (var i = 0; i < s_board.wdt(); i++){
+      $('#board').append('<div class="board-file '+letter+'"></div>');
+      letter = nextChar(letter);
+    }
+    $('.board-file').each(function(){
+      number = 1;
+      for (var i = 0; i < s_board.hgt(); i++){
+        $(this).append('<div class="board-rank '+number+'"></div>');
+        number+=1;
+      }
+      console.log(this);
+    });
   </script>
 </html>

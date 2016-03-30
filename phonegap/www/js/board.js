@@ -52,7 +52,7 @@ GT.Board = function(wdt, hgt) {
 		this._tiles[i] = new Array(wdt);
 	}
 
-	this.Board.reset();
+	this.reset();
 };
 
 /**
