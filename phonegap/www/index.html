@@ -78,7 +78,7 @@
 		var fileWdt = (1/sBoard.wdt()) * ($(window).width() - 20);
 		var rankHgt = (1/sBoard.hgt()) * ($(window).height() - 20);
 
-		if (fileWdt <= rankHgt) {
+		if (fileWdt <= rankHgt){
 			rankHgt = fileWdt;
 		} else{
 			fileWdt = rankHgt;
@@ -88,7 +88,7 @@
 		* For the width of the board, add file columns
 		*/
 		var letter = 'a';
-		for (var i = 0; i < sBoard.wdt(); i++) {
+		for (var i = 0; i < sBoard.wdt(); i++){
 			$('.game-board').append('<div class="board-file ' + letter + '"></div>');
 			letter = nextChar(letter);
 		}
@@ -98,7 +98,7 @@
 		*/
 		$('.board-file').each(function() {
 			number = sBoard.hgt();
-			for (var i = 0; i < sBoard.hgt(); i++) {
+			for (var i = 0; i < sBoard.hgt(); i++){
 				$(this).append('<div class="board-rank ' + number + '"></div>');
 				number -= 1;
 			}
@@ -116,12 +116,12 @@
 		* Updates the UI to display the current layout
 		*/
 		function updateBoard() {
-			for (var y = 0; y < sBoard.hgt(); y++) {
-				for (var x = 0; x < sBoard.wdt(); x++) {
+			for (var y = 0; y < sBoard.hgt(); y++){
+				for (var x = 0; x < sBoard.wdt(); x++){
 					var file = '.' + String.fromCharCode(97+x);
 					var rank = '.' + (y+1).toString();
 
-					if (sArray[y][x] != (maxTurn + 1)) {
+					if (sArray[y][x] != (maxTurn + 1)){
 						var player = "player"+sArray[y][x].toString();
 						$(file).children(rank).children().attr("class", player);
 					} else {
@@ -144,14 +144,14 @@
 		* tile and updates the board, then checks if all tiles have been filled
 		* and if so declares a winner.
 		*/
-		$(".board-rank").click(function(){
+		$(".board-rank").click(function() {
 			var file = $(this).parent().attr('class').slice(-1).charCodeAt(0) - 97;
 			var rank = parseInt($(this).attr('class').slice(-1)) - 1;
 
-			if (sBoard.place(file, rank, turn)) {
+			if (sBoard.place(file, rank, turn)){
 				$(this).append('<div class="player'+turn.toString()+'"></div>');
 				$(this).css("opacity",(1.0).toString());
-				if (turn === maxTurn) {
+				if (turn === maxTurn){
 					turn = 1;
 				} else {
 					turn += 1;
@@ -162,19 +162,19 @@
 
 				updateBoard();
 
-				if (sBoard.emp() === 0) {
+				if (sBoard.emp() === 0){
 					var dom = sBoard.dominance();
 					var winner = dom[0].toString();
 					var p1 = dom[1].toString();
 					var p2 = dom[2].toString();
 
-					if (p2 > p1) {
+					if (p2 > p1){
 						var temp = p2;
 						p2 = p1;
 						p1 = temp;
 					}
 
-					if (winner <= maxTurn) {
+					if (winner <= maxTurn){
 						alert("Player " + winner + " wins! " + p1 + " to " + p2);
 					} else {
 						alert("It's a tie!");
