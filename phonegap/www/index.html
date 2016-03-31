@@ -40,6 +40,12 @@
 			</center>
 			<a class="back-btn ui-btn ui-icon-back ui-btn-icon-left" href="#home">BACK</a>
 			<a class="settings-btn ui-btn ui-icon-gear ui-btn-icon-left">SETTINGS</a>
+			<div class="alert">
+				<center>
+					<div class="alert-message"></div>
+					<div class="ok-btn">OK</div>
+				</center>
+			</div>
 		</div>
 	</body>
 	<script>
@@ -53,10 +59,18 @@
 		var turn = 1;
 		var maxTurn = 2;
 		var single = false;
-
+		$('.alert').hide();
 		$(".single").click(function(){single = true;});
 		$(".double").click(function(){single = false;});
 		$(".back").click(function(){sBoard.reset(); updateBoard(); turn = 1;})
+		$('.ok-btn').click(function(){
+			sBoard.reset();
+			updateBoard();
+			if (single === true && turn === 2){
+				aiMove();
+			}
+			$('.alert').hide();
+		});
 
 		/*
 		* Initialize the board (should eventually look for a configuration file
@@ -159,7 +173,7 @@
 		* tile and updates the board, then checks if all tiles have been filled
 		* and if so declares a winner.
 		*/
-		$(".board-rank").click(function() {
+		function addTile() {
 			var file = $(this).parent().attr('class').slice(-1).charCodeAt(0) - 97;
 			var rank = parseInt($(this).attr('class').slice(-1)) - 1;
 
@@ -173,7 +187,9 @@
 				} else {
 					turn += 1;
 					if (single === true && sBoard.emp() > 0){
+						$('.board-rank').off('click',addTile);
 						setTimeout(function(){
+							$(".board-rank").on('click',addTile);
   						aiMove();
 						}, 1000);
 					}
@@ -194,19 +210,14 @@
 					}
 
 					if (winner <= maxTurn){
-						alert("Player " + winner + " wins! " + p1 + " to " + p2);
+						$('.alert-message').text("Player " + winner + " wins! (" + p1 + " to " + p2 +")");
 					} else {
-						alert("It's a tie!");
+						$('.alert-message').text("It's a tie!");
 					}
-
-					sBoard.reset();
-					updateBoard();
-
-					if (single === true && turn === 2){
-						aiMove();
-					}
+					$('.alert').show();
 				}
 			}
-		});
+		}
+		$(".board-rank").on('click',addTile);
 	</script>
 </html>
