@@ -25,6 +25,7 @@ body{
   border-color:grey;
   border-width:2px;
   box-sizing:border-box;
+  perspective:1000;
 }
 .back{
   position:fixed;

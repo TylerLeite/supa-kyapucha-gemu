@@ -59,7 +59,7 @@
     * Initialize the board (should eventually look for a configuration file
     * instead of just hard coding the size)
     */
-    var s_board = new GT.Board(7,7);
+    var s_board = new GT.Board(3,3);
     var s_array = s_board.tiles();
 
     /*
@@ -137,7 +137,9 @@
         var rank = parseInt($(this).attr('class').slice(-1))-1
 
         if (s_board.place(file,rank,turn)){
-          $(this).append('<div class="player'+turn.toString()+'"></div>')
+          var sidea = '<div class="player'+turn.toString()+'">'
+          var sideb = '<div class="player'+turn.toString()+'">'
+          $(this).append('<div class="flip">'+sidea+sideb+'</div>')
           $(this).css("opacity",(1.0).toString());
           if (turn === max_turn){
             turn = 1
