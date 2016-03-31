@@ -4,10 +4,10 @@ if (GT === null || typeof(GT) != "object") { var GT = new Object();}
  * Tile enumeration
  */
 GT.Tile = {
-    UNDEFINED : 0,
-    EMPTY: 3,
-    PLAYER1: 1,
-    PLAYER2: 2
+	UNDEFINED : 0,
+	EMPTY: 3,
+	PLAYER1: 1,
+	PLAYER2: 2
 };
 
 /**
@@ -175,7 +175,7 @@ GT.Board.prototype.dominance = function() {
 			if (this._tiles[y][x] == GT.Tile.PLAYER1) {
 				cts[0] += 1;
 			} else if (this._tiles[y][x] == GT.Tile.PLAYER2) {
-				cts[1] += 2;
+				cts[1] += 1;
 			}
 		}
 	}
