@@ -92,15 +92,15 @@ GT.Board.prototype.emp = function() {
  * @return {array<String>} All empty squares in 'XY' format
  */
 GT.Board.prototype.getEmptySquares = function() {
-    var out = [];
-    for (var j = 0; j < this._height; j++) {
-        for (var i = 0; i < this._width; i++) {
-            if (this._tiles[j][i] === GT.Tile.EMPTY) {
-                out.push(i.toString() + j.toString());
-            }
-        }
-    }
-    return out;
+	var out = [];
+	for (var j = 0; j < this._height; j++) {
+		for (var i = 0; i < this._width; i++) {
+			if (this._tiles[j][i] === GT.Tile.EMPTY) {
+				out.push(i.toString() + j.toString());
+			}
+		}
+	}
+	return out;
 };
 
 /**
@@ -179,7 +179,7 @@ GT.Board.prototype.dominance = function() {
 			}
 		}
 	}
-  console.log(cts[0],cts[1]);
+
 	// See which is bigger
 	if (cts[0] > cts[1]) {
 		return GT.Tile.PLAYER1;
