@@ -154,7 +154,7 @@
               turn = 1;
             } else {
               turn += 1;
-              if (single === true){
+              if (single === true && sBoard.emp() > 0){
                 aiMove();
               }
             }
@@ -168,9 +168,11 @@
                 } else {
                   alert("It's a tie!");
                 }
-
                 sBoard.reset();
                 updateBoard();
+                if (single === true && turn === 2){
+                  aiMove();
+                }
             }
         }
     });
