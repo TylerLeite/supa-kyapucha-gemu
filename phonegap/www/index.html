@@ -38,8 +38,8 @@
 
 				</div>
 			</center>
-			<a class="back ui-btn ui-icon-back ui-btn-icon-left" href="#home">BACK</a>
-			<a class="settings ui-btn ui-icon-gear ui-btn-icon-left">SETTINGS</a>
+			<a class="back-btn ui-btn ui-icon-back ui-btn-icon-left" href="#home">BACK</a>
+			<a class="settings-btn ui-btn ui-icon-gear ui-btn-icon-left">SETTINGS</a>
 		</div>
 	</body>
 	<script>
@@ -123,15 +123,30 @@
 
 					if (sArray[y][x] != (maxTurn + 1)){
 						var player = "player"+sArray[y][x].toString();
-						$(file).children(rank).children().attr("class", player);
-					} else {
-						$(file).children(rank).children().remove();
-						$(file).children(rank).css("opacity",0.6.toString());
+						var front = $(file).children(rank).find(".front");
+						var back = $(file).children(rank).find(".back");
+						var disc = $(file).children(rank).children('.disc');
+						if (disc.attr("class").indexOf("flipped") <= -1){
+							console.log(x,y);
+							if (front.attr("class").indexOf(player) <= -1){
+								player = player + " back";
+								back.attr("class", player);
+								disc.toggleClass("flipped");
+							}
+						} else {
+							if (back.attr("class").indexOf(player) <= -1){
+								player = player + " front";
+								front.attr("class", player);
+								disc.toggleClass("flipped");
+							}
+						}
+					}	else {
+								$(file).children(rank).children().remove();
+								$(file).children(rank).css("opacity",0.6.toString());
 					}
 				}
 			}
 		}
-
 		var aiMove = function() {
 			var mv = randoBot.makeMove();
 			var file = '.' + String.fromCharCode(97+mv[0]);
@@ -149,14 +164,18 @@
 			var rank = parseInt($(this).attr('class').slice(-1)) - 1;
 
 			if (sBoard.place(file, rank, turn)){
-				$(this).append('<div class="player'+turn.toString()+'"></div>');
+				var front = '<div class="player'+turn.toString()+' front"></div>';
+				var back = '<div class="player'+turn.toString()+' back"></div>';
+				$(this).append('<div class="disc">'+front+back+'</div>');
 				$(this).css("opacity",(1.0).toString());
 				if (turn === maxTurn){
 					turn = 1;
 				} else {
 					turn += 1;
 					if (single === true && sBoard.emp() > 0){
-						aiMove();
+						setTimeout(function(){
+  						aiMove();
+						}, 1000);
 					}
 				}
 
