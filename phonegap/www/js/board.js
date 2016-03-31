@@ -17,7 +17,7 @@ GT.Tile = {
  */
 GT.validTile = function(tile) {
 	for (var t in GT.Tile) {
-		if (t == tile) {
+		if (GT.Tile[t] == tile) {
 			return true;
 		}
 	}
@@ -31,12 +31,12 @@ GT.validTile = function(tile) {
  * @return {Tile} Whose turn it must be by process of elimination
  */
 GT.oppTurn = function(turn) {
-	if (turn == Tile.PLAYER1) {
-		return Tile.PLAYER2;
-	} else if (turn == Tile.PLAYER2) {
-		return Tile.PLAYER1;
+	if (turn == GT.Tile.PLAYER1) {
+		return GT.Tile.PLAYER2;
+	} else if (turn == GT.Tile.PLAYER2) {
+		return GT.Tile.PLAYER1;
 	} else {
-		return Tile.UNDEFINED;
+		return GT.Tile.UNDEFINED;
 	}
 };
 
@@ -80,6 +80,14 @@ GT.Board.prototype.hgt = function() {
 };
 
 /**
+ * Return the number of empty squares
+ * @return {int} empty squares
+ */
+GT.Board.prototype.emp = function() {
+	return this.emptySquares;
+};
+
+/**
  * Clear the board, setting all times to be empty
  */
 GT.Board.prototype.reset = function() {
@@ -99,9 +107,9 @@ GT.Board.prototype.reset = function() {
  * @return {boolean} Whether the position falls within the board's boundaries
  */
 GT.Board.prototype.inBounds = function(x, y) {
-	if (x >= this.width || x < 0) {
+	if (x >= this._width || x < 0) {
 		return false;
-	} else if (y >= this.height || y < 0) {
+	} else if (y >= this._height || y < 0) {
 		return false;
 	} else {
 		return true;
@@ -146,23 +154,23 @@ GT.Board.prototype.get = function(x, y) {
 GT.Board.prototype.dominance = function() {
 	// Find counts of each player's tile
 	var cts = [0, 0];
-	for (var row in this._tiles) {
-		for (var tile in row) {
-			if (tile == GT.Tile.PLAYER1) {
+	for (var y = 0; y < this._height; y++) {
+		for (var x = 0; x < this._width; x++) {
+			if (this._tiles[y][x] == GT.Tile.PLAYER1) {
 				cts[0] += 1;
-			} else if (tile == GT.Tile.PLAYER2) {
+			} else if (this._tiles[y][x] == GT.Tile.PLAYER2) {
 				cts[1] += 2;
 			}
 		}
 	}
-
+  console.log(cts[0],cts[1]);
 	// See which is bigger
 	if (cts[0] > cts[1]) {
 		return GT.Tile.PLAYER1;
 	} else if (cts[1] > cts[0]){
 		return GT.Tile.PLAYER2;
 	} else {
-		return GT.tile.EMPTY;
+		return GT.Tile.EMPTY;
 	}
 };
 
@@ -180,14 +188,14 @@ GT.Board.prototype.checkReversi = function(sx, sy, xdir, ydir, turn) {
 	var nx = sx + xdir;
 	var ny = sy + ydir;
 
-	if (!GT.tileValid(turn) || !this.inBounds(nx, ny)) {
+	if (!GT.validTile(turn) || !this.inBounds(nx, ny)) {
 		return false;
 	} else if (this.get(nx, ny) == GT.Tile.EMPTY) {
 		return false;
 	} else if (this.get(nx, ny) == turn) {
 		this.set(sx, sy, turn); // Comment this out if just checking
 		return true;
-	} else if (this.get(nx, ny) == Gt.oppTurn(turn)) {
+	} else if (this.get(nx, ny) == GT.oppTurn(turn)) {
 		if (this.checkReversi(nx, ny, xdir, ydir, turn)) {
 			this.set(sx, sy, turn) // Comment this out if just checking
 			return true;
@@ -205,9 +213,9 @@ GT.Board.prototype.checkReversi = function(sx, sy, xdir, ydir, turn) {
  * @return {boolean} Whether the tile was successfully placed
  */
 GT.Board.prototype.place = function(x, y, turn) {
-	if (!GT.tileValid(turn)) {
+	if (!GT.validTile(turn)) {
 		return false;
-	} else if (!this.inBounds(x, y) ||  !this.get(x, y) == Tile.EMPTY) {
+	} else if (!this.inBounds(x, y) ||  this.get(x, y) != GT.Tile.EMPTY) {
 		return false;
 	}
 

@@ -37,6 +37,8 @@
 
         </div>
       </center>
+      <a class="back ui-btn ui-icon-back ui-btn-icon-left" href="#home">BACK</a>
+      <a class="settings ui-btn ui-icon-gear ui-btn-icon-left">SETTINGS</a>
     </div>
   </body>
   <script>
@@ -46,6 +48,9 @@
     function nextChar(c) {
       return String.fromCharCode(c.charCodeAt(0) + 1);
     }
+
+    turn = 1;
+    max_turn = 2;
 
     $(".single").click(function(){
     });
@@ -84,10 +89,10 @@
     * In each file column, for the height of the board, add rank squares
     */
     $('.board-file').each(function(){
-      number = 1;
+      number = s_board.hgt();
       for (var i = 0; i < s_board.hgt(); i++){
         $(this).append('<div class="board-rank '+number+'"></div>');
-        number+=1;
+        number-=1;
       }
     });
 
@@ -95,8 +100,67 @@
     * Change the height and width of the columns and rows to fit the screen
     * minus 20 takes into account 10 px of padding on top and bottom
     */
-    $('.board-file').css("width",file_wdt.toString());
+    $('.board-file').css("width",Math.floor(file_wdt).toString());
     $('.board-file').css("height",($(window).height()-20).toString());
-    $('.board-rank').css("height",rank_hgt.toString());
+    $('.board-rank').css("height",Math.floor(rank_hgt).toString());
+
+    /*
+    * Updates the UI to display the current layout
+    */
+    function updateBoard() {
+      for(var y = 0; y < s_board.hgt(); y++){
+        for (var x = 0; x < s_board.wdt(); x++){
+
+          var file = '.'+String.fromCharCode(97+x)
+          var rank = '.'+(y+1).toString()
+
+          if (s_array[y][x] != (max_turn + 1)){
+            var player = "player"+s_array[y][x].toString()
+            $(file).children(rank).children().attr("class", player)
+          }
+
+          else{
+            $(file).children(rank).children().remove();
+            $(file).children(rank).css("opacity",0.6.toString())
+          }
+        }
+      }
+    }
+
+    /*
+    * Handles when a tile is clicked, first checks if valid, then changes the
+    * tile and updates the board, then checks if all tiles have been filled
+    * and if so declares a winner.
+    */
+    $(".board-rank").click(function(){
+        var file = $(this).parent().attr('class').slice(-1).charCodeAt(0)-97
+        var rank = parseInt($(this).attr('class').slice(-1))-1
+
+        if (s_board.place(file,rank,turn)){
+          $(this).append('<div class="player'+turn.toString()+'"></div>')
+          $(this).css("opacity",(1.0).toString());
+          if (turn === max_turn){
+            turn = 1
+          }
+          else {
+            turn += 1
+          }
+          updateBoard();
+
+          if (s_board.emp() === 0){
+            var winner = s_board.dominance();
+
+            if (winner<=max_turn){
+              alert("Player "+winner+" wins!");
+            }
+
+            else{
+              alert("It's a tie!");
+            }
+            s_board.reset();
+            updateBoard();
+          }
+        }
+    });
   </script>
 </html>
