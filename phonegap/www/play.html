@@ -8,7 +8,7 @@
       <link rel="stylesheet" href="css/play.css">
       <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
       <script src="js/board.js"></script>
-      <script src="js/AI.js"></script>
+      <script src="js/ai.js"></script>
       <script>
       $(document).bind("mobileinit",function() {
         $.mobile.changePage.defaults.changeHash = false;
@@ -50,10 +50,11 @@
         return String.fromCharCode(c.charCodeAt(0) + 1);
     }
 
-    turn = 1;
-    maxTurn = 2;
+    var turn = 1;
+    var maxTurn = 2;
+    var single = false;
 
-    $(".single").click(function(){});
+    $(".single").click(function(){single = true;});
 
     /*
     * Initialize the board (should eventually look for a configuration file
@@ -133,6 +134,7 @@
         var mv = randoBot.makeMove();
         var file = '.' + String.fromCharCode(97+mv[0]);
         var rank = '.' + (mv[1]+1).toString();
+        console.log(file,rank)
         $(file).children(rank).click();
     };
 
@@ -149,12 +151,13 @@
             $(this).append('<div class="player'+turn.toString()+'"></div>');
             $(this).css("opacity",(1.0).toString());
             if (turn === maxTurn) {
-                turn = 1;
+              turn = 1;
             } else {
-                turn += 1;
+              turn += 1;
+              if (single === true){
+                aiMove();
+              }
             }
-
-            aiMove();
             updateBoard();
 
             if (sBoard.emp() === 0) {
