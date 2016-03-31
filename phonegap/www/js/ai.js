@@ -35,7 +35,7 @@ GT.AI.prototype.filterEdges = function(moves) {
 	return edges;
 };
 
-GT.AI.prototype.willCapture = function(sx, sy, xdir, ydir) {
+GT.AI.prototype.willCapture = function(sx, sy, xdir, ydir, safe, first) {
 	// TODO
 	var empty = 0;
 	var oppTurn = 1;
@@ -51,10 +51,10 @@ GT.AI.prototype.willCapture = function(sx, sy, xdir, ydir) {
 		return false;
 	} else if (this.gamestate.get(nx, ny) == empty){
 		return false;
-	} else if (this.gamestate.get(nx, ny) == turn){
+	} else if (this.gamestate.get(nx, ny) == turn && (!first || safe)){
 		return true;
 	} else if (this.gamestate.get(nx, ny) == oppTurn){
-		if (this.willCapture(nx, ny, xdir, ydir)){
+		if (this.willCapture(nx, ny, xdir, ydir, safe, false)){
 			return true;
 		} else {
 			return false;
@@ -62,7 +62,7 @@ GT.AI.prototype.willCapture = function(sx, sy, xdir, ydir) {
 	}
 }
 
-GT.AI.prototype.filterCaptures = function(moves) {
+GT.AI.prototype.checkCaptures = function(moves, safe) {
 	var captures = [];
 
 	for (var i = 0; i < moves.length; i++){
@@ -70,7 +70,7 @@ GT.AI.prototype.filterCaptures = function(moves) {
 
 		for (var xdir = -1; xdir < 2; xdir++){
 			for (var ydir = -1; ydir < 2; ydir++){
-				if (this.willCapture(mv[0], mv[1], xdir, ydir)){
+				if (this.willCapture(mv[0], mv[1], xdir, ydir, safe, true)){
 					captures.push(moves[i]);
 					break;
 				}
@@ -81,11 +81,21 @@ GT.AI.prototype.filterCaptures = function(moves) {
 	return captures;
 }
 
+GT.AI.prototype.filterCaptures = function(moves) {
+	return this.checkCaptures(moves, false);
+}
+
+GT.AI.prototype.filterSafes = function(moves) {
+	return this.checkCaptures(moves, true);
+}
+
 GT.AI.prototype.makeMove = function() {
 	var legalMoves = this.gamestate.getEmptySquares();
-	var captures = this.filterCaptures(legalMoves);
 	var edges = this.filterEdges(legalMoves);
+	var captures = this.filterCaptures(legalMoves);
+	var safes = this.filterSafes(legalMoves);
 	var edgeCaps = this.filterCaptures(edges);
+	var edgeSafes = this.filterSafes(edges);
 	var corners = [];
 	if (edges.length > 0){
 		corners = this.filterCorners(edges);
@@ -99,6 +109,9 @@ GT.AI.prototype.makeMove = function() {
 		if (edgeCaps.length > 0){
 			rand = Math.floor(Math.random() * edgeCaps.length);
 			out = edgeCaps[rand].split("");
+		} else if (edgeSafes.length > 0){
+			rand = Math.floor(Math.random() * edgeSafes.length);
+			out = edgeSafes[rand].split("");
 		} else {
 			rand = Math.floor(Math.random() * edges.length);
 			out = edges[rand].split("");
@@ -106,6 +119,9 @@ GT.AI.prototype.makeMove = function() {
 	} else if (captures.length > 0){
 		rand = rand = Math.floor(Math.random() * captures.length);
 		out = captures[rand].split("");
+	} else if (safes.length > 0){
+		rand = Math.floor(Math.random() * safes.length);
+		out = safes[rand].split("");
 	} else if (legalMoves.length > 0){
 		rand = Math.floor(Math.random() * legalMoves.length);
 		out = legalMoves[rand].split("");
