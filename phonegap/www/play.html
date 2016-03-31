@@ -8,8 +8,9 @@
       <link rel="stylesheet" href="css/play.css">
       <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
       <script src="js/board.js"></script>
+      <script src="js/AI.js"></script>
       <script>
-      $(document).bind("mobileinit",function(){
+      $(document).bind("mobileinit",function() {
         $.mobile.changePage.defaults.changeHash = false;
         $.mobile.hashListeningEnabled = false;
         $.mobile.pushStateEnabled = false;
@@ -46,86 +47,94 @@
     * This function returns the next character in the alphabet
     */
     function nextChar(c) {
-      return String.fromCharCode(c.charCodeAt(0) + 1);
+        return String.fromCharCode(c.charCodeAt(0) + 1);
     }
 
     turn = 1;
-    max_turn = 2;
+    maxTurn = 2;
 
-    $(".single").click(function(){
-    });
+    $(".single").click(function(){});
 
     /*
     * Initialize the board (should eventually look for a configuration file
     * instead of just hard coding the size)
     */
-    var s_board = new GT.Board(3,3);
-    var s_array = s_board.tiles();
+    var sBoard = new GT.Board(7,7);
+    var sArray = sBoard.tiles();
+
+    /**
+     * randoBot takes no prisoners
+     */
+    var randoBot = new GT.AI(sBoard);
 
     /*
     * Calculate the maximum height and width of each square, then take the
     * smaller of the two and use that as the square size. Minus 20 takes into
     * account the padding used.
     */
-    var file_wdt = (1/s_board.wdt())*($(window).width()-20);
-    var rank_hgt = (1/s_board.hgt())*($(window).height()-20);
-    if (file_wdt <= rank_hgt){
-      rank_hgt = file_wdt;
-    }
-    else{
-      file_wdt = rank_hgt;
+    var fileWdt = (1/sBoard.wdt()) * ($(window).width() - 20);
+    var rankHgt = (1/sBoard.hgt()) * ($(window).height() - 20);
+
+    if (fileWdt <= rankHgt) {
+      rankHgt = fileWdt;
+    } else{
+      fileWdt = rankHgt;
     }
 
     /*
     * For the width of the board, add file columns
     */
     var letter = 'a';
-    for (var i = 0; i < s_board.wdt(); i++){
-      $('.game-board').append('<div class="board-file '+letter+'"></div>');
-      letter = nextChar(letter);
+    for (var i = 0; i < sBoard.wdt(); i++) {
+        $('.game-board').append('<div class="board-file ' + letter + '"></div>');
+        letter = nextChar(letter);
     }
 
     /*
     * In each file column, for the height of the board, add rank squares
     */
-    $('.board-file').each(function(){
-      number = s_board.hgt();
-      for (var i = 0; i < s_board.hgt(); i++){
-        $(this).append('<div class="board-rank '+number+'"></div>');
-        number-=1;
-      }
+    $('.board-file').each(function() {
+        number = sBoard.hgt();
+        for (var i = 0; i < sBoard.hgt(); i++) {
+            $(this).append('<div class="board-rank ' + number + '"></div>');
+            number -= 1;
+        }
     });
 
     /*
     * Change the height and width of the columns and rows to fit the screen
     * minus 20 takes into account 10 px of padding on top and bottom
     */
-    $('.board-file').css("width",Math.floor(file_wdt).toString());
+    $('.board-file').css("width",Math.floor(fileWdt).toString());
     $('.board-file').css("height",($(window).height()-20).toString());
-    $('.board-rank').css("height",Math.floor(rank_hgt).toString());
+    $('.board-rank').css("height",Math.floor(rankHgt).toString());
 
     /*
     * Updates the UI to display the current layout
     */
     function updateBoard() {
-      for(var y = 0; y < s_board.hgt(); y++){
-        for (var x = 0; x < s_board.wdt(); x++){
+        for (var y = 0; y < sBoard.hgt(); y++) {
+            for (var x = 0; x < sBoard.wdt(); x++) {
+                var file = '.' + String.fromCharCode(97+x);
+                var rank = '.' + (y+1).toString();
 
-          var file = '.'+String.fromCharCode(97+x)
-          var rank = '.'+(y+1).toString()
-
-          if (s_array[y][x] != (max_turn + 1)){
-            var player = "player"+s_array[y][x].toString()
-            $(file).children(rank).children().attr("class", player)
-          }
-
-          else{
-            $(file).children(rank).children().remove();
-            $(file).children(rank).css("opacity",0.6.toString())
-          }
+                if (sArray[y][x] != (maxTurn + 1)) {
+                    var player = "player"+sArray[y][x].toString();
+                    $(file).children(rank).children().attr("class", player);
+                } else {
+                    $(file).children(rank).children().remove();
+                    $(file).children(rank).css("opacity",0.6.toString());
+                }
+            }
         }
-      }
     }
+
+    var aiMove = function() {
+        var mv = randoBot.makeMove();
+        var file = '.' + String.fromCharCode(97+mv[0]);
+        var rank = '.' + (mv[1]+1).toString();
+        $(file).children(rank).click();
+    };
 
     /*
     * Handles when a tile is clicked, first checks if valid, then changes the
@@ -133,35 +142,33 @@
     * and if so declares a winner.
     */
     $(".board-rank").click(function(){
-        var file = $(this).parent().attr('class').slice(-1).charCodeAt(0)-97
-        var rank = parseInt($(this).attr('class').slice(-1))-1
+        var file = $(this).parent().attr('class').slice(-1).charCodeAt(0) - 97;
+        var rank = parseInt($(this).attr('class').slice(-1)) - 1;
 
-        if (s_board.place(file,rank,turn)){
-          var sidea = '<div class="player'+turn.toString()+'">'
-          var sideb = '<div class="player'+turn.toString()+'">'
-          $(this).append('<div class="flip">'+sidea+sideb+'</div>')
-          $(this).css("opacity",(1.0).toString());
-          if (turn === max_turn){
-            turn = 1
-          }
-          else {
-            turn += 1
-          }
-          updateBoard();
-
-          if (s_board.emp() === 0){
-            var winner = s_board.dominance();
-
-            if (winner<=max_turn){
-              alert("Player "+winner+" wins!");
+        if (sBoard.place(file, rank, turn)) {
+            $(this).append('<div class="player'+turn.toString()+'"></div>');
+            $(this).css("opacity",(1.0).toString());
+            if (turn === maxTurn) {
+                turn = 1;
+            } else {
+                turn += 1;
             }
 
-            else{
-              alert("It's a tie!");
-            }
-            s_board.reset();
+            aiMove();
             updateBoard();
-          }
+
+            if (sBoard.emp() === 0) {
+                var winner = sBoard.dominance();
+
+                if (winner <= maxTurn) {
+                  alert("Player " + winner + " wins!");
+                } else {
+                  alert("It's a tie!");
+                }
+
+                sBoard.reset();
+                updateBoard();
+            }
         }
     });
   </script>

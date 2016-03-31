@@ -5,7 +5,7 @@ if (GT === null || typeof(GT) != "object") { var GT = new Object();}
  */
 GT.Tile = {
     UNDEFINED : 0,
-	  EMPTY: 3,
+    EMPTY: 3,
     PLAYER1: 1,
     PLAYER2: 2
 };
@@ -81,10 +81,26 @@ GT.Board.prototype.hgt = function() {
 
 /**
  * Return the number of empty squares
- * @return {int} empty squares
+ * @return {int} Number of empty squares
  */
 GT.Board.prototype.emp = function() {
 	return this.emptySquares;
+};
+
+/**
+ * Return a list of all random squares
+ * @return {array<String>} All empty squares in 'XY' format
+ */
+GT.Board.prototype.getEmptySquares = function() {
+    var out = [];
+    for (var j = 0; j < this._height; j++) {
+        for (var i = 0; i < this._width; i++) {
+            if (this._tiles[j][i] === GT.Tile.EMPTY) {
+                out.push(i.toString() + j.toString());
+            }
+        }
+    }
+    return out;
 };
 
 /**
