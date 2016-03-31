@@ -182,11 +182,11 @@ GT.Board.prototype.dominance = function() {
 
 	// See which is bigger
 	if (cts[0] > cts[1]) {
-		return GT.Tile.PLAYER1;
+		return [GT.Tile.PLAYER1, cts[0], cts[1]];
 	} else if (cts[1] > cts[0]){
-		return GT.Tile.PLAYER2;
+		return [GT.Tile.PLAYER2, cts[0], cts[1]];
 	} else {
-		return GT.Tile.EMPTY;
+		return [GT.Tile.EMPTY, cts[0], cts[1]];
 	}
 };
 
