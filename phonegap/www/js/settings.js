@@ -17,8 +17,8 @@ GT.Settings = function() {
 
 GT.Settings.prototype.addPlayer = function(name, tile) {
 	this.numPlayers += 1;
-	piece = '../img/pieces/' + tile + '.png';
-	player = new Player(name, piece);
+	piece = 'img/pieces/' + tile + '.png';
+	player = new GT.Player(name, piece);
 	this.players.push(player);
 };
 
@@ -46,8 +46,8 @@ GT.Settings.prototype.setMultiPlayer = function() {
 	this.singlePlayer = false;
 };
 GT.Settings.prototype.getPiece = function(player) {
-	return players[player].piece();
+	return this.players[player].piece;
 };
 GT.Settings.prototype.getName = function(player) {
-	return players[player].name();
+	return this.players[player].name;
 };

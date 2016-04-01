@@ -9,6 +9,8 @@
 		<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
 		<script src="js/board.js"></script>
 		<script src="js/ai.js"></script>
+		<script src="js/settings.js"></script>
+
 		<script>
 			$(document).bind("mobileinit",function() {
 				$.mobile.changePage.defaults.changeHash = false;
@@ -16,6 +18,7 @@
 				$.mobile.pushStateEnabled = false;
 			});
 		</script>
+
 		<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 	</head>
 	<body>
@@ -61,10 +64,16 @@
 		var single = false;
 
 		$('.alert').hide();
+
+		var settings = new GT.Settings()
 		for (var i = 1; i < maxTurn+1; i++){
 			player = ".player" + i.toString();
-			$(player).css("background-image","url("+GT.Settings.getPiece(i-1)+")");
-			$(player).css("background-size","contain");
+			var url = "url('" + settings.getPiece(i-1) + "')";
+			$("<style type='text/css'>"+player+"{ background-image: "+url+"; }</style>")
+    		.appendTo(document.documentElement);
+			$("<style type='text/css'>"+player+" { background-size: contain; }</style>")
+    		.appendTo(document.documentElement);
+			console.log($(player).css("background-image"))
 		}
 
 
@@ -206,7 +215,7 @@
 
 				if (sBoard.emp() === 0){
 					var dom = sBoard.dominance();
-					var winner = dom[0].toString();
+					var winner = dom[0];
 					var p1 = dom[1].toString();
 					var p2 = dom[2].toString();
 
@@ -217,7 +226,7 @@
 					}
 
 					if (winner <= maxTurn){
-						$('.alert-message').text("Player " + winner + " wins! (" + p1 + " to " + p2 +")");
+						$('.alert-message').text("Player " + settings.getName(winner-1) + " wins! (" + p1 + " to " + p2 +")");
 					} else {
 						$('.alert-message').text("It's a tie!");
 					}
