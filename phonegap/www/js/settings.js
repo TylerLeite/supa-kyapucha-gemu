@@ -12,8 +12,17 @@ GT.Settings = function() {
 	this.singlePlayer = false;
 	this.numPlayers = 0;
 
-	this.addPlayer('Human', 'fx');
-	this.addPlayer('CPU', 'wondergirls');
+	var choices = ['2ne1', '4minute', 'aoa', 'apink', 'fx',
+	               'girlsgeneration', 'kara', 'sonamoo', 'wondergirls'];
+	var rand1 = Math.floor(Math.random() * choices.length);
+	var rand2 = Math.floor(Math.random() * choices.length);
+
+	while (rand1 === rand2) {
+		rand2 = Math.floor(Math.random() * choices.length);
+	}
+
+	this.addPlayer('Human', choices[rand1]);
+	this.addPlayer('CPU', choices[rand2]);
 };
 
 GT.Settings.prototype.addPlayer = function(name, tile) {
