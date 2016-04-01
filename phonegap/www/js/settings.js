@@ -23,7 +23,7 @@ GT.Settings.prototype.getTwoDistinctRandomLogos = function() {
 				   'aoa', 'apink', 'b1a4', 'bap', 'bigbang', 'blockb', 'bts',
 				   'crayonpop', 'dalshabet', 'exo', 'fiestar', 'fx', 'girlsday',
 				   'girlsgeneration', 'gna', 'got7', 'hellovenus', 'hyuna',
-				   'infinite', 'iu', 'juniel', 'kara', 'mamamoo', 'mbalq', 'missa',
+				   'infinite', 'iu', 'juniel', 'kara', 'mamamoo', 'mblaq', 'missa',
 				   'ninemuses', 'nsyoong', 'nuest', 'orangecaramel', 'redvelvet',
 				   'shinee', 'sistar', 'sonamoo', 'spica', 'superjunior', 't-ara',
 				   'ukiss', 'vixx', 'winner', 'wondergirls'];
