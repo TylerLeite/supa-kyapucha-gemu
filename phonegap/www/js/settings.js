@@ -12,13 +12,13 @@ GT.Settings = function() {
 	this.singlePlayer = false;
 	this.numPlayers = 0;
 
-	var choices = this.getTwoDistinctRandomLogos();
+	var filens = this.getTwoDistinctRandomLogos();
 
-	this.addPlayer('Human', choices[0]);
-	this.addPlayer('CPU', choices[1]);
+	this.addPlayer('Human', filens[0]);
+	this.addPlayer('CPU', filens[1]);
 };
 
-GT.Settings.getTwoDistinctRandomLogos() {
+GT.Settings.prototype.getTwoDistinctRandomLogos = function() {
 	var choices = ['1cm', '2am', '2ne1', '2pm', '4minute', 'akdongmusician',
 				   'aoa', 'apink', 'b1a4', 'bap', 'bigbang', 'blockb', 'bts',
 				   'crayonpop', 'dalshabet', 'exo', 'fiestar', 'fx', 'girlsday',
@@ -38,7 +38,9 @@ GT.Settings.getTwoDistinctRandomLogos() {
 	var out = [];
 	out.push(choices[rand1]);
 	out.push(choices[rand2]);
-}
+
+	return out;
+};
 
 GT.Settings.prototype.addPlayer = function(name, tile) {
 	this.numPlayers += 1;
