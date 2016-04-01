@@ -10,7 +10,7 @@
 		<script src="js/board.js"></script>
 		<script src="js/ai.js"></script>
 		<script src="js/settings.js"></script>
-		
+
 		<script>
 			$(document).bind("mobileinit",function() {
 				$.mobile.changePage.defaults.changeHash = false;
@@ -81,7 +81,6 @@
     		.appendTo(document.documentElement);
 			$("<style type='text/css'>"+player+" { background-size: contain; }</style>")
     		.appendTo(document.documentElement);
-			console.log($(player).css("background-image"))
 		}
 
 		$('.single').click(function(){single = true;});

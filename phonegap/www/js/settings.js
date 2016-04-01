@@ -3,6 +3,7 @@ if (GT === null || typeof(GT) != "object"){ var GT = new Object();}
 GT.Player = function(name, piece) {
 	this.name = name;
 	this.piece = piece;
+	this.rating = 1500;
 };
 
 GT.Settings = function() {
