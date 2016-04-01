@@ -1,7 +1,8 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-		<title>GOthello</title>
+		<title>スーパーキャプチャゲーム!</title>
+		<!-- Sūpā Kyapucha Gēmu! -->
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
 		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
@@ -10,7 +11,7 @@
 		<script src="js/board.js"></script>
 		<script src="js/ai.js"></script>
 		<script src="js/settings.js"></script>
-		
+
 		<script>
 			$(document).bind("mobileinit",function() {
 				$.mobile.changePage.defaults.changeHash = false;
@@ -32,7 +33,8 @@
 	<body>
 		<div data-role="page" id="home">
 			<div data-role="header">
-				<h3>GOthello!</h3>
+				<h3>スーパーキャプチャゲーム!</h3>
+				<center>Sūpā Kyapucha Gēmu!</center>
 			</div>
 			<div data-role="content">
 				<div class="scroll_wrapper ui-content" data-isscroll>
@@ -81,7 +83,6 @@
     		.appendTo(document.documentElement);
 			$("<style type='text/css'>"+player+" { background-size: contain; }</style>")
     		.appendTo(document.documentElement);
-			console.log($(player).css("background-image"))
 		}
 
 		$('.single').click(function(){single = true;});
@@ -233,7 +234,7 @@
 					}
 
 					if (winner <= maxTurn){
-						$('.alert-message').text("Player " + settings.getName(winner-1) + " wins! (" + p1 + " to " + p2 +")");
+						$('.alert-message').text(settings.getName(winner-1) + " wins! (" + p1 + " to " + p2 +")");
 					} else {
 						$('.alert-message').text('It\'s a tie!');
 					}
