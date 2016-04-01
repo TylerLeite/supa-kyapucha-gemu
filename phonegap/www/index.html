@@ -10,10 +10,7 @@
 		<script src="js/board.js"></script>
 		<script src="js/ai.js"></script>
 		<script src="js/settings.js"></script>
-<<<<<<< HEAD
-
-=======
->>>>>>> 88b432d081e9e1cab4ae2121df92ef38339cb34d
+		
 		<script>
 			$(document).bind("mobileinit",function() {
 				$.mobile.changePage.defaults.changeHash = false;
@@ -75,7 +72,6 @@
 		var single = false;
 
 		$('.alert').hide();
-<<<<<<< HEAD
 
 		var settings = new GT.Settings()
 		for (var i = 1; i < maxTurn+1; i++){
@@ -86,16 +82,6 @@
 			$("<style type='text/css'>"+player+" { background-size: contain; }</style>")
     		.appendTo(document.documentElement);
 			console.log($(player).css("background-image"))
-		}
-=======
->>>>>>> 88b432d081e9e1cab4ae2121df92ef38339cb34d
-
-		var settings = new GT.Settings();
-
-		for (var i = 1; i < settings.numPlayers + 1; i++){
-			var player = '.player' + i.toString();
-			$(player).css('background-image', 'url("' + settings.getPiece(i-1) + '")');
-			$(player).css('background-size', 'contain');
 		}
 
 		$('.single').click(function(){single = true;});
@@ -247,11 +233,7 @@
 					}
 
 					if (winner <= maxTurn){
-<<<<<<< HEAD
 						$('.alert-message').text("Player " + settings.getName(winner-1) + " wins! (" + p1 + " to " + p2 +")");
-=======
-						$('.alert-message').text('Player ' + winner + ' wins! (' + p1 + ' to ' + p2 +')');
->>>>>>> 88b432d081e9e1cab4ae2121df92ef38339cb34d
 					} else {
 						$('.alert-message').text('It\'s a tie!');
 					}

@@ -17,13 +17,10 @@ GT.Settings = function() {
 
 GT.Settings.prototype.addPlayer = function(name, tile) {
 	this.numPlayers += 1;
-<<<<<<< HEAD
-	piece = 'img/pieces/' + tile + '.png';
-	player = new GT.Player(name, piece);
-=======
-	var piece = '..img/pieces/' + tile + '.png';
+
+	var piece = 'img/pieces/' + tile + '.png';
 	var player = new GT.Player(name, piece);
->>>>>>> 88b432d081e9e1cab4ae2121df92ef38339cb34d
+
 	this.players.push(player);
 };
 
