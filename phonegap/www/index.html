@@ -141,7 +141,6 @@
 						var back = $(file).children(rank).find(".back");
 						var disc = $(file).children(rank).children('.disc');
 						if (disc.attr("class").indexOf("flipped") <= -1){
-							console.log(x,y);
 							if (front.attr("class").indexOf(player) <= -1){
 								player = player + " back";
 								back.attr("class", player);
