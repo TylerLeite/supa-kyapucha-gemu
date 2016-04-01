@@ -12,13 +12,13 @@ GT.Settings = function() {
 	this.numPlayers = 0;
 
 	this.addPlayer('Human', '4minute');
-	this.addPlayer('CPU', 'kara');
+	this.addPlayer('CPU', 'girlsgeneration');
 };
 
 GT.Settings.prototype.addPlayer = function(name, tile) {
 	this.numPlayers += 1;
-	piece = '../img/pieces/' + tile + '.png';
-	player = new Player(name, piece);
+	var piece = '..img/pieces/' + tile + '.png';
+	var player = new GT.Player(name, piece);
 	this.players.push(player);
 };
 
@@ -46,8 +46,8 @@ GT.Settings.prototype.setMultiPlayer = function() {
 	this.singlePlayer = false;
 };
 GT.Settings.prototype.getPiece = function(player) {
-	return players[player].piece();
+	return this.players[player].piece;
 };
 GT.Settings.prototype.getName = function(player) {
-	return players[player].name();
+	return this.players[player].name;
 };

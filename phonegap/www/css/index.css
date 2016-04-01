@@ -61,14 +61,7 @@ body{
   bottom:10px;
   left:0px;
 }
-.player1{
-  background-image:url("../img/player1.png");
-  background-size:contain;
-}
-.player2{
-  background-image:url("../img/player2.png");
-  background-size:contain;
-}
+
 .alert{
   position:absolute;
   left:50%;

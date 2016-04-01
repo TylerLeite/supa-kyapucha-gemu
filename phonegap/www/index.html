@@ -9,12 +9,21 @@
 		<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
 		<script src="js/board.js"></script>
 		<script src="js/ai.js"></script>
+		<script src="js/settings.js"></script>
 		<script>
 			$(document).bind("mobileinit",function() {
 				$.mobile.changePage.defaults.changeHash = false;
 				$.mobile.hashListeningEnabled = false;
 				$.mobile.pushStateEnabled = false;
 			});
+
+			var settings = new GT.Settings();
+
+			for (var i = 1; i < settings.numPlayers + 1; i++){
+				var player = '.player' + i.toString();
+				$(player).css('background-image', 'url("' + settings.getPiece(i-1) + '")');
+				$(player).css('background-size', 'contain');
+			}
 		</script>
 		<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 	</head>
@@ -61,16 +70,18 @@
 		var single = false;
 
 		$('.alert').hide();
-		for (var i = 1; i < maxTurn+1; i++){
-			player = ".player" + i.toString();
-			$(player).css("background-image","url("+GT.Settings.getPiece(i-1)+")");
-			$(player).css("background-size","contain");
+
+		var settings = new GT.Settings();
+
+		for (var i = 1; i < settings.numPlayers + 1; i++){
+			var player = '.player' + i.toString();
+			$(player).css('background-image', 'url("' + settings.getPiece(i-1) + '")');
+			$(player).css('background-size', 'contain');
 		}
 
-
-		$(".single").click(function(){single = true;});
-		$(".double").click(function(){single = false;});
-		$(".back").click(function(){sBoard.reset(); updateBoard(); turn = 1;})
+		$('.single').click(function(){single = true;});
+		$('.double').click(function(){single = false;});
+		$('.back').click(function(){sBoard.reset(); updateBoard(); turn = 1;})
 		$('.ok-btn').click(function(){
 			sBoard.reset();
 			updateBoard();
@@ -130,9 +141,9 @@
 		* Change the height and width of the columns and rows to fit the screen
 		* minus 20 takes into account 10 px of padding on top and bottom
 		*/
-		$('.board-file').css("width",Math.floor(fileWdt).toString());
-		$('.board-file').css("height",($(window).height()-20).toString());
-		$('.board-rank').css("height",Math.floor(rankHgt).toString());
+		$('.board-file').css('width',Math.floor(fileWdt).toString());
+		$('.board-file').css('height',($(window).height()-20).toString());
+		$('.board-rank').css('height',Math.floor(rankHgt).toString());
 
 		/*
 		* Updates the UI to display the current layout
@@ -144,26 +155,26 @@
 					var rank = '.' + (y+1).toString();
 
 					if (sArray[y][x] != (maxTurn + 1)){
-						var player = "player"+sArray[y][x].toString();
-						var front = $(file).children(rank).find(".front");
-						var back = $(file).children(rank).find(".back");
+						var player = 'player'+sArray[y][x].toString();
+						var front = $(file).children(rank).find('.front');
+						var back = $(file).children(rank).find('.back');
 						var disc = $(file).children(rank).children('.disc');
-						if (disc.attr("class").indexOf("flipped") <= -1){
-							if (front.attr("class").indexOf(player) <= -1){
-								player = player + " back";
-								back.attr("class", player);
-								disc.toggleClass("flipped");
+						if (disc.attr('class').indexOf('flipped') <= -1){
+							if (front.attr('class').indexOf(player) <= -1){
+								player = player + ' back';
+								back.attr('class', player);
+								disc.toggleClass('flipped');
 							}
 						} else {
-							if (back.attr("class").indexOf(player) <= -1){
-								player = player + " front";
-								front.attr("class", player);
-								disc.toggleClass("flipped");
+							if (back.attr('class').indexOf(player) <= -1){
+								player = player + ' front';
+								front.attr('class', player);
+								disc.toggleClass('flipped');
 							}
 						}
 					}	else {
 								$(file).children(rank).children().remove();
-								$(file).children(rank).css("opacity",0.6.toString());
+								$(file).children(rank).css('opacity',0.6.toString());
 					}
 				}
 			}
@@ -196,7 +207,7 @@
 					if (single === true && sBoard.emp() > 0){
 						$('.board-rank').off('click',addTile);
 						setTimeout(function(){
-							$(".board-rank").on('click',addTile);
+							$('.board-rank').on('click',addTile);
   						aiMove();
 						}, 1000);
 					}
@@ -217,14 +228,14 @@
 					}
 
 					if (winner <= maxTurn){
-						$('.alert-message').text("Player " + winner + " wins! (" + p1 + " to " + p2 +")");
+						$('.alert-message').text('Player ' + winner + ' wins! (' + p1 + ' to ' + p2 +')');
 					} else {
-						$('.alert-message').text("It's a tie!");
+						$('.alert-message').text('It\'s a tie!');
 					}
 					$('.alert').show();
 				}
 			}
 		}
-		$(".board-rank").on('click',addTile);
+		$('.board-rank').on('click',addTile);
 	</script>
 </html>
