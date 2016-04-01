@@ -59,7 +59,15 @@
 		var turn = 1;
 		var maxTurn = 2;
 		var single = false;
+
 		$('.alert').hide();
+		for (var i = 1; i < maxTurn+1; i++){
+			player = ".player" + i.toString();
+			$(player).css("background-image","url("+GT.Settings.getPiece(i-1)+")");
+			$(player).css("background-size","contain");
+		}
+
+
 		$(".single").click(function(){single = true;});
 		$(".double").click(function(){single = false;});
 		$(".back").click(function(){sBoard.reset(); updateBoard(); turn = 1;})
