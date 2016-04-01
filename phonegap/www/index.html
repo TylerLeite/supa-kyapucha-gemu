@@ -178,13 +178,14 @@
 								disc.toggleClass('flipped');
 							}
 						}
-					}	else {
-								$(file).children(rank).children().remove();
-								$(file).children(rank).css('opacity',0.6.toString());
+					} else {
+						$(file).children(rank).children().remove();
+						$(file).children(rank).css('opacity',0.6.toString());
 					}
 				}
 			}
 		}
+
 		var aiMove = function() {
 			var mv = randoBot.makeMove();
 			var file = '.' + String.fromCharCode(97+mv[0]);
