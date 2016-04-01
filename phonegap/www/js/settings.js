@@ -11,8 +11,8 @@ GT.Settings = function() {
 	this.singlePlayer = false;
 	this.numPlayers = 0;
 
-	this.addPlayer('Human', '4minute');
-	this.addPlayer('CPU', 'girlsgeneration');
+	this.addPlayer('Human', 'fx');
+	this.addPlayer('CPU', 'wondergirls');
 };
 
 GT.Settings.prototype.addPlayer = function(name, tile) {
