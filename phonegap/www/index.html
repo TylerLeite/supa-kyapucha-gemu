@@ -5,9 +5,10 @@
 		<!-- Sūpā Kyapucha Gēmu! -->
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
-		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+		<link rel="stylesheet" href="js/lib/jQueryMobile/jquery.mobile-1.4.5.min.css">
 		<link rel="stylesheet" href="css/index.css">
-		<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+		<script src="js/lib/jQuery/jquery-1.12.2.min.js"></script>
+		<script src="js/lib/jQueryMobile/jquery.mobile-1.4.5.min.js"></script>
 		<script src="js/board.js"></script>
 		<script src="js/ai.js"></script>
 		<script src="js/settings.js"></script>
@@ -27,8 +28,6 @@
 				$(player).css('background-size', 'contain');
 			}
 		</script>
-
-		<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 	</head>
 	<body>
 		<div data-role="page" id="home">
@@ -47,8 +46,12 @@
 		</div>
 		<div data-role="page" id="board">
 			<center>
+				<div class="top-score score-board">
+				</div>
 				<div class="game-board">
 
+				</div>
+				<div class="bottom-score score-board">
 				</div>
 			</center>
 			<a class="back-btn ui-btn ui-icon-back ui-btn-icon-left" href="#home">BACK</a>
@@ -74,20 +77,27 @@
 		var single = false;
 
 		$('.alert').hide();
+		window.onload = function () {
+			$(".ui-loader").hide();
+		}
 
 		var settings = new GT.Settings()
 		for (var i = 1; i < maxTurn+1; i++){
-			player = ".player" + i.toString();
+			var player = ".player" + i.toString();
+			var logo = ".logo" + i.toString();
 			var url = "url('" + settings.getPiece(i-1) + "')";
 			$("<style type='text/css'>"+player+"{ background-image: "+url+"; }</style>")
     		.appendTo(document.documentElement);
 			$("<style type='text/css'>"+player+" { background-size: contain; }</style>")
     		.appendTo(document.documentElement);
+			$("<style type='text/css'>"+logo+"{ background-image: "+url+"; }</style>")
+    		.appendTo(document.documentElement);
+			$("<style type='text/css'>"+logo+" { background-size: contain; }</style>")
+    		.appendTo(document.documentElement);
 		}
-
 		$('.single').click(function(){single = true;});
 		$('.double').click(function(){single = false;});
-		$('.back').click(function(){sBoard.reset(); updateBoard(); turn = 1;})
+		$('.back-btn').click(function(){sBoard.reset(); updateBoard(); turn = 1;})
 		$('.ok-btn').click(function(){
 			sBoard.reset();
 			updateBoard();
@@ -110,20 +120,6 @@
 		var randoBot = new GT.AI(sBoard);
 
 		/*
-		* Calculate the maximum height and width of each square, then take the
-		* smaller of the two and use that as the square size. Minus 20 takes into
-		* account the padding used.
-		*/
-		var fileWdt = (1/sBoard.wdt()) * ($(window).width() - 20);
-		var rankHgt = (1/sBoard.hgt()) * ($(window).height() - 20);
-
-		if (fileWdt <= rankHgt){
-			rankHgt = fileWdt;
-		} else{
-			fileWdt = rankHgt;
-		}
-
-		/*
 		* For the width of the board, add file columns
 		*/
 		var letter = 'a';
@@ -143,14 +139,136 @@
 			}
 		});
 
-		/*
-		* Change the height and width of the columns and rows to fit the screen
-		* minus 20 takes into account 10 px of padding on top and bottom
-		*/
-		$('.board-file').css('width',Math.floor(fileWdt).toString());
-		$('.board-file').css('height',($(window).height()-20).toString());
-		$('.board-rank').css('height',Math.floor(rankHgt).toString());
+		function resize(){
+			/*
+			* Calculate the maximum height and width of each square, then take the
+			* smaller of the two and use that as the square size. Minus 20 takes into
+			* account the padding used.
+			*/
+			var winHgt = $(window).height();
+			var winWdt = $(window).width();
 
+			var fileWdt = (1/sBoard.wdt()) * (winWdt - 20);
+			var rankHgt = (1/sBoard.hgt()) * (winHgt - 20);
+			var squareSize = Math.floor(Math.min(fileWdt,rankHgt));
+
+			/*
+			* Change the height and width of the columns and rows to fit the screen
+			* minus 20 takes into account 10 px of padding on top and bottom
+			*/
+			$('.board-file').css('width',squareSize.toString());
+			$('.board-file').css('height',(winHgt-20).toString());
+			$('.board-rank').css('height',squareSize.toString());
+
+			var remHgt = winHgt-(squareSize*sBoard.hgt());
+			var remWdt = winWdt-(squareSize*sBoard.wdt());
+			var logo1 = '<div class = "logo logo1"></div>';
+			var score1 = '<div class = "score score1"><div class = "tens">0</div><div class = "ones">0</div></div>'
+			var logo2 = '<div class = "logo logo2"></div>';
+			var score2 = '<div class = "score score2"><div class = "tens">0</div><div class = "ones">0</div></div>'
+			if (remHgt > remWdt){
+				console.log("fuck this shit")
+				$('.bottom-score').hide();
+				if (remHgt >= 140){
+					$('.score-board').css('height', ((remHgt/2)-20).toString());
+					$('.top-score').css('left','0');
+					$('.top-score').css('top','0');
+					var extraPad = (remHgt/2)-20;
+					extraPad += ((remHgt - extraPad - 50) / 4);
+					$('.game-board').css('padding-top', extraPad.toString()+"px");
+					$('.top-score').append(logo1+score1+logo2+score2);
+					var logoWdt = (1/4) * (winWdt);
+					var logoHgt = (remHgt/2)-20;
+					var logoSize = Math.floor(Math.min(logoWdt,logoHgt));
+					$('.logo').css("width", logoSize.toString());
+					$('.logo').css("height", logoSize.toString());
+					$('.score').css("width", (logoSize).toString());
+					$('.score').css("height", logoSize.toString());
+					var extraLogo = winWdt - (logoSize * 4);
+					$('.logo2').css("margin-left",extraLogo.toString()+"px");
+					$('.top-score').css("height", logoSize.toString());
+				} else {
+					$('.top-score').hide();
+				}
+			} else {
+				$('.game-board').css('padding-top', "10px")
+				$('.score-board').css('width', ((remWdt/2)-20).toString());
+				if (remWdt/2 >= 400){
+					console.log(((remWdt/2)-400)/2);
+					$('.top-score').css('left', (((remWdt/2)-400)/2).toString()+"px");
+					$('.bottom-score').css('right', (((remWdt/2)-400)/2).toString()+"px");
+				}
+				$('.top-score').append(logo1+score1);
+				$('.bottom-score').append(logo2+score2);
+			}
+			window.onload = function () {
+				var digitHgt = $('.score').height();
+				var digitWdt = $('.score').width()/2;
+
+				var fontSize = $('.ones').css("font-size");
+				console.log(digitHgt, $('.ones').height(),digitWdt, $('.ones').width())
+				fontSize = parseInt(fontSize.substring(0, fontSize.length-2));
+				while($('.ones').height() < digitHgt && $('.ones').width()<digitWdt){
+					fontSize += 1
+					$('.ones').css("font-size", fontSize+"px");
+					$('.tens').css("font-size", fontSize+"px");
+				}
+			}
+		}
+
+		$(window).on("orientationchange",function(){
+			resize();
+		});
+
+		function increaseScore(label,oldS,newS){
+			if (oldS < newS){
+				if($(label).children('.ones').text() === "9"){
+					var oldT = parseInt($(label).children('.tens').text());
+					oldT += 1;
+					$(label).children('.tens').text(oldT.toString());
+					$(label).children('.ones').text("0");
+				} else {
+					var oldO = parseInt($(label).children('.ones').text());
+					oldO += 1;
+					$(label).children('.ones').text(oldO.toString());
+				}
+				oldS += 1;
+				setTimeout(function(){increaseScore(label,oldS,newS)}, 100);
+			}
+		}
+		function decreaseScore(label,oldS,newS){
+			if (oldS > newS){
+				if($(label).children('.ones').text() === "0"){
+					var oldT = parseInt($(label).children('.tens').text());
+					oldT -= 1;
+					$(label).children('.tens').text(oldT.toString());
+					$(label).children('.ones').text("9");
+				} else {
+					var oldO = parseInt($(label).children('.ones').text());
+					oldO -= 1;
+					$(label).children('.ones').text(oldO.toString());
+				}
+				oldS -= 1;
+				setTimeout(function(){decreaseScore(label,oldS,newS)}, 100);
+			}
+		}
+		function updateScore(){
+			var dom = sBoard.dominance();
+			var score1 = parseInt($('.score1').children('.tens').text())*10;
+			score1 += parseInt($('.score1').children('.ones').text());
+			var score2 = parseInt($('.score2').children('.tens').text())*10;
+			score2 += parseInt($('.score2').children('.ones').text());
+			if(score1 > dom[1]){
+				decreaseScore('.score1',score1,dom[1]);
+			} else if (score1 < dom[1]){
+				increaseScore('.score1',score1,dom[1]);
+			}
+			if(score2 > dom[2]){
+				decreaseScore('.score2',score2,dom[2]);
+			} else if (score2 < dom[2]){
+				increaseScore('.score2',score2,dom[2]);
+			}
+		}
 		/*
 		* Updates the UI to display the current layout
 		*/
@@ -184,6 +302,7 @@
 					}
 				}
 			}
+			updateScore();
 		}
 
 		var aiMove = function() {
@@ -243,6 +362,7 @@
 				}
 			}
 		}
+		resize();
 		$('.board-rank').on('click',addTile);
 	</script>
 </html>
