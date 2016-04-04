@@ -101,6 +101,7 @@
 		$('.ok-btn').click(function(){
 			sBoard.reset();
 			updateBoard();
+			resetScore();
 			if (single === true && turn === 2){
 				aiMove();
 			}
@@ -243,6 +244,7 @@
 		}
 		function decreaseScore(label,oldS,newS){
 			if (oldS > newS){
+				console.log(oldS,newS);
 				if($(label).children('.ones').text() === "0"){
 					var oldT = parseInt($(label).children('.tens').text());
 					oldT -= 1;
@@ -257,12 +259,17 @@
 				setTimeout(function(){decreaseScore(label,oldS,newS)}, 100);
 			}
 		}
+		function resetScore(){
+			$('.score').children('.ones').text("0");
+			$('.score').children('.tens').text("0");
+		}
 		function updateScore(){
 			var dom = sBoard.dominance();
 			var score1 = parseInt($('.score1').children('.tens').text())*10;
 			score1 += parseInt($('.score1').children('.ones').text());
 			var score2 = parseInt($('.score2').children('.tens').text())*10;
 			score2 += parseInt($('.score2').children('.ones').text());
+			console.log(score1,dom[1]);
 			if(score1 > dom[1]){
 				decreaseScore('.score1',score1,dom[1]);
 			} else if (score1 < dom[1]){
@@ -311,7 +318,6 @@
 					}
 				}
 			}
-			updateScore();
 		}
 
 		var aiMove = function() {
@@ -349,6 +355,7 @@
 				}
 
 				updateBoard();
+				updateScore();
 
 				if (sBoard.emp() === 0){
 					var dom = sBoard.dominance();
