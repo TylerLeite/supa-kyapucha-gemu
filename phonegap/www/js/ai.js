@@ -1,12 +1,33 @@
 /**
  * The Big Bad GOTHELLO AI
  * Right now it sucks, but one day it will rule
+ * TODO:
+ *    Pattern matching to avoid holes like X...XX or XX.X.X
+ *    Choose move based on some heuristic rather than randomly
+ *        -Be more aggressive with edge placement
+ *        -Be more safe with captures
+ *    Remember moves as blocks, try to avoid touching a block to an enemy piece
  */
 
 if (GT === null || typeof(GT) != "object") { var GT = new Object();}
 
+/**
+ * @constructor
+ */
 GT.AI = function(board) {
 	this.gamestate = board;
+	this.testbed = this.gamestate.deepCopy();
+	this.history = [];
+	//00, 01, 11, 10
+	this.corners = [false, false, false, false];
+};
+
+/**
+ * Runs a heuristic on this.testbed to evaluate the positition
+ * @return {Number} The score for the position
+ */
+GT.AI.prototype.analyzePosition = function() {
+	return;
 };
 
 GT.AI.prototype.filterCorners = function(moves) {
@@ -35,6 +56,41 @@ GT.AI.prototype.filterEdges = function(moves) {
 	return edges;
 };
 
+GT.AI.prototype.dontNeedMove = function(x, y) {
+	// Check if an edge move has high prioritah
+
+	var width = this.gamestate.wdt() - 1;
+	var height = this.gamestate.hgt() - 1;
+
+	if (this.corners[0] && this.corners[1]){
+		return x == 0;
+	}
+
+	if (this.corners[1] && this.corners[2]){
+		return y == 0;
+	}
+
+	if (this.corners[2] && this.corners[3]){
+		return x == width;
+	}
+
+	if (this.corners[3] && this.corners[0]){
+		return y == height;
+	}
+};
+
+GT.AI.prototype.filterUnneeded = function(moves) {
+	var out = []
+	for (var i = 0; i < moves.length; i++){
+		var mv = moves[i];
+		if (!this.dontNeedMove(mv[0], mv[1])){
+			out.push(mv);
+		}
+	}
+
+	return out;
+};
+
 GT.AI.prototype.willCapture = function(sx, sy, xdir, ydir, safe, first) {
 	// TODO
 	var empty = 0;
@@ -60,7 +116,7 @@ GT.AI.prototype.willCapture = function(sx, sy, xdir, ydir, safe, first) {
 			return false;
 		}
 	}
-}
+};
 
 GT.AI.prototype.checkCaptures = function(moves, safe) {
 	var captures = [];
@@ -79,15 +135,19 @@ GT.AI.prototype.checkCaptures = function(moves, safe) {
 	}
 
 	return captures;
-}
+};
+
+GT.AI.prototype.checkBadEdge = function(x, y){
+	//Bad edge is one that either creates a hole or
+};
 
 GT.AI.prototype.filterCaptures = function(moves) {
 	return this.checkCaptures(moves, false);
-}
+};
 
 GT.AI.prototype.filterSafes = function(moves) {
 	return this.checkCaptures(moves, true);
-}
+};
 
 GT.AI.prototype.makeMove = function() {
 	var legalMoves = this.gamestate.getEmptySquares();
@@ -96,8 +156,9 @@ GT.AI.prototype.makeMove = function() {
 	var safes = this.filterSafes(legalMoves);
 	var edgeCaps = this.filterCaptures(edges);
 	var edgeSafes = this.filterSafes(edges);
+	var edgeNeeds = this.filterUnneeded(edgeSafes);
 	var corners = [];
-	
+
 	if (edges.length > 0){
 		corners = this.filterCorners(edges);
 	}
@@ -106,13 +167,29 @@ GT.AI.prototype.makeMove = function() {
 	if (corners.length > 0) {
 		rand = Math.floor(Math.random() * corners.length);
 		out = corners[rand].split("");
+		var width = this.gamestate.wdt() - 1;
+		var height = this.gamestate.hgt() - 1;
+		if (out[0] == 0 && out[1] == height){
+			this.corners[0] = true;
+		} else if (out[0] == 0 && out[1] == 0){
+			this.corners[1] = true;
+		} else if (out[0] == width && out[1] == 0){
+			this.corners[2] = true;
+		} else if (out[0] == width && out[1] == height){
+			this.corners[3] = true;
+		}
 	} else if (edges.length > 0){
 		if (edgeCaps.length > 0){
 			rand = Math.floor(Math.random() * edgeCaps.length);
 			out = edgeCaps[rand].split("");
 		} else if (edgeSafes.length > 0){
-			rand = Math.floor(Math.random() * edgeSafes.length);
-			out = edgeSafes[rand].split("");
+			if (edgeNeeds.length > 0){
+				rand = Math.floor(Math.random() * edgeNeeds.length);
+				out = edgeNeeds[rand].split("");
+			} else {
+				rand = Math.floor(Math.random() * edgeSafes.length);
+				out = edgeSafes[rand].split("");
+			}
 		} else {
 			rand = Math.floor(Math.random() * edges.length);
 			out = edges[rand].split("");
@@ -132,5 +209,12 @@ GT.AI.prototype.makeMove = function() {
 
 	out[0] = parseInt(out[0]);
 	out[1] = parseInt(out[1]);
+
+	this.history.push(out);
 	return out;
+};
+
+GT.AI.reset = function(){
+	this.history = [];
+	this.corners = [false, false, false, false];
 };

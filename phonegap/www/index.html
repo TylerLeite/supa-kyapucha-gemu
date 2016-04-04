@@ -284,7 +284,11 @@
 					var rank = '.' + (y+1).toString();
 
 					if (sArray[y][x] != (maxTurn + 1)){
-						var player = 'player'+sArray[y][x].toString();
+						var pnum = '1';
+						if (sArray[y][x] == 2 || sArray[y][x] == 5){
+							pnum = '2';
+						}
+						var player = 'player'+pnum;
 						var front = $(file).children(rank).find('.front');
 						var back = $(file).children(rank).find('.back');
 						var disc = $(file).children(rank).children('.disc');
