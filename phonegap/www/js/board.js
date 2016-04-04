@@ -3,12 +3,26 @@ if (GT === null || typeof(GT) != "object"){ var GT = new Object();}
 /**
  * Tile enumeration
  */
-GT.Tile = {
+GT.TileEnum = {
 	UNDEFINED : 0,
 	EMPTY: 3,
 	PLAYER1: 1,
-	PLAYER2: 2
+	PLAYER2: 2,
 };
+
+/**
+ * @constructor
+ * @param {TileEnum} type What kind of tile is being made
+ * @param {boolean} supa Whether the tile is a SUPA tile (can't be captured)
+ */
+GT.Tile = fuction(type, supa) {
+	this.type = type;
+	if (!GT.validTile(type)){
+		this.type = 0;
+	}
+
+	this.isSupa = supa;
+;
 
 /**
  * Check whether a tile is a valid choice
@@ -16,8 +30,8 @@ GT.Tile = {
  * @return {boolean} Whether the tile is valid
  */
 GT.validTile = function(tile) {
-	for (var t in GT.Tile){
-		if (GT.Tile[t] == tile){
+	for (var t in GT.TileEnum){
+		if (GT.TileEnum[t] == tile){
 			return true;
 		}
 	}
@@ -31,12 +45,12 @@ GT.validTile = function(tile) {
  * @return {Tile} Whose turn it must be by process of elimination
  */
 GT.oppTurn = function(turn) {
-	if (turn == GT.Tile.PLAYER1){
-		return GT.Tile.PLAYER2;
-	} else if (turn == GT.Tile.PLAYER2){
-		return GT.Tile.PLAYER1;
+	if (turn == GT.TileEnum.PLAYER1){
+		return GT.TileEnum.PLAYER2;
+	} else if (turn == GT.TileEnum.PLAYER2){
+		return GT.TileEnum.PLAYER1;
 	} else {
-		return GT.Tile.UNDEFINED;
+		return GT.TileEnum.UNDEFINED;
 	}
 };
 
@@ -51,6 +65,8 @@ GT.Board = function(wdt, hgt) {
 	for (var i = 0; i < hgt; i++){
 		this._tiles[i] = new Array(wdt);
 	}
+
+	this.kyapuchas = [];
 
 	this.reset();
 };
@@ -95,7 +111,7 @@ GT.Board.prototype.getEmptySquares = function() {
 	var out = [];
 	for (var j = 0; j < this._height; j++){
 		for (var i = 0; i < this._width; i++){
-			if (this._tiles[j][i] === GT.Tile.EMPTY){
+			if (this._tiles[j][i] === GT.TileEnum.EMPTY){
 				out.push(i.toString() + j.toString());
 			}
 		}
@@ -109,7 +125,7 @@ GT.Board.prototype.getEmptySquares = function() {
 GT.Board.prototype.reset = function() {
 	for (var y = 0; y < this.hgt(); y++){
 		for (var x = 0; x < this.wdt(); x++){
-			this._tiles[y][x] = GT.Tile.EMPTY;
+			this._tiles[y][x] = GT.TileEnum.EMPTY;
 		}
 	}
 
@@ -156,7 +172,7 @@ GT.Board.prototype.set = function(x, y, tile) {
  */
 GT.Board.prototype.get = function(x, y) {
 	if (!this.inBounds(x, y)){
-		return GT.Tile.UNDEFINED;
+		return GT.TileEnum.UNDEFINED;
 	} else {
 		return this._tiles[y][x];
 	}
@@ -172,9 +188,9 @@ GT.Board.prototype.dominance = function() {
 	var cts = [0, 0];
 	for (var y = 0; y < this._height; y++){
 		for (var x = 0; x < this._width; x++){
-			if (this._tiles[y][x] == GT.Tile.PLAYER1){
+			if (this._tiles[y][x] == GT.TileEnum.PLAYER1){
 				cts[0] += 1;
-			} else if (this._tiles[y][x] == GT.Tile.PLAYER2){
+			} else if (this._tiles[y][x] == GT.TileEnum.PLAYER2){
 				cts[1] += 1;
 			}
 		}
@@ -182,11 +198,11 @@ GT.Board.prototype.dominance = function() {
 
 	// See which is bigger
 	if (cts[0] > cts[1]){
-		return [GT.Tile.PLAYER1, cts[0], cts[1]];
+		return [GT.TileEnum.PLAYER1, cts[0], cts[1]];
 	} else if (cts[1] > cts[0]){
-		return [GT.Tile.PLAYER2, cts[0], cts[1]];
+		return [GT.TileEnum.PLAYER2, cts[0], cts[1]];
 	} else {
-		return [GT.Tile.EMPTY, cts[0], cts[1]];
+		return [GT.TileEnum.EMPTY, cts[0], cts[1]];
 	}
 };
 
@@ -200,25 +216,53 @@ GT.Board.prototype.dominance = function() {
  * @param {Tile} turn Whose turn it is
  * @return {boolean} Whether a capture in the give direction is caused by the move
  */
-GT.Board.prototype.checkReversi = function(sx, sy, xdir, ydir, turn) {
+GT.Board.prototype.realCheckReversi = function(sx, sy, xdir, ydir, turn) {
 	var nx = sx + xdir;
 	var ny = sy + ydir;
 
 	if (!GT.validTile(turn) || !this.inBounds(nx, ny)){
 		return false;
-	} else if (this.get(nx, ny) == GT.Tile.EMPTY){
+	} else if (this.get(nx, ny) == GT.TileEnum.EMPTY){
 		return false;
 	} else if (this.get(nx, ny) == turn){
-		this.set(sx, sy, turn); // Comment this out if just checking
+		if (this.get(sx, sy) != turn){
+			this.set(sx, sy, turn) // Comment this out if just checking
+			this.kyapuchas.push([sx, sy]);
+		}
 		return true;
 	} else if (this.get(nx, ny) == GT.oppTurn(turn)){
-		if (this.checkReversi(nx, ny, xdir, ydir, turn)){
-			this.set(sx, sy, turn) // Comment this out if just checking
+		if (this.realCheckReversi(nx, ny, xdir, ydir, turn)){
+			if (this.get(sx, sy) != turn){
+				this.set(sx, sy, turn) // Comment this out if just checking
+				this.kyapuchas.push([sx, sy]);
+			}
 			return true;
 		} else {
 			return false;
 		}
 	}
+};
+
+GT.Board.prototype.checkReversi = function(sx, sy, xdir, ydir, turn){
+	this.kyapuchas = [];
+	var out = this.realCheckReversi(sx, sy, xdir, ydir, turn);
+
+	/*
+	if (this.kyapuchas.length >= 5){
+		var newTile;
+		if (turn == GT.TileEnum.PLAYER1){
+			newTile = GT.TileEnum.PLAYER1SUPER;
+		} else if (turn == GT.TileEnum.PLAYER2) {
+			newTile = GT.TileEnum.PLAYER2SUPER;
+		}
+
+		for (var i = 0; i < this.kyapuchas.length; i++){
+			this.set(this.kyapuchas[i][0], this.kyapuchas[i][1], newTile);
+		}
+	}
+	*/
+
+	return out;
 };
 
 /**
@@ -231,7 +275,7 @@ GT.Board.prototype.checkReversi = function(sx, sy, xdir, ydir, turn) {
 GT.Board.prototype.place = function(x, y, turn) {
 	if (!GT.validTile(turn)){
 		return false;
-	} else if (!this.inBounds(x, y) ||  this.get(x, y) != GT.Tile.EMPTY){
+	} else if (!this.inBounds(x, y) ||  this.get(x, y) != GT.TileEnum.EMPTY){
 		return false;
 	}
 
@@ -250,4 +294,19 @@ GT.Board.prototype.place = function(x, y, turn) {
 	}
 
 	return true;
+};
+
+/**
+ * Create a copy of this object that can be edited without modifying the original
+ * @return {GT.Board} A copy of this object
+ */
+GT.Board.prototype.deepCopy = function() {
+	var out = new GT.Board(this._width, this._height);
+	for (var i = 0; i < this._height; i++){
+		for (var j = 0; j < this._width; j++){
+			out.set(this.get(i, j));
+		}
+	}
+
+	return out;
 };
