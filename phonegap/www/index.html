@@ -139,6 +139,23 @@
 			}
 		});
 
+		function resizeText(){
+			var digitHgt = $('.score').height();
+			var digitWdt = $('.score').width()/2;
+			if ($('.ones').height() > 0 && $('.ones').width() > 0){
+				var fontSize = $('.ones').css("font-size");
+				console.log(digitHgt, $('.ones').height(),digitWdt, $('.ones').width())
+				fontSize = parseInt(fontSize.substring(0, fontSize.length-2));
+				while($('.ones').height() < digitHgt && $('.ones').width()<digitWdt){
+					fontSize += 1
+					$('.ones').css("font-size", fontSize+"px");
+					$('.tens').css("font-size", fontSize+"px");
+				}
+			} else {
+				setTimeout(function(){resizeText()}, 100);
+			}
+		}
+
 		function resize(){
 			/*
 			* Calculate the maximum height and width of each square, then take the
@@ -201,23 +218,11 @@
 				$('.top-score').append(logo1+score1);
 				$('.bottom-score').append(logo2+score2);
 			}
-			window.onload = function () {
-				var digitHgt = $('.score').height();
-				var digitWdt = $('.score').width()/2;
-
-				var fontSize = $('.ones').css("font-size");
-				console.log(digitHgt, $('.ones').height(),digitWdt, $('.ones').width())
-				fontSize = parseInt(fontSize.substring(0, fontSize.length-2));
-				while($('.ones').height() < digitHgt && $('.ones').width()<digitWdt){
-					fontSize += 1
-					$('.ones').css("font-size", fontSize+"px");
-					$('.tens').css("font-size", fontSize+"px");
-				}
-			}
 		}
 
 		$(window).on("orientationchange",function(){
 			resize();
+			resizeText();
 		});
 
 		function increaseScore(label,oldS,newS){
@@ -363,6 +368,7 @@
 			}
 		}
 		resize();
+		resizeText();
 		$('.board-rank').on('click',addTile);
 	</script>
 </html>
