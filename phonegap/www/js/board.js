@@ -4,10 +4,10 @@ if (GT === null || typeof(GT) != "object"){ var GT = new Object();}
  * Tile enumeration
  */
 GT.TileEnum = {
-	UNDEFINED : 0,
+	UNDEFINED: 0,
 	EMPTY: 3,
 	PLAYER1: 1,
-	PLAYER2: 2,
+	PLAYER2: 2
 };
 
 /**
@@ -15,14 +15,14 @@ GT.TileEnum = {
  * @param {TileEnum} type What kind of tile is being made
  * @param {boolean} supa Whether the tile is a SUPA tile (can't be captured)
  */
-GT.Tile = fuction(type, supa) {
+GT.Tile = function(type, supa) {
 	this.type = type;
 	if (!GT.validTile(type)){
 		this.type = 0;
 	}
 
 	this.isSupa = supa;
-;
+};
 
 /**
  * Check whether a tile is a valid choice
