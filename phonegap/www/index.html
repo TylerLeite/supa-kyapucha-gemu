@@ -65,23 +65,40 @@
 		</div>
 	</body>
 	<script>
-		/*
-		* This function returns the next character in the alphabet
-		*/
-		function nextChar(c) {
-			return String.fromCharCode(c.charCodeAt(0) + 1);
-		}
 
+
+		/*
+		* 'turn' keeps track of the current turn starting with 1
+		* 'maxTurn' holds the maximum number of players
+		* 'single' keeps track of whether the game is single or multi player
+		* 'sBoard' is the board object (should have board size in config eventually)
+		* 'sArray' is the 2D array of tiles
+		* 'randoBot' is the AI object
+		*/
 		var turn = 1;
 		var maxTurn = 2;
 		var single = false;
+		var sBoard = new GT.Board(7,7);
+		var sArray = sBoard.tiles();
+		var randoBot = new GT.AI(sBoard);
 
+		/*
+		* We need to hide the custom alert to start
+		*/
 		$('.alert').hide();
+
+		/*
+		* JqueryMobile has a loader symbol that needs to be hidden after page load
+		*/
 		window.onload = function () {
 			$(".ui-loader").hide();
 		}
 
-		var settings = new GT.Settings()
+		/*
+		*	Since jQuery can only change styles for existing DOM objects, this for
+		* loop adds style tags to the html to style the divs from the start.  The
+		* loop styes the logos for each player based on the settings class.
+		*/
 		for (var i = 1; i < maxTurn+1; i++){
 			var player = ".player" + i.toString();
 			var logo = ".logo" + i.toString();
@@ -95,30 +112,6 @@
 			$("<style type='text/css'>"+logo+" { background-size: contain; }</style>")
     		.appendTo(document.documentElement);
 		}
-		$('.single').click(function(){single = true;});
-		$('.double').click(function(){single = false;});
-		$('.back-btn').click(function(){sBoard.reset(); updateBoard(); resetScore(); turn = 1;})
-		$('.ok-btn').click(function(){
-			sBoard.reset();
-			updateBoard();
-			resetScore();
-			if (single === true && turn === 2){
-				aiMove();
-			}
-			$('.alert').hide();
-		});
-
-		/*
-		* Initialize the board (should eventually look for a configuration file
-		* instead of just hard coding the size)
-		*/
-		var sBoard = new GT.Board(7,7);
-		var sArray = sBoard.tiles();
-
-		/**
-		 * randoBot takes no prisoners
-		 */
-		var randoBot = new GT.AI(sBoard);
 
 		/*
 		* For the width of the board, add file columns
@@ -140,6 +133,44 @@
 			}
 		});
 
+		/*
+		*	When single or double is clicked, single is toggled to true or false
+		*/
+		$('.single').click(function(){single = true;});
+		$('.double').click(function(){single = false;});
+
+		/*
+		* When the back button is pressed, reset everything
+		*/
+		$('.back-btn').click(function(){sBoard.reset(); updateBoard(); resetScore(); turn = 1;})
+
+		/*
+		*	When the ok button on the alert is pressed, reset everything and have the
+		* AI make it's move if it is the first turn in single player mode.
+		*/
+		$('.ok-btn').click(function(){
+			sBoard.reset();
+			updateBoard();
+			resetScore();
+			if (single === true && turn === 2){
+				aiMove();
+			}
+			$('.alert').hide();
+		});
+
+		/*
+		* This function returns the next character in the alphabet
+		*/
+		function nextChar(c) {
+			return String.fromCharCode(c.charCodeAt(0) + 1);
+		}
+
+		/*
+		*	This function resizes the text of the scores to be the right height and
+		* width, this is separated from the resize function because it needs to be
+		* called after the DOM objects are initialized since it relies on the
+		* height and width of the .score container.
+		*/
 		function resizeText(){
 			var digitHgt = $('.score').height();
 			var digitWdt = $('.score').width()/2;
@@ -157,6 +188,9 @@
 			}
 		}
 
+		/*
+		*	The resize function resizes the board DOM objects to the right size.
+		*/
 		function resize(){
 			/*
 			* Calculate the maximum height and width of each square, then take the
@@ -178,12 +212,27 @@
 			$('.board-file').css('height',(winHgt-20).toString());
 			$('.board-rank').css('height',squareSize.toString());
 
+			/*
+			* remHgt is the remaining board height left after the board is sized
+			* remWdt is the remaining width
+			* logo1/2 and score1/2 are divs to hold the logos and scores
+			*/
 			var remHgt = winHgt-(squareSize*sBoard.hgt());
 			var remWdt = winWdt-(squareSize*sBoard.wdt());
 			var logo1 = '<div class = "logo logo1"></div>';
 			var score1 = '<div class = "score score1"><div class = "tens">0</div><div class = "ones">0</div></div>'
 			var logo2 = '<div class = "logo logo2"></div>';
 			var score2 = '<div class = "score score2"><div class = "tens">0</div><div class = "ones">0</div></div>'
+
+			/*
+			* If the remaining height is greater, show only the top scoreboard
+			* Size the scoreboard to the correct height (at least 50px + 20padding)
+			* Make the scoreboard full width and top 0
+			* Pad the game-board accordingly
+			* Append the logo and score divs
+			* Resize the logo and score divs
+			* If scoreboard is less than 50px hide it
+			*/
 			if (remHgt > remWdt){
 				console.log("fuck this shit")
 				$('.bottom-score').hide();
@@ -209,6 +258,10 @@
 					$('.top-score').hide();
 				}
 			} else {
+				/*
+				* Otherwise add the logos to the top and bottom scores and
+				* make sure the game-board is centered
+				*/
 				$('.game-board').css('padding-top', "10px")
 				$('.score-board').css('width', ((remWdt/2)-20).toString());
 				if (remWdt/2 >= 400){
@@ -221,11 +274,23 @@
 			}
 		}
 
+		/*
+		* on window orientation change resize everything ... this probably
+		* doesn't work correctly
+		*/
 		$(window).on("orientationchange",function(){
 			resize();
 			resizeText();
 		});
 
+		/*
+		* This function increases the score of a scoreboard given the
+		* scoreboard class, the old score and the new score
+		* setTimeout is to make it look all cool and count uppy... the score
+		* board has a separate tens and ones place cause I'm an asshole and it
+		* looks nicer when counting up to have it this way.  You can fix it if
+		* you want to make it simple again.
+		*/
 		function increaseScore(label,oldS,newS){
 			if (oldS < newS){
 				if($(label).children('.ones').text() === "9"){
@@ -242,6 +307,10 @@
 				setTimeout(function(){increaseScore(label,oldS,newS)}, 100);
 			}
 		}
+
+		/*
+		* Opposite of the increase score function
+		*/
 		function decreaseScore(label,oldS,newS){
 			if (oldS > newS){
 				console.log(oldS,newS);
@@ -259,10 +328,19 @@
 				setTimeout(function(){decreaseScore(label,oldS,newS)}, 100);
 			}
 		}
+
+		/*
+		* reset the scores to zero
+		*/
 		function resetScore(){
 			$('.score').children('.ones').text("0");
 			$('.score').children('.tens').text("0");
 		}
+
+		/*
+		* This function updates the scores by checking the dominance function
+		* of the baord object nad calling increase/decrease score
+		*/
 		function updateScore(){
 			var dom = sBoard.dominance();
 			var score1 = parseInt($('.score1').children('.tens').text())*10;
@@ -281,6 +359,7 @@
 				increaseScore('.score2',score2,dom[2]);
 			}
 		}
+
 		/*
 		* Updates the UI to display the current layout
 		*/
@@ -295,6 +374,12 @@
 						if (sArray[y][x] == 2 || sArray[y][x] == 5){
 							pnum = '2';
 						}
+
+						/*
+						* this part adds player logos to the discs
+						* it is a bit more complex in order to accomidate more than
+						* two players since there are only two sides to a disc
+						*/
 						var player = 'player'+pnum;
 						var front = $(file).children(rank).find('.front');
 						var back = $(file).children(rank).find('.back');
@@ -320,6 +405,9 @@
 			}
 		}
 
+		/*
+		* makes randobot moves
+		*/
 		var aiMove = function() {
 			var mv = randoBot.makeMove();
 			var file = '.' + String.fromCharCode(97+mv[0]);
@@ -378,6 +466,10 @@
 				}
 			}
 		}
+
+		/*
+		* resize the board, and the text on initialization
+		*/
 		resize();
 		resizeText();
 		$('.board-rank').on('click',addTile);
