@@ -6,7 +6,7 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
 		<link rel="stylesheet" href="js/lib/jQueryMobile/jquery.mobile-1.4.5.min.css">
-		<link rel="stylesheet" href="css/index.css">
+		<link rel="stylesheet" href="css/index.css" id="styling">
 		<script src="js/lib/jQuery/jquery-1.12.2.min.js"></script>
 		<script src="js/lib/jQueryMobile/jquery.mobile-1.4.5.min.js"></script>
 		<script src="js/board.js"></script>
@@ -235,7 +235,6 @@
 			*/
 			if (remHgt > remWdt){
 				console.log("fuck this shit")
-				$('.bottom-score').hide();
 				if (remHgt >= 140){
 					$('.score-board').css('height', ((remHgt/2)-20).toString());
 					$('.top-score').css('left','0');
@@ -244,6 +243,7 @@
 					extraPad += ((remHgt - extraPad - 50) / 4);
 					$('.game-board').css('padding-top', extraPad.toString()+"px");
 					$('.top-score').append(logo1+score1+logo2+score2);
+					$('.bottom-score').hide();
 					var logoWdt = (1/4) * (winWdt);
 					var logoHgt = (remHgt/2)-20;
 					var logoSize = Math.floor(Math.min(logoWdt,logoHgt));
@@ -262,18 +262,21 @@
 				* Otherwise add the logos to the top and bottom scores and
 				* make sure the game-board is centered
 				*/
+				$('.top-score').append(logo1+score1);
+				$('.bottom-score').append(logo2+score2);
 				$('.game-board').css('padding-top', "10px")
-				$('.score-board').css('width', ((remWdt/2)-20).toString());
+				var logoWdt = (remWdt/2)-20;
+				var logoHgt = (winHgt*.6);
+				var logoSize = Math.floor(Math.min(logoWdt/2,logoHgt));
+				$('.score-board').css('width', (logoSize*2).toString());
+				$('.score-board').css('height', logoSize.toString());
 				if (remWdt/2 >= 400){
 					console.log(((remWdt/2)-400)/2);
 					$('.top-score').css('left', (((remWdt/2)-400)/2).toString()+"px");
 					$('.bottom-score').css('right', (((remWdt/2)-400)/2).toString()+"px");
 				}
-				$('.top-score').append(logo1+score1);
-				$('.bottom-score').append(logo2+score2);
 			}
 		}
-
 		/*
 		* on window orientation change resize everything ... this probably
 		* doesn't work correctly
@@ -281,7 +284,6 @@
 		$(window).on("orientationchange",function(){
 			location.reload();
 		});
-
 		/*
 		* This function increases the score of a scoreboard given the
 		* scoreboard class, the old score and the new score
@@ -471,6 +473,7 @@
 		*/
 		resize();
 		resizeText();
+
 		$('.board-rank').on('click',addTile);
 	</script>
 </html>

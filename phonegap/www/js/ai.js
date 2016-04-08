@@ -34,8 +34,8 @@ GT.AI.prototype.filterCorners = function(moves) {
 	var corners = [];
 	for (var i = 0; i < moves.length; i++){
 		var mv = moves[i];
-		if ((mv[0] === 0 || mv[0] == this.gamestate.wdt()-1) &&
-					(mv[1] === 0 || mv[1] == this.gamestate.hgt()-1)){
+		if ((mv[0] == 0 || mv[0] == this.gamestate.wdt()-1) &&
+					(mv[1] == 0 || mv[1] == this.gamestate.hgt()-1)){
 			corners.push(mv);
 		}
 	}
@@ -47,8 +47,8 @@ GT.AI.prototype.filterEdges = function(moves) {
 	var edges = [];
 	for (var i = 0; i < moves.length; i++){
 		var mv = moves[i];
-		if (mv[0] === 0 || mv[0] === this.gamestate.wdt()-1 ||
-					mv[1] === 0 || mv[1] === this.gamestate.hgt()-1){
+		if (mv[0] == 0 || mv[0] == this.gamestate.wdt()-1 ||
+					mv[1] == 0 || mv[1] == this.gamestate.hgt()-1){
 			edges.push(mv);
 		}
 	}
@@ -63,11 +63,11 @@ GT.AI.prototype.dontNeedMove = function(x, y) {
 	var height = this.gamestate.hgt() - 1;
 
 	if (this.corners[0] && this.corners[1]){
-		return x === 0;
+		return x == 0;
 	}
 
 	if (this.corners[1] && this.corners[2]){
-		return y === 0;
+		return y == 0;
 	}
 
 	if (this.corners[2] && this.corners[3]){
@@ -80,7 +80,7 @@ GT.AI.prototype.dontNeedMove = function(x, y) {
 };
 
 GT.AI.prototype.filterUnneeded = function(moves) {
-	var out = [];
+	var out = []
 	for (var i = 0; i < moves.length; i++){
 		var mv = moves[i];
 		if (!this.dontNeedMove(mv[0], mv[1])){
@@ -122,7 +122,7 @@ GT.AI.prototype.checkCaptures = function(moves, safe) {
 	var captures = [];
 
 	for (var i = 0; i < moves.length; i++){
-		var mv = moves[i];
+		var mv = moves[i]
 
 		for (var xdir = -1; xdir < 2; xdir++){
 			for (var ydir = -1; ydir < 2; ydir++){
@@ -169,13 +169,13 @@ GT.AI.prototype.makeMove = function() {
 		out = corners[rand].split("");
 		var width = this.gamestate.wdt() - 1;
 		var height = this.gamestate.hgt() - 1;
-		if (out[0] === 0 && out[1] === height){
+		if (out[0] == 0 && out[1] == height){
 			this.corners[0] = true;
-		} else if (out[0] === 0 && out[1] === 0){
+		} else if (out[0] == 0 && out[1] == 0){
 			this.corners[1] = true;
-		} else if (out[0] === width && out[1] === 0){
+		} else if (out[0] == width && out[1] == 0){
 			this.corners[2] = true;
-		} else if (out[0] === width && out[1] === height){
+		} else if (out[0] == width && out[1] == height){
 			this.corners[3] = true;
 		}
 	} else if (edges.length > 0){
