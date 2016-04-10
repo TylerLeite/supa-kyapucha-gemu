@@ -176,8 +176,8 @@
 		function resizeText(){
 			var digitHgt = $('.text-resize').height();
 			var digitWdt = Math.floor($('.text-resize').width()/2);
-			var fontSize = $('.sizer').css("font-size");
-			fontSize = parseInt(fontSize.substring(0, fontSize.length-2));
+			$('.sizer').css("fontSize","1px");
+			fontSize = 1
 			while($('.sizer').height() < digitHgt && $('.sizer').width()<digitWdt){
 				fontSize += 1
 				$('.sizer').css("font-size", fontSize+"px");
@@ -252,6 +252,7 @@
 					var extraLogo = winWdt - (logoSize * 4);
 					$('.logo2').css("margin-left",extraLogo.toString()+"px");
 					$('.top-score').css("height", logoSize.toString());
+					$('.top-score').css("width","100%");
 				} else {
 					$('.top-score').hide();
 				}
@@ -260,8 +261,10 @@
 				* Otherwise add the logos to the top and bottom scores and
 				* make sure the game-board is centered
 				*/
+				$('.bottom-score').show();
 				$('.top-score').append(logo1+score1);
 				$('.bottom-score').append(logo2+score2);
+				$('.top-score').css({top:"10px",left:"10px"});
 				$('.game-board').css('padding-top', "10px")
 				var logoWdt = (remWdt/2)-20;
 				var logoHgt = (winHgt*.6);
@@ -282,7 +285,13 @@
 		* doesn't work correctly
 		*/
 		$(window).on("orientationchange",function(){
-			location.reload();
+			setTimeout(function(){
+				$('#board').children().hide().show(0);
+				$('.score-board').empty();
+				resize();
+				updateScore();
+				$('.alert').hide();
+			},100);
 		});
 		/*
 		* This function increases the score of a scoreboard given the
