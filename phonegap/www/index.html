@@ -1,4 +1,4 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
 	<head>
 		<title>スーパーキャプチャゲーム!</title>
@@ -30,6 +30,7 @@
 		</script>
 	</head>
 	<body>
+		<div class="text-resize"><div class = "sizer">0</div></div>
 		<div data-role="page" id="home">
 			<div data-role="header">
 				<h3>スーパーキャプチャゲーム!</h3>
@@ -86,6 +87,7 @@
 		* We need to hide the custom alert to start
 		*/
 		$('.alert').hide();
+		$('.score').css({visibility:"hidden"});
 
 		/*
 		* JqueryMobile has a loader symbol that needs to be hidden after page load
@@ -136,8 +138,8 @@
 		/*
 		*	When single or double is clicked, single is toggled to true or false
 		*/
-		$('.single').click(function(){single = true; resizeText();});
-		$('.double').click(function(){single = false; resizeText();});
+		$('.single').click(function(){single = true;});
+		$('.double').click(function(){single = false;});
 
 		/*
 		* When the back button is pressed, reset everything
@@ -172,18 +174,15 @@
 		* height and width of the .score container.
 		*/
 		function resizeText(){
-			var digitHgt = $('.score').height();
-			var digitWdt = $('.score').width()/2;
-			if ($('.ones').height() > 0 && $('.ones').width() > 0){
-				var fontSize = $('.ones').css("font-size");
-				fontSize = parseInt(fontSize.substring(0, fontSize.length-2));
-				while($('.ones').height() < digitHgt && $('.ones').width()<digitWdt){
-					fontSize += 1
-					$('.ones').css("font-size", fontSize+"px");
-					$('.tens').css("font-size", fontSize+"px");
-				}
-			} else {
-				setTimeout(function(){resizeText()}, 1000);
+			var digitHgt = $('.text-resize').height();
+			var digitWdt = Math.floor($('.text-resize').width()/2);
+			var fontSize = $('.sizer').css("font-size");
+			fontSize = parseInt(fontSize.substring(0, fontSize.length-2));
+			while($('.sizer').height() < digitHgt && $('.sizer').width()<digitWdt){
+				fontSize += 1
+				$('.sizer').css("font-size", fontSize+"px");
+				$('.ones').css("font-size", fontSize+"px");
+				$('.tens').css("font-size", fontSize+"px");
 			}
 		}
 
@@ -232,6 +231,7 @@
 			* Resize the logo and score divs
 			* If scoreboard is less than 50px hide it
 			*/
+			var logoSize;
 			if (remHgt > remWdt){
 				if (remHgt >= 140){
 					$('.score-board').css('height', ((remHgt/2)-20).toString());
@@ -244,10 +244,10 @@
 					$('.bottom-score').hide();
 					var logoWdt = (1/4) * (winWdt);
 					var logoHgt = (remHgt/2)-20;
-					var logoSize = Math.floor(Math.min(logoWdt,logoHgt));
+					logoSize = Math.floor(Math.min(logoWdt,logoHgt));
 					$('.logo').css("width", logoSize.toString());
 					$('.logo').css("height", logoSize.toString());
-					$('.score').css("width", (logoSize).toString());
+					$('.score').css("width", logoSize.toString());
 					$('.score').css("height", logoSize.toString());
 					var extraLogo = winWdt - (logoSize * 4);
 					$('.logo2').css("margin-left",extraLogo.toString()+"px");
@@ -265,7 +265,7 @@
 				$('.game-board').css('padding-top', "10px")
 				var logoWdt = (remWdt/2)-20;
 				var logoHgt = (winHgt*.6);
-				var logoSize = Math.floor(Math.min(logoWdt/2,logoHgt));
+				logoSize = Math.floor(Math.min(logoWdt/2,logoHgt));
 				$('.score-board').css('width', (logoSize*2).toString());
 				$('.score-board').css('height', logoSize.toString());
 				if (remWdt/2 >= 400){
@@ -273,6 +273,9 @@
 					$('.bottom-score').css('right', (((remWdt/2)-400)/2).toString()+"px");
 				}
 			}
+			logoSize = Math.min(logoSize,200).toString()+"px";
+			$('.text-resize').css({height:logoSize,width:logoSize});
+			resizeText();
 		}
 		/*
 		* on window orientation change resize everything ... this probably
@@ -467,7 +470,6 @@
 		* resize the board, and the text on initialization
 		*/
 		resize();
-
 		$('.board-rank').on('click',addTile);
 	</script>
 </html>

@@ -5,6 +5,19 @@
 body{
   overflow:hidden;
 }
+.text-resize{
+  position:absolute;
+  top:10000px;
+  left:10000px;
+  font-size:1px;
+}
+.sizer{
+  float:left;
+  position:relative;
+  font-size:1px;
+  top:50%;
+  transform: translateY(-50%);
+}
 /*
  * scoreboard contains score and logo
  * width and height are changed by JS on page load
@@ -48,7 +61,7 @@ body{
 .ones, .tens{
   float:left;
   position:relative;
-  font-size:10px;
+  font-size:1px;
   top:50%;
   transform: translateY(-50%);
 }
