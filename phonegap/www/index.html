@@ -55,7 +55,7 @@
 				<div class="bottom-score score-board">
 				</div>
 			</center>
-			<a class="back-btn ui-btn ui-icon-back ui-btn-icon-left" href="#home">BACK</a>
+			<a class="back-btn ui-btn ui-icon-back ui-btn-icon-left" onclick="history.go(-1);">BACK</a>
 			<a class="settings-btn ui-btn ui-icon-gear ui-btn-icon-left">SETTINGS</a>
 			<div class="alert">
 				<center>
@@ -144,7 +144,12 @@
 		/*
 		* When the back button is pressed, reset everything
 		*/
-		$('.back-btn').click(function(){sBoard.reset(); updateBoard(); resetScore(); turn = 1;})
+		$('.back-btn').click(function(){
+			sBoard.reset();
+			updateBoard();
+			resetScore();
+			turn = 1;
+		});
 
 		/*
 		*	When the ok button on the alert is pressed, reset everything and have the
