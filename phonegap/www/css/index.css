@@ -6,6 +6,9 @@
 body{
   overflow:hidden;
 }
+a{
+  text-decoration: none;
+}
 .text-resize{
   position:absolute;
   top:10000px;
