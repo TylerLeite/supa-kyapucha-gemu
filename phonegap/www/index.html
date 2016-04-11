@@ -31,6 +31,7 @@
 	</head>
 	<body>
 		<div class="text-resize"><div class = "sizer">0</div></div>
+
 		<div data-role="page" id="home">
 			<div data-role="header">
 				<h3>スーパーキャプチャゲーム!</h3>
@@ -45,6 +46,20 @@
 				</div>
 			</div>
 		</div>
+
+		<div data-role="page" id="settings">
+			<div data-role="content">
+				<div class="scroll_wrapper ui-content" data-isscroll>
+					<ul data-role="listview" id="home_menu" data-theme="a">
+						<li><a class="single" href="#board" data-transition="flip">Single Player</a></li>
+						<li><a class="double" href="#board" data-transition="flip">Multiplayer</a></li>
+					</ul>
+				</div>
+			</div>
+
+			<a class="back-btn ui-btn ui-icon-back ui-btn-icon-left" onclick="history.go(-1);">BACK</a>
+		</div>
+
 		<div data-role="page" id="board">
 			<center>
 				<div class="top-score score-board">
