@@ -37,10 +37,18 @@
 				<center>Sūpā Kyapucha Gēmu!</center>
 			</div>
 			<center>
-				<div class="menu-float single"></div>
-				<div class="menu-float multi"></div>
-				<div class="menu-float online"></div>
-				<div class="menu-float settings"></div>
+				<a href="#board" class = "single">
+					<div class="menu-float" style="background-image: url(img/icons/singleplayer.png);"></div>
+				</a>
+				<a href="#board" class = "multi">
+					<div class="menu-float" style="background-image: url(img/icons/multiplayer.png);"></div>
+				</a>
+				<a href="#board" class = "online">
+					<div class="menu-float" style="background-image: url(img/icons/online.png);"></div>
+				</a>
+				<a href="#settings" class = "settings">
+					<div class="menu-float" style="background-image: url(img/icons/settings.png);"></div>
+				</a>
 			</center>
 		</div>
 		<div data-role="page" id="board">
@@ -134,11 +142,11 @@
 		});
 
 		/*
-		*	When single or double is clicked, single is toggled to true or false
+		*	When single, multi or online is clicked, single is toggled to true or false
 		*/
 		$('.single').click(function(){single = true;});
-		$('.double').click(function(){single = false;});
-
+		$('.multi').click(function(){single = false;});
+		$('.online').click(function(){single = false;});
 		/*
 		* When the back button is pressed, reset everything
 		*/

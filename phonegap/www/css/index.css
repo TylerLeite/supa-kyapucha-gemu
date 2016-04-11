@@ -20,11 +20,11 @@ body{
   transform: translateY(-50%);
 }
 .menu-float{
-  width:100px;
-  height:100px;
+  max-width:240px;
+  max-height:240px;
   display: inline-block;
-  margin:5px;
-  background-color:white;
+  margin:2.5%;
+  background-size:contain;
 }
 .home{
   background-image:url("../img/wood_pattern.png");
