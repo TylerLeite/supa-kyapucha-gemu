@@ -23,7 +23,7 @@ body{
   max-width:240px;
   max-height:240px;
   display: inline-block;
-  margin:2.5%;
+  margin:5px;
   background-size:contain;
 }
 .home{
