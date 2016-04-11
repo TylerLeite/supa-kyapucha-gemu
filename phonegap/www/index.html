@@ -27,6 +27,23 @@
 				$(player).css('background-image', 'url("' + settings.getPiece(i-1) + '")');
 				$(player).css('background-size', 'contain');
 			}
+
+			var cur_music = 'menu';
+			var music = new Audio('aud/' + cur_music + '.ogg');
+			music.addEventListener('ended', function() {
+				this.currentTime = 0;
+				this.play();
+			}, false);
+
+			music.play();
+
+			// Audio
+			switch_music = function(new_music) {
+				cur_music = new_music;
+				music.setAttribute('src', 'aud/' + cur_music + '.ogg');
+				music.load();
+				music.play();
+			}
 		</script>
 	</head>
 	<body>
@@ -153,8 +170,8 @@
 		/*
 		*	When single or double is clicked, single is toggled to true or false
 		*/
-		$('.single').click(function(){single = true;});
-		$('.double').click(function(){single = false;});
+		$('.single').click(function(){switch_music('level-select'); single = true;});
+		$('.double').click(function(){switch_music('level-select'); single = false;});
 
 		/*
 		* When the back button is pressed, reset everything
@@ -164,6 +181,7 @@
 			updateBoard();
 			resetScore();
 			turn = 1;
+			switch_music('menu');
 		});
 
 		/*
