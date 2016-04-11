@@ -1,6 +1,7 @@
 /*
  * wood_pattern.png from subtlepatterns.com (awesome site)
  * overflow hidden hides the scroll bar
+ * player icons by Ivan Boyko https://www.iconfinder.com/iconsets/users-android-l-lollipop
  */
 body{
   overflow:hidden;
@@ -17,6 +18,20 @@ body{
   font-size:1px;
   top:50%;
   transform: translateY(-50%);
+}
+.menu-float{
+  max-width:240px;
+  max-height:240px;
+  display: inline-block;
+  margin:2.5%;
+  background-size:contain;
+}
+.home{
+  background-image:url("../img/wood_pattern.png");
+  height:100%;
+}
+.title{
+  margin-bottom:6%;
 }
 /*
  * scoreboard contains score and logo
