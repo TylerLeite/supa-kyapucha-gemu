@@ -6,6 +6,9 @@
 body{
   overflow:hidden;
 }
+a{
+  text-decoration: none;
+}
 .text-resize{
   position:absolute;
   top:10000px;
@@ -23,7 +26,7 @@ body{
   max-width:240px;
   max-height:240px;
   display: inline-block;
-  margin:2.5%;
+  margin:5px;
   background-size:contain;
 }
 .home{
@@ -31,7 +34,16 @@ body{
   height:100%;
 }
 .title{
-  margin-bottom:6%;
+  margin-top:10px;
+  margin-left:5px;
+  margin-right:5px;
+  margin-bottom:3%;
+  background-image:url("../img/logo.png");
+  background-repeat:no-repeat;
+  background-size:contain;
+  background-position:center;
+  width:auto;
+  height:30%;
 }
 /*
  * scoreboard contains score and logo
