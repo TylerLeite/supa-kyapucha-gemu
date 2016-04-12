@@ -34,7 +34,16 @@ a{
   height:100%;
 }
 .title{
-  margin-bottom:6%;
+  margin-top:10px;
+  margin-left:5px;
+  margin-right:5px;
+  margin-bottom:3%;
+  background-image:url("../img/logo.png");
+  background-repeat:no-repeat;
+  background-size:contain;
+  background-position:center;
+  width:auto;
+  height:30%;
 }
 /*
  * scoreboard contains score and logo
