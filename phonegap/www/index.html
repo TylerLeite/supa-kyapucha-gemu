@@ -48,10 +48,10 @@
 	</head>
 	<body>
 		<div class="text-resize"><div class = "sizer">0</div></div>
-		<div data-role="page" id="home" class = "home">
+		<div data-role="page" id="home" class = "menu">
 			<div class="title"></div>
 			<center>
-				<a href="#board" class = "single">
+				<a href="#level-select" class = "single">
 					<div class="menu-float" style="background-image: url(img/icons/singleplayer.png);"></div>
 				</a>
 				<a href="#board" class = "multi">
@@ -65,21 +65,13 @@
 				</a>
 			</center>
 		</div>
-		<div data-role="page" id="level-select">
+		<div data-role="page" id="level-select" class = "menu">
 			<center>
-				<a href="#board" class = "level">
+				<a href="#board" class = "level" id = "1">
 					<div class="menu-float" style="background-image: url(img/icons/singleplayer.png);"></div>
 				</a>
-				<a href="#board" class = "level">
-					<div class="menu-float" style="background-image: url(img/icons/multiplayer.png);"></div>
-				</a>
-				<a href="#board" class = "level">
-					<div class="menu-float" style="background-image: url(img/icons/online.png);"></div>
-				</a>
-				<a href="#settings" class = "level">
-					<div class="menu-float" style="background-image: url(img/icons/settings.png);"></div>
-				</a>
 			</center>
+			<a class="back-btn ui-btn ui-icon-back ui-btn-icon-left" onclick="history.go(-1);">BACK</a>
 		</div>
 		<div data-role="page" id="board">
 			<center>
@@ -102,8 +94,6 @@
 		</div>
 	</body>
 	<script>
-
-
 		/*
 		* 'turn' keeps track of the current turn starting with 1
 		* 'maxTurn' holds the maximum number of players
@@ -118,6 +108,7 @@
 		var sBoard = new GT.Board(7,7);
 		var sArray = sBoard.tiles();
 		var randoBot = new GT.AI(sBoard);
+		var level = 0;
 
 		/*
 		* We need to hide the custom alert to start
@@ -174,8 +165,9 @@
 		/*
 		*	When single, multi or online is clicked, single is toggled to true or false
 		*/
-		$('.single').click(function(){switch_music('game'); single = true;});
+		$('.single').click(function(){switch_music('level-select'); single = true;});
 		$('.multi').click(function(){switch_music('game'); single = false;});
+		$('.level').click(function(){switch_music('game'); level = $(this).attr('id')});
 		$('.online').click(function(){single = false;});
 		/*
 		* When the back button is pressed, reset everything
@@ -185,7 +177,12 @@
 			updateBoard();
 			resetScore();
 			turn = 1;
-			switch_music('menu');
+			if (level != 0){
+				switch_music('level-select')
+				level = 0;
+			} else {
+				switch_music('menu');
+			}
 		});
 
 		/*
@@ -247,7 +244,6 @@
 			*/
 			var winHgt = $(window).height();
 			var winWdt = $(window).width();
-
 			var fileWdt = (1/sBoard.wdt()) * (winWdt - 20);
 			var rankHgt = (1/sBoard.hgt()) * (winHgt - 20);
 			var squareSize = Math.floor(Math.min(fileWdt,rankHgt));
