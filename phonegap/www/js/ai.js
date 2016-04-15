@@ -148,7 +148,12 @@ GT.AI.prototype.filterCaptures = function(moves) {
 GT.AI.prototype.filterSafes = function(moves) {
 	return this.checkCaptures(moves, true);
 };
-
+GT.AI.prototype.chooseSpace = function(moves){
+	var rand; var out;
+	rand = Math.floor(Math.random() * moves.length);
+	out = moves[rand].split("");
+	return out;
+};
 GT.AI.prototype.makeMove = function() {
 	var legalMoves = this.gamestate.getEmptySquares();
 	var edges = this.filterEdges(legalMoves);
@@ -158,17 +163,24 @@ GT.AI.prototype.makeMove = function() {
 	var edgeSafes = this.filterSafes(edges);
 	var edgeNeeds = this.filterUnneeded(edgeSafes);
 	var corners = [];
-
-	var priorities = ['corner', 'edgeCap', 'edgeNeed', 'edgeSafe', 'edge', 'captures', 'safes', 'legal'];
-
 	if (edges.length > 0){
 		corners = this.filterCorners(edges);
 	}
+	var priorities = [corners, edgeCaps, edgeNeeds, edgeSafes, edges, captures, safes, legalMoves];
 
-	var rand; var out;
+	var out = [];
+	for (var a in priorities){
+		if (priorities[a].length != 0){
+			console.log(a);
+			out = this.chooseSpace(priorities[a]);
+			break;
+		}
+	}
+	if (out.length === 0){
+		out = ['-1','-1'];
+	}
+
 	if (corners.length > 0) {
-		rand = Math.floor(Math.random() * corners.length);
-		out = corners[rand].split("");
 		var width = this.gamestate.wdt() - 1;
 		var height = this.gamestate.hgt() - 1;
 		if (out[0] == 0 && out[1] == height){
@@ -180,38 +192,10 @@ GT.AI.prototype.makeMove = function() {
 		} else if (out[0] == width && out[1] == height){
 			this.corners[3] = true;
 		}
-	} else if (edges.length > 0){
-		if (edgeCaps.length > 0){
-			rand = Math.floor(Math.random() * edgeCaps.length);
-			out = edgeCaps[rand].split("");
-		} else if (edgeSafes.length > 0){
-			if (edgeNeeds.length > 0){
-				rand = Math.floor(Math.random() * edgeNeeds.length);
-				out = edgeNeeds[rand].split("");
-			} else {
-				rand = Math.floor(Math.random() * edgeSafes.length);
-				out = edgeSafes[rand].split("");
-			}
-		} else {
-			rand = Math.floor(Math.random() * edges.length);
-			out = edges[rand].split("");
-		}
-	} else if (captures.length > 0){
-		rand = rand = Math.floor(Math.random() * captures.length);
-		out = captures[rand].split("");
-	} else if (safes.length > 0){
-		rand = Math.floor(Math.random() * safes.length);
-		out = safes[rand].split("");
-	} else if (legalMoves.length > 0){
-		rand = Math.floor(Math.random() * legalMoves.length);
-		out = legalMoves[rand].split("");
-	} else {
-		out = ['-1', '-1'];
 	}
 
 	out[0] = parseInt(out[0]);
 	out[1] = parseInt(out[1]);
-
 	this.history.push(out);
 	return out;
 };
