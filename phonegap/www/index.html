@@ -67,9 +67,6 @@
 		</div>
 		<div data-role="page" id="level-select" class = "menu">
 			<center>
-				<a href="#board" class = "level" id = "1">
-					<div class="menu-float" style="background-image: url(img/icons/singleplayer.png);"></div>
-				</a>
 			</center>
 			<a class="back-btn ui-btn ui-icon-back ui-btn-icon-left" onclick="history.go(-1);">BACK</a>
 		</div>
@@ -109,6 +106,7 @@
 		var sArray = sBoard.tiles();
 		var randoBot = new GT.AI(sBoard);
 		var level = 0;
+		var numLevels = 20;
 
 		/*
 		* We need to hide the custom alert to start
@@ -151,6 +149,12 @@
 			letter = nextChar(letter);
 		}
 
+		for (var i = 1; i <= numLevels; i++){
+			var img = "background-image: url(img/icons/lvl/"+i.toString()+".png)";
+			var obj = '<a href="#board" class = "level" id = "'+i.toString()+'"><div class="menu-float" style="'+img+'"></div></a>'
+			$('#level-select').children().first().append(obj);
+		}
+
 		/*
 		* In each file column, for the height of the board, add rank squares
 		*/
@@ -167,7 +171,7 @@
 		*/
 		$('.single').click(function(){switch_music('level-select'); single = true;});
 		$('.multi').click(function(){switch_music('game'); single = false;});
-		$('.level').click(function(){switch_music('game'); level = $(this).attr('id')});
+		$('.level').click(function(){switch_music('game'); level = $(this).attr('id'); window.scrollTo(0,0);});
 		$('.online').click(function(){single = false;});
 		/*
 		* When the back button is pressed, reset everything
