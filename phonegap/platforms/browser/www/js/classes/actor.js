@@ -7,6 +7,7 @@ GT.Actor = function(name) {
 	this.name = name;
 	this.picture = 'img/npc/' + name + '/' + name + '.png';
 	this.piece = 'img/npc/' + name + '/piece.png';
+	this.music = 'aud/npc/' + name + '.ogg';
 };
 
 GT.Actor.prototype.setupAI = function(level, aggression, foresight) {
