@@ -3,14 +3,14 @@
  * overflow hidden hides the scroll bar
  * player icons by Ivan Boyko https://www.iconfinder.com/iconsets/users-android-l-lollipop
  */
-body{
+html,body{
   overflow:hidden;
 }
 a{
   text-decoration: none;
 }
 .text-resize{
-  position:absolute;
+  position:fixed;
   top:10000px;
   left:10000px;
   font-size:1px;
