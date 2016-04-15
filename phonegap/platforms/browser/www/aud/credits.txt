@@ -3,3 +3,6 @@ menu
 
 level-select
 	Move Forward - Kevin Macleod, incompetech.com
+
+game
+	Son of a Rocket - Kevin Macleod, incompetech.com

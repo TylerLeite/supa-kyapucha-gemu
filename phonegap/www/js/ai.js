@@ -171,7 +171,6 @@ GT.AI.prototype.makeMove = function() {
 	var out = [];
 	for (var a in priorities){
 		if (priorities[a].length != 0){
-			console.log(a);
 			out = this.chooseSpace(priorities[a]);
 			break;
 		}

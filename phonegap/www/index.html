@@ -67,9 +67,6 @@
 		</div>
 		<div data-role="page" id="level-select" class = "menu">
 			<center>
-				<a href="#board" class = "level" id = "1">
-					<div class="menu-float" style="background-image: url(img/icons/singleplayer.png);"></div>
-				</a>
 			</center>
 			<a class="back-btn ui-btn ui-icon-back ui-btn-icon-left" onclick="history.go(-1);">BACK</a>
 		</div>
@@ -105,11 +102,12 @@
 		var turn = 1;
 		var maxTurn = 2;
 		var single = false;
-		var sBoard = new GT.Board(7,7);
+		var sBoard = new GT.Board(3,3);
 		var sArray = sBoard.tiles();
 		var randoBot = new GT.AI(sBoard);
 		var level = 0;
-
+		var numLevels = 20;
+		var scoreVal =[[0,0],[0,0]]
 		/*
 		* We need to hide the custom alert to start
 		*/
@@ -151,6 +149,12 @@
 			letter = nextChar(letter);
 		}
 
+		for (var i = 1; i <= numLevels; i++){
+			var img = "background-image: url(img/icons/lvl/"+i.toString()+".png)";
+			var obj = '<a href="#board" class = "level" id = "'+i.toString()+'"><div class="menu-float" style="'+img+'"></div></a>'
+			$('#level-select').children().first().append(obj);
+		}
+
 		/*
 		* In each file column, for the height of the board, add rank squares
 		*/
@@ -167,7 +171,7 @@
 		*/
 		$('.single').click(function(){switch_music('level-select'); single = true;});
 		$('.multi').click(function(){switch_music('game'); single = false;});
-		$('.level').click(function(){switch_music('game'); level = $(this).attr('id')});
+		$('.level').click(function(){switch_music('game'); level = $(this).attr('id'); window.scrollTo(0,0);});
 		$('.online').click(function(){single = false;});
 		/*
 		* When the back button is pressed, reset everything
@@ -190,9 +194,9 @@
 		* AI make it's move if it is the first turn in single player mode.
 		*/
 		$('.ok-btn').click(function(){
+			resetScore();
 			sBoard.reset();
 			updateBoard();
-			resetScore();
 			if (single === true && turn === 2){
 				aiMove();
 			}
@@ -352,40 +356,38 @@
 		* looks nicer when counting up to have it this way.  You can fix it if
 		* you want to make it simple again.
 		*/
-		function increaseScore(label,oldS,newS){
+		function increaseScore(label,oldS,newS,w){
 			if (oldS < newS){
-				if($(label).children('.ones').text() === "9"){
-					var oldT = parseInt($(label).children('.tens').text());
-					oldT += 1;
-					$(label).children('.tens').text(oldT.toString());
-					$(label).children('.ones').text("0");
+				if(scoreVal[w][1] === 9){
+					scoreVal[w][0] += 1;
+					$(label).children('.tens').text(scoreVal[w][0].toString());
+					scoreVal[w][1] = 0;
+					$(label).children('.ones').text(scoreVal[w][1].toString());
 				} else {
-					var oldO = parseInt($(label).children('.ones').text());
-					oldO += 1;
-					$(label).children('.ones').text(oldO.toString());
+					scoreVal[w][1] += 1;
+					$(label).children('.ones').text(scoreVal[w][1].toString());
 				}
 				oldS += 1;
-				setTimeout(function(){increaseScore(label,oldS,newS)}, 100);
+				setTimeout(function(){increaseScore(label,oldS,newS,w)}, 100);
 			}
 		}
 
 		/*
 		* Opposite of the increase score function
 		*/
-		function decreaseScore(label,oldS,newS){
+		function decreaseScore(label,oldS,newS,w){
 			if (oldS > newS){
-				if($(label).children('.ones').text() === "0"){
-					var oldT = parseInt($(label).children('.tens').text());
-					oldT -= 1;
-					$(label).children('.tens').text(oldT.toString());
-					$(label).children('.ones').text("9");
+				if(scoreVal[w][1]===0){
+					scoreVal[w][0] -= 1;
+					$(label).children('.tens').text(scoreVal[w][0].toString());
+					scoreVal[w][1] = 9;
+					$(label).children('.ones').text(scoreVal[w][1].toString());
 				} else {
-					var oldO = parseInt($(label).children('.ones').text());
-					oldO -= 1;
-					$(label).children('.ones').text(oldO.toString());
+					scoreVal[w][1] -= 1;
+					$(label).children('.ones').text(scoreVal[w][1].toString());
 				}
 				oldS -= 1;
-				setTimeout(function(){decreaseScore(label,oldS,newS)}, 100);
+				setTimeout(function(){decreaseScore(label,oldS,newS,w)}, 100);
 			}
 		}
 
@@ -395,6 +397,7 @@
 		function resetScore(){
 			$('.score').children('.ones').text("0");
 			$('.score').children('.tens').text("0");
+			scoreVal =[[0,0],[0,0]];
 		}
 
 		/*
@@ -403,19 +406,17 @@
 		*/
 		function updateScore(){
 			var dom = sBoard.dominance();
-			var score1 = parseInt($('.score1').children('.tens').text())*10;
-			score1 += parseInt($('.score1').children('.ones').text());
-			var score2 = parseInt($('.score2').children('.tens').text())*10;
-			score2 += parseInt($('.score2').children('.ones').text());
-			if(score1 > dom[1]){
-				decreaseScore('.score1',score1,dom[1]);
+			score1 = scoreVal[0][0]*10+scoreVal[0][1]
+			score2 = scoreVal[1][0]*10+scoreVal[1][1]
+			if( score1 > dom[1]){
+				decreaseScore('.score1',score1,dom[1],0);
 			} else if (score1 < dom[1]){
-				increaseScore('.score1',score1,dom[1]);
+				increaseScore('.score1',score1,dom[1],0);
 			}
 			if(score2 > dom[2]){
-				decreaseScore('.score2',score2,dom[2]);
+				decreaseScore('.score2',score2,dom[2],1);
 			} else if (score2 < dom[2]){
-				increaseScore('.score2',score2,dom[2]);
+				increaseScore('.score2',score2,dom[2],1);
 			}
 		}
 
