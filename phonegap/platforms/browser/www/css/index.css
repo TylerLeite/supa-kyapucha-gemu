@@ -1,9 +1,13 @@
 /*
  * wood_pattern.png from subtlepatterns.com (awesome site)
  * overflow hidden hides the scroll bar
+ * player icons by Ivan Boyko https://www.iconfinder.com/iconsets/users-android-l-lollipop
  */
 body{
   overflow:hidden;
+}
+a{
+  text-decoration: none;
 }
 .text-resize{
   position:absolute;
@@ -17,6 +21,29 @@ body{
   font-size:1px;
   top:50%;
   transform: translateY(-50%);
+}
+.menu-float{
+  max-width:240px;
+  max-height:240px;
+  display: inline-block;
+  margin:5px;
+  background-size:contain;
+}
+.menu{
+  background-image:url("../img/wood_pattern.png");
+  height:100%;
+}
+.title{
+  margin-top:10px;
+  margin-left:5px;
+  margin-right:5px;
+  margin-bottom:3%;
+  background-image:url("../img/logo.png");
+  background-repeat:no-repeat;
+  background-size:contain;
+  background-position:center;
+  width:auto;
+  height:30%;
 }
 /*
  * scoreboard contains score and logo

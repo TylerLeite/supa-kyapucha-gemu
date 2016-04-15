@@ -27,23 +27,51 @@
 				$(player).css('background-image', 'url("' + settings.getPiece(i-1) + '")');
 				$(player).css('background-size', 'contain');
 			}
+
+			var cur_music = 'menu';
+			var music = new Audio('aud/' + cur_music + '.ogg');
+			music.addEventListener('ended', function() {
+				this.currentTime = 0;
+				this.play();
+			}, false);
+
+			music.play();
+
+			// Audio
+			switch_music = function(new_music) {
+				cur_music = new_music;
+				music.setAttribute('src', 'aud/' + cur_music + '.ogg');
+				music.load();
+				music.play();
+			}
 		</script>
 	</head>
 	<body>
 		<div class="text-resize"><div class = "sizer">0</div></div>
-		<div data-role="page" id="home">
-			<div data-role="header">
-				<h3>スーパーキャプチャゲーム!</h3>
-				<center>Sūpā Kyapucha Gēmu!</center>
-			</div>
-			<div data-role="content">
-				<div class="scroll_wrapper ui-content" data-isscroll>
-					<ul data-role="listview" id="home_menu" data-theme="a">
-						<li><a class="single" href="#board" data-transition="flip">Single Player</a></li>
-						<li><a class="double" href="#board" data-transition="flip">Multiplayer</a></li>
-					</ul>
-				</div>
-			</div>
+		<div data-role="page" id="home" class = "menu">
+			<div class="title"></div>
+			<center>
+				<a href="#level-select" class = "single">
+					<div class="menu-float" style="background-image: url(img/icons/singleplayer.png);"></div>
+				</a>
+				<a href="#board" class = "multi">
+					<div class="menu-float" style="background-image: url(img/icons/multiplayer.png);"></div>
+				</a>
+				<a href="#board" class = "online">
+					<div class="menu-float" style="background-image: url(img/icons/online.png);"></div>
+				</a>
+				<a href="#settings" class = "settings">
+					<div class="menu-float" style="background-image: url(img/icons/settings.png);"></div>
+				</a>
+			</center>
+		</div>
+		<div data-role="page" id="level-select" class = "menu">
+			<center>
+				<a href="#board" class = "level" id = "1">
+					<div class="menu-float" style="background-image: url(img/icons/singleplayer.png);"></div>
+				</a>
+			</center>
+			<a class="back-btn ui-btn ui-icon-back ui-btn-icon-left" onclick="history.go(-1);">BACK</a>
 		</div>
 		<div data-role="page" id="board">
 			<center>
@@ -66,8 +94,6 @@
 		</div>
 	</body>
 	<script>
-
-
 		/*
 		* 'turn' keeps track of the current turn starting with 1
 		* 'maxTurn' holds the maximum number of players
@@ -82,6 +108,7 @@
 		var sBoard = new GT.Board(7,7);
 		var sArray = sBoard.tiles();
 		var randoBot = new GT.AI(sBoard);
+		var level = 0;
 
 		/*
 		* We need to hide the custom alert to start
@@ -136,11 +163,12 @@
 		});
 
 		/*
-		*	When single or double is clicked, single is toggled to true or false
+		*	When single, multi or online is clicked, single is toggled to true or false
 		*/
-		$('.single').click(function(){single = true;});
-		$('.double').click(function(){single = false;});
-
+		$('.single').click(function(){switch_music('level-select'); single = true;});
+		$('.multi').click(function(){switch_music('game'); single = false;});
+		$('.level').click(function(){switch_music('game'); level = $(this).attr('id')});
+		$('.online').click(function(){single = false;});
 		/*
 		* When the back button is pressed, reset everything
 		*/
@@ -149,6 +177,12 @@
 			updateBoard();
 			resetScore();
 			turn = 1;
+			if (level != 0){
+				switch_music('level-select')
+				level = 0;
+			} else {
+				switch_music('menu');
+			}
 		});
 
 		/*
@@ -191,10 +225,18 @@
 			}
 		}
 
+		function resizeMenu(){
+			var winHgt = $(window).height();
+			var winWdt = $(window).width();
+			var floatSize = Math.floor(Math.min(winHgt, winWdt) * .40);
+			floatSize = floatSize.toString() + "px";
+			$('.menu-float').css({height:floatSize, width:floatSize});
+		}
 		/*
 		*	The resize function resizes the board DOM objects to the right size.
 		*/
 		function resize(){
+			resizeMenu();
 			/*
 			* Calculate the maximum height and width of each square, then take the
 			* smaller of the two and use that as the square size. Minus 20 takes into
@@ -202,7 +244,6 @@
 			*/
 			var winHgt = $(window).height();
 			var winWdt = $(window).width();
-
 			var fileWdt = (1/sBoard.wdt()) * (winWdt - 20);
 			var rankHgt = (1/sBoard.hgt()) * (winHgt - 20);
 			var squareSize = Math.floor(Math.min(fileWdt,rankHgt));
@@ -240,13 +281,12 @@
 			if (remHgt > remWdt){
 				if (remHgt >= 140){
 					$('.score-board').css('height', ((remHgt/2)-20).toString());
-					$('.top-score').css('left','0');
-					$('.top-score').css('top','0');
+					$('.score-board').append(logo1+score1+logo2+score2);
+
 					var extraPad = (remHgt/2)-20;
 					extraPad += ((remHgt - extraPad - 50) / 4);
 					$('.game-board').css('padding-top', extraPad.toString()+"px");
-					$('.top-score').append(logo1+score1+logo2+score2);
-					$('.bottom-score').hide();
+
 					var logoWdt = (1/4) * (winWdt);
 					var logoHgt = (remHgt/2)-20;
 					logoSize = Math.floor(Math.min(logoWdt,logoHgt));
@@ -256,20 +296,26 @@
 					$('.score').css("height", logoSize.toString());
 					var extraLogo = winWdt - (logoSize * 4);
 					$('.logo2').css("margin-left",extraLogo.toString()+"px");
+
+					$('.top-score').css({left:'0',top:'0'});
 					$('.top-score').css("height", logoSize.toString());
 					$('.top-score').css("width","100%");
+					$('.bottom-score').hide();
 				} else {
 					$('.top-score').hide();
+					$('.bottom-score').hide();
 				}
 			} else {
 				/*
 				* Otherwise add the logos to the top and bottom scores and
 				* make sure the game-board is centered
 				*/
-				$('.bottom-score').show();
 				$('.top-score').append(logo1+score1);
-				$('.bottom-score').append(logo2+score2);
 				$('.top-score').css({top:"10px",left:"10px"});
+
+				$('.bottom-score').show();
+				$('.bottom-score').append(logo2+score2);
+
 				$('.game-board').css('padding-top', "10px")
 				var logoWdt = (remWdt/2)-20;
 				var logoHgt = (winHgt*.6);
