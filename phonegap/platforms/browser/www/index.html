@@ -102,7 +102,7 @@
 		var turn = 1;
 		var maxTurn = 2;
 		var single = false;
-		var sBoard = new GT.Board(3,3);
+		var sBoard = new GT.Board(11,11);
 		var sArray = sBoard.tiles();
 		var randoBot = new GT.AI(sBoard);
 		var level = 0;
@@ -176,7 +176,12 @@
 		/*
 		* When the back button is pressed, reset everything
 		*/
-		$('.back-btn').click(function(){
+		/*$(window).on('hashchange', function(e){
+		 handleBack();
+	 });*/
+		$('.back-btn').click(function(){handleBack();});
+
+		function handleBack(){
 			sBoard.reset();
 			updateBoard();
 			resetScore();
@@ -187,8 +192,7 @@
 			} else {
 				switch_music('menu');
 			}
-		});
-
+		}
 		/*
 		*	When the ok button on the alert is pressed, reset everything and have the
 		* AI make it's move if it is the first turn in single player mode.

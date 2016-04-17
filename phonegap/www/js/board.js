@@ -119,6 +119,17 @@ GT.Board.prototype.getEmptySquares = function() {
 	return out;
 };
 
+GT.Board.prototype.getPlayerSquares = function(turn){
+	var pSpaces = [];
+	for (var i = 0; i < this.hgt(); i++){
+		for (var j = 0; j < this.wdt(); j++){
+			if (this.get(i,j) == turn){
+				pSpaces.push(i.toString() + j.toString());
+			}
+		}
+	}
+	return pSpaces;
+}
 /**
  * Clear the board, setting all times to be empty
  */
