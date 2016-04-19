@@ -101,7 +101,7 @@ GT.AI.prototype.hasEmpty = function(sx,sy,xdir,ydir){
 	var nx = sx + xdir;
 	var ny = sy + ydir;
 	if (!GT.validTile(turn) || !this.gamestate.inBounds(nx, ny)){
-		return 'x';
+		return false;
 	} else if (this.gamestate.get(nx, ny) == empty){
 		return nx.toString()+ny.toString();
 	} else {
@@ -109,7 +109,7 @@ GT.AI.prototype.hasEmpty = function(sx,sy,xdir,ydir){
 	}
 };
 
-GT.AI.prototype.besideOpp = function(sx, sy, xdir, ydir, turn) {
+GT.AI.prototype.besideOpp = function(sx, sy, xdir, ydir, turn, det) {
 	// TODO
 
 	if (xdir === 0 && ydir === 0){
@@ -122,21 +122,19 @@ GT.AI.prototype.besideOpp = function(sx, sy, xdir, ydir, turn) {
 	var nx = sx + xdir;
 	var ny = sy + ydir;
 	if (!GT.validTile(turn) || !this.gamestate.inBounds(nx, ny)){
+		if (det){
+			return true;
+		}
 		return false;
 	} else if (this.gamestate.get(nx, ny) == empty){
+		if (det){
+			return true;
+		}
 		return false;
 	} else if (this.gamestate.get(nx, ny) == turn){
-		if (this.besideOpp(nx, ny, xdir, ydir, turn)){
-			return true;
-		} else {
-			return false;
-		}
+		return this.besideOpp(nx, ny, xdir, ydir, turn, false);
 	} else {
-		if (this.besideOpp(nx, ny, xdir, ydir, turn)){
-			return false;
-		} else {
-			return true;
-		}
+		return this.besideOpp(nx, ny, xdir, ydir, turn, true);
 	}
 };
 
@@ -147,12 +145,14 @@ GT.AI.prototype.checkCaptures = function(moves, safe, turn) {
 		var mv = moves[i];
 		var found = false;
 		for (var xdir = -1; xdir < 2; xdir++){
+			var negx = xdir * -1;
 			for (var ydir = -1; ydir < 2; ydir++){
-				var negx = xdir * -1;
 				var negy = ydir * -1;
 				var e = this.hasEmpty(mv[0], mv[1], negx, negy);
-				//console.log(this.besideOpp(mv[0], mv[1], xdir, ydir, turn),this.hasEmpty(mv[0], mv[1], negx, negy), mv[0], mv[1], xdir, ydir, turn);
-				if (this.besideOpp(mv[0], mv[1], xdir, ydir, turn) && e[0] != 'x'){
+				/*if(mv[0] == '0' && mv[1] == '2'){
+					if (e != 'x'){console.log(mv[0],mv[1],xdir,ydir,e, this.besideOpp(mv[0], mv[1], xdir, ydir, turn, false))}
+				}*/
+				if (this.besideOpp(mv[0], mv[1], xdir, ydir, turn, false) && e != false){
 					captures.push(e);
 					found = true;
 				}
@@ -175,7 +175,6 @@ GT.AI.prototype.checkBadEdge = function(x, y){
 GT.AI.prototype.filterCaptures = function(moves,opp) {
 	var oppSpaces = this.gamestate.getPlayerSquares(opp);
 	var caps = this.checkCaptures(oppSpaces, false, opp);
-	console.log(caps);
 	var filteredCaps = []
 	for (var i = 0; i < caps.length; i++){
 		for (var j = 0; j < moves.length; j++){
@@ -191,6 +190,22 @@ GT.AI.prototype.filterCaptures = function(moves,opp) {
 GT.AI.prototype.filterSafes = function(moves) {
 	return this.checkCaptures(moves, true, 2);
 };
+GT.AI.prototype.filterDefenses = function(moves, me){
+	var empty = 3;
+	var mySpaces = this.gamestate.getPlayerSquares(me);
+	var caps = this.checkCaptures(mySpaces, false, me);
+	var defenses = [];
+	var best = 0;
+	for (var i = 0; i < caps.length; i++){
+		this.gamestate.set(parseInt(caps[i][0]),parseInt(caps[i][1]),me);
+		var newcaps = this.checkCaptures(mySpaces, false, me);
+		if ((caps.length - newcaps.length) > best){
+			defenses.push(caps[i]);
+		}
+		this.gamestate.set(parseInt(caps[i][0]),parseInt(caps[i][1]),empty);
+	}
+	return defenses;
+};
 GT.AI.prototype.chooseSpace = function(moves){
 	var rand; var out;
 	rand = Math.floor(Math.random() * moves.length);
@@ -201,7 +216,6 @@ GT.AI.prototype.bestMove = function(moves){
 	var counts = {};
 	var best = [];
 	var max = 0;
-	console.log(moves);
 	for (var i = 0; i < moves.length; i++){
 		var a = moves[i];
 		if(!counts[a]){
@@ -223,16 +237,18 @@ GT.AI.prototype.makeMove = function() {
 	var edges = this.filterEdges(legalMoves);
 	var captures = this.bestMove(this.filterCaptures(legalMoves,1));
 	var safes = this.filterSafes(legalMoves);
-	var edgeCaps = this.filterCaptures(edges,1);
+	var edgeCaps = this.bestMove(this.filterCaptures(edges,1));
 	var edgeSafes = this.filterSafes(edges);
 	var edgeNeeds = this.filterUnneeded(edgeSafes);
+	var defenses = this.filterDefenses(legalMoves,2);
 	var corners = [];
 	console.log(captures);
-	console.log(safes);
+	console.log(edgeSafes);
+	console.log(defenses);
 	if (edges.length > 0){
 		corners = this.filterCorners(edges);
 	}
-	var priorities = [corners, captures, edgeNeeds, edgeSafes, edges, safes, legalMoves];
+	var priorities = [corners, defenses, edgeCaps, edgeNeeds, captures, edgeSafes, edges, safes, legalMoves];
 
 	var out = [];
 	for (var a in priorities){
