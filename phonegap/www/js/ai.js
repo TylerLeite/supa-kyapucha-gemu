@@ -42,6 +42,32 @@ GT.AI.prototype.filterCorners = function(moves) {
 
 	return corners;
 };
+GT.AI.prototype.oddGaps = function(moves){
+	var empty = 3;
+	var oddMoves = [];
+	for (var m = 0; m < moves.length; m++){
+		x = parseInt(moves[m][0]);
+		y = parseInt(moves[m][1]);
+		for (var i = 0; i < Math.max(this.gamestate.wdt(), this.gamestate.hgt()); i++){
+			if (!this.gamestate.inBounds(x+1, y) || !this.gamestate.inBounds(x-1, y)){
+				if (this.gamestate.get(x,y+i) != empty && this.gamestate.get(x,y-i) != empty){
+					oddMoves.push(moves[m]);
+					break;
+				} else if (this.gamestate.get(x,y+i) != empty || this.gamestate.get(x,y-i) != empty){
+					break;
+				}
+			} else {
+				if (this.gamestate.get(x+i,y) != empty && this.gamestate.get(x-i,y) != empty){
+					oddMoves.push(moves[m]);
+					break;
+				} else if (this.gamestate.get(x+i,y) != empty || this.gamestate.get(x-i,y) != empty){
+					break;
+				}
+			}
+		}
+	}
+	return oddMoves;
+};
 GT.AI.prototype.closerTo = function(moves,turn, oppTurn){
 	var empty = 3;
 	closerMoves = [];
@@ -66,10 +92,12 @@ GT.AI.prototype.closerTo = function(moves,turn, oppTurn){
 				if (j < dist){
 					closer = false;
 				}
+				break;
 			} else if (this.gamestate.get(x,y+j) == turn || this.gamestate.get(x,y-j)== turn){
 				if (j < dist){
 					closer = true;
 				}
+				break;
 			}
 		}
 		if (closer === true){
@@ -279,15 +307,15 @@ GT.AI.prototype.makeMove = function() {
 	var edgeClose = this.closerTo(edgeSafes, 2, 1);
 	var edgeNeeds = this.filterUnneeded(edgeSafes);
 	var defenses = this.filterDefenses(legalMoves,2);
+	var oddGaps = this.oddGaps(edgeSafes);
 	var corners = [];
-	console.log(captures);
+	console.log(oddGaps);
 	console.log(edgeSafes);
-	console.log(defenses);
 	console.log(edgeClose);
 	if (edges.length > 0){
 		corners = this.filterCorners(edges);
 	}
-	var priorities = [corners, defenses, edgeCaps, edgeNeeds, edgeClose, captures, edgeSafes, safes, legalMoves];
+	var priorities = [corners, defenses, edgeCaps, edgeClose, oddGaps, edgeNeeds, captures, edgeSafes, safes, legalMoves];
 
 	var out = [];
 	for (var a in priorities){
