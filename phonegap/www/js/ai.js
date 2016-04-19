@@ -42,6 +42,43 @@ GT.AI.prototype.filterCorners = function(moves) {
 
 	return corners;
 };
+GT.AI.prototype.closerTo = function(moves,turn, oppTurn){
+	var empty = 3;
+	closerMoves = [];
+	for (var m = 0; m < moves.length; m++){
+		x = parseInt(moves[m][0]);
+		y = parseInt(moves[m][1]);
+		var closer = false;
+		var dist = 0;
+		for (var i = 0; i < this.gamestate.wdt(); i++){
+			if (this.gamestate.get(x+i,y) == oppTurn || this.gamestate.get(x-i,y) == oppTurn){
+				closer = false;
+				dist = i;
+				break;
+			} else if (this.gamestate.get(x+i,y) == turn || this.gamestate.get(x-i,y)== turn){
+				closer = true;
+				dist = i;
+				break;
+			}
+		}
+		for (var j = 0; j < this.gamestate.hgt(); j++){
+			if (this.gamestate.get(x,y+j) == oppTurn || this.gamestate.get(x,y-j) == oppTurn){
+				if (j < dist){
+					closer = false;
+				}
+			} else if (this.gamestate.get(x,y+j) == turn || this.gamestate.get(x,y-j)== turn){
+				if (j < dist){
+					closer = true;
+				}
+			}
+		}
+		if (closer === true){
+			closerMoves.push(moves[m]);
+		}
+	}
+	return closerMoves;
+};
+
 
 GT.AI.prototype.filterEdges = function(moves) {
 	var edges = [];
@@ -239,16 +276,18 @@ GT.AI.prototype.makeMove = function() {
 	var safes = this.filterSafes(legalMoves);
 	var edgeCaps = this.bestMove(this.filterCaptures(edges,1));
 	var edgeSafes = this.filterSafes(edges);
+	var edgeClose = this.closerTo(edgeSafes, 2, 1);
 	var edgeNeeds = this.filterUnneeded(edgeSafes);
 	var defenses = this.filterDefenses(legalMoves,2);
 	var corners = [];
 	console.log(captures);
 	console.log(edgeSafes);
 	console.log(defenses);
+	console.log(edgeClose);
 	if (edges.length > 0){
 		corners = this.filterCorners(edges);
 	}
-	var priorities = [corners, defenses, edgeCaps, edgeNeeds, captures, edgeSafes, edges, safes, legalMoves];
+	var priorities = [corners, defenses, edgeClose, edgeCaps, edgeNeeds, captures, edgeSafes, safes, legalMoves];
 
 	var out = [];
 	for (var a in priorities){
