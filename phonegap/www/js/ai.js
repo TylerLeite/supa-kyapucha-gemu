@@ -90,50 +90,81 @@ GT.AI.prototype.filterUnneeded = function(moves) {
 
 	return out;
 };
-
-GT.AI.prototype.willCapture = function(sx, sy, xdir, ydir, safe, first) {
-	// TODO
-	var empty = 0;
-	var oppTurn = 1;
-	var turn = 2;
-
+GT.AI.prototype.hasEmpty = function(sx,sy,xdir,ydir){
+	if (xdir === 0 && ydir === 0){
+		return false;
+	}
 	sx = parseInt(sx);
 	sy = parseInt(sy);
 
+	var empty = 3;
 	var nx = sx + xdir;
 	var ny = sy + ydir;
+	if (!GT.validTile(turn) || !this.gamestate.inBounds(nx, ny)){
+		return 'x';
+	} else if (this.gamestate.get(nx, ny) == empty){
+		return nx.toString()+ny.toString();
+	} else {
+		return this.hasEmpty(nx,ny,xdir,ydir);
+	}
+};
 
+GT.AI.prototype.besideOpp = function(sx, sy, xdir, ydir, turn) {
+	// TODO
+
+	if (xdir === 0 && ydir === 0){
+		return false;
+	}
+	sx = parseInt(sx);
+	sy = parseInt(sy);
+
+	var empty = 3;
+	var nx = sx + xdir;
+	var ny = sy + ydir;
 	if (!GT.validTile(turn) || !this.gamestate.inBounds(nx, ny)){
 		return false;
 	} else if (this.gamestate.get(nx, ny) == empty){
 		return false;
-	} else if (this.gamestate.get(nx, ny) == turn && (!first || safe)){
-		return true;
-	} else if (this.gamestate.get(nx, ny) == oppTurn){
-		if (this.willCapture(nx, ny, xdir, ydir, safe, false)){
+	} else if (this.gamestate.get(nx, ny) == turn){
+		if (this.besideOpp(nx, ny, xdir, ydir, turn)){
 			return true;
 		} else {
 			return false;
 		}
+	} else {
+		if (this.besideOpp(nx, ny, xdir, ydir, turn)){
+			return false;
+		} else {
+			return true;
+		}
 	}
 };
 
-GT.AI.prototype.checkCaptures = function(moves, safe) {
+GT.AI.prototype.checkCaptures = function(moves, safe, turn) {
 	var captures = [];
-
+	var safes = [];
 	for (var i = 0; i < moves.length; i++){
-		var mv = moves[i]
-
+		var mv = moves[i];
+		var found = false;
 		for (var xdir = -1; xdir < 2; xdir++){
 			for (var ydir = -1; ydir < 2; ydir++){
-				if (this.willCapture(mv[0], mv[1], xdir, ydir, safe, true)){
-					captures.push(moves[i]);
-					break;
+				var negx = xdir * -1;
+				var negy = ydir * -1;
+				var e = this.hasEmpty(mv[0], mv[1], negx, negy);
+				//console.log(this.besideOpp(mv[0], mv[1], xdir, ydir, turn),this.hasEmpty(mv[0], mv[1], negx, negy), mv[0], mv[1], xdir, ydir, turn);
+				if (this.besideOpp(mv[0], mv[1], xdir, ydir, turn) && e[0] != 'x'){
+					captures.push(e);
+					found = true;
 				}
 			}
 		}
+		if (found === false){
+			safes.push(moves[i]);
+		}
 	}
-
+	if (safe){
+		return safes;
+	}
 	return captures;
 };
 
@@ -141,12 +172,24 @@ GT.AI.prototype.checkBadEdge = function(x, y){
 	//Bad edge is one that either creates a hole or
 };
 
-GT.AI.prototype.filterCaptures = function(moves) {
-	return this.checkCaptures(moves, false);
+GT.AI.prototype.filterCaptures = function(moves,opp) {
+	var oppSpaces = this.gamestate.getPlayerSquares(opp);
+	var caps = this.checkCaptures(oppSpaces, false, opp);
+	console.log(caps);
+	var filteredCaps = []
+	for (var i = 0; i < caps.length; i++){
+		for (var j = 0; j < moves.length; j++){
+			if (caps[i] == moves[j]){
+				filteredCaps.push(caps[i]);
+				break;
+			}
+		}
+	}
+	return filteredCaps;
 };
 
 GT.AI.prototype.filterSafes = function(moves) {
-	return this.checkCaptures(moves, true);
+	return this.checkCaptures(moves, true, 2);
 };
 GT.AI.prototype.chooseSpace = function(moves){
 	var rand; var out;
@@ -154,19 +197,42 @@ GT.AI.prototype.chooseSpace = function(moves){
 	out = moves[rand].split("");
 	return out;
 };
+GT.AI.prototype.bestMove = function(moves){
+	var counts = {};
+	var best = [];
+	var max = 0;
+	console.log(moves);
+	for (var i = 0; i < moves.length; i++){
+		var a = moves[i];
+		if(!counts[a]){
+			counts[a] = 1;
+		} else {
+			counts[a]++;
+		}
+		if (counts[a]>max){
+			best = [a];
+			max = counts[a];
+		} else if(counts[a] === max) {
+			best.push(a);
+		}
+	}
+	return best;
+};
 GT.AI.prototype.makeMove = function() {
 	var legalMoves = this.gamestate.getEmptySquares();
 	var edges = this.filterEdges(legalMoves);
-	var captures = this.filterCaptures(legalMoves);
+	var captures = this.bestMove(this.filterCaptures(legalMoves,1));
 	var safes = this.filterSafes(legalMoves);
-	var edgeCaps = this.filterCaptures(edges);
+	var edgeCaps = this.filterCaptures(edges,1);
 	var edgeSafes = this.filterSafes(edges);
 	var edgeNeeds = this.filterUnneeded(edgeSafes);
 	var corners = [];
+	console.log(captures);
+	console.log(safes);
 	if (edges.length > 0){
 		corners = this.filterCorners(edges);
 	}
-	var priorities = [corners, edgeCaps, edgeNeeds, edgeSafes, edges, captures, safes, legalMoves];
+	var priorities = [corners, captures, edgeNeeds, edgeSafes, edges, safes, legalMoves];
 
 	var out = [];
 	for (var a in priorities){

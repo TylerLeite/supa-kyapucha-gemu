@@ -41,7 +41,7 @@ GT.validTile = function(tile) {
 
 /**
  * Check whether a tile is a valid choice
- * @param {Tile} tile The current turn
+ * @param {Tile} turn The current turn
  * @return {Tile} Whose turn it must be by process of elimination
  */
 GT.oppTurn = function(turn) {
@@ -263,6 +263,27 @@ GT.Board.prototype.checkReversi = function(sx, sy, xdir, ydir, turn){
 	*/
 
 	return out;
+};
+
+/**
+ * Check whether a specified move is legal
+ * @param {int} x The x-position to check for legality
+ * @param {int} y The y-position to check for legality
+ * @param {Tile} turn Whose turn it is
+ * @return {boolean} Whether the specified move is legal
+ */
+GT.Board.prototype.checkLegal(x, y, turn=-1) {
+	if (!this.inBounds(x, y)){
+		return false;
+	} else {
+		for (var i = 0; i < this.legalityRules.length; i++) {
+			if (!this.legalityRules[i](x, y, turn)){
+				return false;
+			}
+		}
+	}
+
+	return true;
 };
 
 /**
