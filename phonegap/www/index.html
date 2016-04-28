@@ -44,9 +44,25 @@
 				music.load();
 				music.play();
 			}
+
+			/*
+			function popopo() {
+				var els = document.getElementsByClassName("menu");
+				var el = document.getElementById("board");
+				el.innerHTML = '<input type="submit" style=id="clearlocalstorage" onclick="function(){window.localstorage.clear();}" value="Clear" />' + el.innerHTML;
+
+				for (var i = 0; i < els.length; i++) {
+					els[i].innerHTML = '<input type="submit" style=id="clearlocalstorage" onclick="function(){window.localstorage.clear();}" value="Clear" />' + els[i].innerHTML;
+				}
+
+			}
+
+			window.setTimeout(popopo, 600);
+			//*/
+
 		</script>
 	</head>
-	<body>
+	<body class="body">
 		<div class="text-resize"><div class = "sizer">0</div></div>
 		<div data-role="page" id="home" class = "menu">
 			<div class="title"></div>
