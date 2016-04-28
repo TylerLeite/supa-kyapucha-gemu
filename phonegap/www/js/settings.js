@@ -1,8 +1,9 @@
 if (GT === null || typeof(GT) != "object"){ var GT = new Object();}
 
-GT.Player = function(name, piece) {
+GT.Player = function(name, piece, theme) {
 	this.name = name;
 	this.piece = piece;
+	this.theme = theme;
 	this.rating = 1500;
 };
 
@@ -14,8 +15,8 @@ GT.Settings = function() {
 
 	var filens = this.getTwoDistinctRandomLogos();
 
-	this.addPlayer('Human', filens[0]);
-	this.addPlayer('CPU', filens[1]);
+	this.addPlayer('Human', filens[0], 'standard');
+	this.addPlayer('CPU', filens[1], 'standard');
 };
 
 GT.Settings.prototype.getTwoDistinctRandomLogos = function() {
@@ -42,13 +43,21 @@ GT.Settings.prototype.getTwoDistinctRandomLogos = function() {
 	return out;
 };
 
-GT.Settings.prototype.addPlayer = function(name, tile) {
+GT.Settings.prototype.addPlayer = function(name, tile, theme) {
 	this.numPlayers += 1;
-
+	var theme = 'standard'
 	var piece = 'img/pieces/' + tile + '.png';
-	var player = new GT.Player(name, piece);
+	var player = new GT.Player(name, piece, theme);
 
 	this.players.push(player);
+};
+
+GT.Settings.prototype.changeTheme = function(player, theme) {
+	if (player > numPlayers || player <= 0){
+		return;
+	} else {
+		this.players[player-1].theme = theme;
+	}
 };
 
 GT.Settings.prototype.changePiece = function(player, tile) {
@@ -76,6 +85,9 @@ GT.Settings.prototype.setMultiPlayer = function() {
 };
 GT.Settings.prototype.getPiece = function(player) {
 	return this.players[player].piece;
+};
+GT.Settings.prototype.getTheme = function(player) {
+	return this.players[player].theme;
 };
 GT.Settings.prototype.getName = function(player) {
 	return this.players[player].name;

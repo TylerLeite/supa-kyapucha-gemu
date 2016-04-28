@@ -176,7 +176,7 @@ a{
  * custom alert, the background color allows it to be clear but have
  * fully colored text
  */
-.alert{
+.pop-up{
   position:absolute;
   left:50%;
   top:50%;
@@ -187,16 +187,34 @@ a{
   border-radius:5px;
   background-color:rgba(255,255,255,0.9);
 }
+
+.prompt{
+  height:140px;
+}
+
 .alert-message{
   color:black;
   padding-top:20px;
   width:100%;
 }
+
+.prompt-message{
+  color:blue;
+  padding-top:20px;
+  width:100%;
+}
+
+.prompt-input{
+  width:80%;
+  height:30px;
+  margin-top:10px;
+  margin-bottom:10px;
+}
 /*
  * all the select nones make it so the button isn't selectable... ask
  * tyler why he cares about this so much
  */
-.ok-btn{
+.pop-up-btn{
   padding-top:10px;
   border-bottom-left-radius:5px;
   border-bottom-right-radius:5px;
@@ -212,6 +230,6 @@ a{
 	user-select: none;
   background-color:rgba(200,200,200,0.8);
 }
-.ok-btn:hover{
+.pop-up-btn:hover{
   background-color:rgba(200,200,200,1);
 }

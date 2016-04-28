@@ -20,14 +20,6 @@
 				$.mobile.pushStateEnabled = false;
 			});
 
-			var settings = new GT.Settings();
-
-			for (var i = 1; i < settings.numPlayers + 1; i++){
-				var player = '.player' + i.toString();
-				$(player).css('background-image', 'url("' + settings.getPiece(i-1) + '")');
-				$(player).css('background-size', 'contain');
-			}
-
 			var cur_music = 'menu';
 			var music = new Audio('aud/' + cur_music + '.ogg');
 			music.addEventListener('ended', function() {
@@ -64,6 +56,13 @@
 					<div class="menu-float" style="background-image: url(img/icons/settings.png);"></div>
 				</a>
 			</center>
+			<div class="prompt pop-up">
+				<center>
+					<div class="prompt-message"></div>
+					<input type="text" class = "prompt-input" />
+					<div class="sub-btn pop-up-btn">OK</div>
+				</center>
+			</div>
 		</div>
 		<div data-role="page" id="level-select" class = "menu">
 			<center>
@@ -82,10 +81,10 @@
 			</center>
 			<a class="back-btn ui-btn ui-icon-back ui-btn-icon-left" onclick="history.go(-1);">BACK</a>
 			<a class="settings-btn ui-btn ui-icon-gear ui-btn-icon-left">SETTINGS</a>
-			<div class="alert">
+			<div class="alert pop-up">
 				<center>
 					<div class="alert-message"></div>
-					<div class="ok-btn">OK</div>
+					<div class="ok-btn pop-up-btn">OK</div>
 				</center>
 			</div>
 		</div>
@@ -108,12 +107,14 @@
 		var level = 0;
 		var numLevels = 20;
 		var scoreVal =[[0,0],[0,0]]
+		var settings;
+		var name = "";
 
 		function initialize(){
+			initializeMenu();
 			initializeAlert();
 			initializeBoard();
 			initializeScoreBoard();
-			initializeMenu();
 		}
 		function resize(){
 			resizeMenu();
@@ -135,8 +136,8 @@
 			//resetTurn();
 			resetMenu();
 			resetAlert();
+			resetPrompt();
 		}
-
 		initialize();
 		resize();
 		/*
@@ -172,6 +173,7 @@
 		*	When the ok button on the alert is pressed, reset everything and have the
 		* AI make it's move if it is the first turn in single player mode.
 		*/
+
 		$('.ok-btn').click(function(){
 			reset();
 			if (single === true && turn === 2){
@@ -179,8 +181,28 @@
 			}
 		});
 
+		$('.sub-btn').click(function(){
+			name = $('.prompt-input').val();
+			if (name === null || name === ""){
+				$('.prompt-message').css({color:"red"});
+				$('.prompt-message').text("Uh... that's no good");
+			} else {
+				setStore = JSON.stringify(settings);
+				reset();
+				//localStorage.setItem("settings",setStore);
+			}
+		});
+
+		$('.board-rank').on('click',addTile);
+
+
+/////////////////////////////////INITIALIZATIONS////////////////////////////////
 		function initializeAlert(){
 			$('.alert').hide();
+		}
+
+		function initializePrompt(){
+			$('.prompt').hide();
 		}
 
 		function initializeScoreBoard(){
@@ -228,14 +250,29 @@
 				}
 			});
 		}
-
 		function initializeMenu(){
+			if(typeof(Storage) !== "undefined"){
+				settings = new GT.Settings();
+				if(localStorage.getItem("settings") !== null){
+					//setStore = localStorage.getItem("settings");
+					//settings = JSON.parse(setStore);
+				} else {
+					updatePrompt();
+				}
+				for (var i = 1; i < settings.numPlayers + 1; i++){
+					var player = '.player' + i.toString();
+					$(player).css('background-image', 'url("' + settings.getPiece(i-1) + '")');
+					$(player).css('background-size', 'contain');
+				}
+			}
 			for (var i = 1; i <= numLevels; i++){
 				var img = "background-image: url(img/icons/lvl/"+i.toString()+".png)";
 				var obj = '<a href="#board" class = "level" id = "'+i.toString()+'"><div class="menu-float" style="'+img+'"></div></a>'
 				$('#level-select').children().first().append(obj);
 			}
 		}
+
+/////////////////////////////////////RESETS/////////////////////////////////////
 
 		function resetTurn(){
 			turn = 1;
@@ -253,14 +290,24 @@
 			initializeAlert();
 		}
 
+		function resetPrompt(){
+			initializePrompt();
+		}
+
 		function resetScoreBoard(){
 			$('.score').children('.ones').text("0");
 			$('.score').children('.tens').text("0");
 			scoreVal =[[0,0],[0,0]];
 		}
 
+////////////////////////////////////UPDATES/////////////////////////////////////
+
 		function updateMenu(){
 			return;
+		}
+
+		function updatePrompt(){
+			$('.prompt').show();
 		}
 
 		function updateAlert(){
@@ -342,13 +389,17 @@
 								disc.toggleClass('flipped');
 							}
 						}
+						disc.hide().show(0);
 					} else {
+						console.log("test");
 						$(file).children(rank).children().remove();
 						$(file).children(rank).css('opacity',0.6.toString());
 					}
 				}
 			}
 		}
+/////////////////////////////////////RESIZES////////////////////////////////////
+
 		/*
 		*	This function resizes the text of the scores to be the right height and
 		* width, this is separated from the resize function because it needs to be
@@ -469,6 +520,8 @@
 			$('.board-file').css('height',(winHgt-20).toString());
 			$('.board-rank').css('height',squareSize.toString());
 		}
+/////////////////////////////////OTHER FUNCTIONS////////////////////////////////
+
 		/*
 		* on window orientation change resize everything ... this probably
 		* doesn't work correctly
@@ -586,6 +639,7 @@
 		function nextChar(c) {
 			return String.fromCharCode(c.charCodeAt(0) + 1);
 		}
-		$('.board-rank').on('click',addTile);
+
+
 	</script>
 </html>
