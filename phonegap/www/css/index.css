@@ -180,12 +180,24 @@ a{
   position:absolute;
   left:50%;
   top:50%;
+  z-index:3;
   margin-top:-75px;
   margin-left:-150px;
   width:300px;
   height:100px;
   border-radius:5px;
   background-color:rgba(255,255,255,0.9);
+}
+
+.overlay{
+  width:100%;
+  height:100%;
+  background-color:black;
+  opacity:.3;
+  z-index:2;
+  position:absolute;
+  top:0;
+  left:0;
 }
 
 .prompt{
@@ -199,16 +211,18 @@ a{
 }
 
 .prompt-message{
-  color:blue;
-  padding-top:20px;
+  color:black;
+  padding-top:10px;
+  font-size:20px;
   width:100%;
 }
 
 .prompt-input{
   width:80%;
   height:30px;
-  margin-top:10px;
+  margin-top:15px;
   margin-bottom:10px;
+  text-align:center;
 }
 /*
  * all the select nones make it so the button isn't selectable... ask

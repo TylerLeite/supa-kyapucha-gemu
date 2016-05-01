@@ -58,11 +58,12 @@
 			</center>
 			<div class="prompt pop-up">
 				<center>
-					<div class="prompt-message"></div>
-					<input type="text" class = "prompt-input" />
+					<div class="prompt-message">Welcome to SKG! You are?</div>
+					<input type="text" class = "prompt-input" placeholder="Username"/>
 					<div class="sub-btn pop-up-btn">OK</div>
 				</center>
 			</div>
+			<div class="overlay"></div>
 		</div>
 		<div data-role="page" id="level-select" class = "menu">
 			<center>
@@ -87,6 +88,7 @@
 					<div class="ok-btn pop-up-btn">OK</div>
 				</center>
 			</div>
+			<div class="overlay"></div>
 		</div>
 	</body>
 	<script>
@@ -107,12 +109,13 @@
 		var level = 0;
 		var numLevels = 20;
 		var scoreVal =[[0,0],[0,0]]
-		var settings;
-		var name = "";
+		var settings = new GT.Settings();
+		var save = {name:"", theme:"standard", chip:"standard", progress:0}
 
 		function initialize(){
-			initializeMenu();
 			initializeAlert();
+			initializePrompt();
+			initializeMenu();
 			initializeBoard();
 			initializeScoreBoard();
 		}
@@ -182,14 +185,16 @@
 		});
 
 		$('.sub-btn').click(function(){
-			name = $('.prompt-input').val();
-			if (name === null || name === ""){
+			var name = $('.prompt-input').val();
+			var re = /^[a-zA-Z0-9_-]{3,16}$/
+			if (!re.test(name)){
 				$('.prompt-message').css({color:"red"});
 				$('.prompt-message').text("Uh... that's no good");
 			} else {
-				setStore = JSON.stringify(settings);
+				save.name = name;
+				setStore = JSON.stringify(save);
 				reset();
-				//localStorage.setItem("settings",setStore);
+				localStorage.setItem("save",setStore);
 			}
 		});
 
@@ -199,10 +204,12 @@
 /////////////////////////////////INITIALIZATIONS////////////////////////////////
 		function initializeAlert(){
 			$('.alert').hide();
+			$('.overlay').hide();
 		}
 
 		function initializePrompt(){
 			$('.prompt').hide();
+			$('.overlay').hide();
 		}
 
 		function initializeScoreBoard(){
@@ -252,10 +259,10 @@
 		}
 		function initializeMenu(){
 			if(typeof(Storage) !== "undefined"){
-				settings = new GT.Settings();
-				if(localStorage.getItem("settings") !== null){
-					//setStore = localStorage.getItem("settings");
-					//settings = JSON.parse(setStore);
+				if(localStorage.getItem("save") !== null){
+					//localStorage.clear();
+					setStore = localStorage.getItem("save");
+					save = setStore;
 				} else {
 					updatePrompt();
 				}
@@ -308,6 +315,7 @@
 
 		function updatePrompt(){
 			$('.prompt').show();
+			$('.overlay').show();
 		}
 
 		function updateAlert(){
@@ -329,6 +337,7 @@
 					$('.alert-message').text('It\'s a tie!');
 				}
 				$('.alert').show();
+				$('.overlay').show();
 			}
 		}
 
