@@ -30,39 +30,46 @@ ________________________________________________________________________________
 Unlockables
 ================================================================================
 
+*you can't buy these, you have to unlock them in-game
+
 Music
 	8-bit version of soundtrack
 Themes
-	Fishing Theme
-	Fairy Forest Theme
-	Golden Theme
+	*Fishing Theme
+	*Fairy Forest Theme
+	*Golden Theme
 Pieces
-	Mountain
-	Rubber Duck
-	Red Checkers Piece
-	Black Checkers Piece
-	Fishing Hook
-	Princess Crown
-	Magic Crystal Ball
-	Mummy
-	Skeleton
-	Butterfly
-	Viper
-	Skull and Crossbones
-	Computer Chip
-	Yin Yang Symbol
-	Hawk
+	*Mountain
+	*Rubber Duck
+	*Red Checkers Piece
+	*Black Checkers Piece
+	*Fishing Hook
+	*Golden Fishing Hook
+	*Princess Crown
+	*Magic Crystal Ball
+	*Mummy
+	*Skeleton
+	*Butterfly
+	*Golden Butterfly
+	*Viper
+	*Skull and Crossbones
+	*Computer Chip
+	*Yin Yang Symbol
+	*Hawk
+	*Golden Hawk
 Icons
-	Rock With Face
-	Bill
-	Lee Ji-Ho
-	Kanako
-	Margaret
-	Giuseppe
-	Olga
-	Kent
-	Yeshi
+	*Rock With Face
+	*Bill
+	*Lee Ji-Ho
+	*Kanako
+	*Margaret
+	*Giuseppe
+	*Olga
+	*Kent
+	*Yeshi
 Titles
+	*Grandmaster ___
+	*Champion ___
 	___ The Great
 	___ The Sneaky
 	Princess ___
