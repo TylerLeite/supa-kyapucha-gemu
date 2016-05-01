@@ -1,0 +1,172 @@
+Big Bad Todo List
+================================================================================
+Programming
+	Multiplayer
+		Login / registration
+		Connect to facebook
+		Matchmaking
+		Custom name, profile picture, pieces, themes
+	High Score server code (for endless Yeshi battle)
+	In-app purchases
+		Actual purchases
+		Marketplace screen
+	Campaign
+		Edits to game logic to support special rulesets / win cons
+		Dialog code
+		Update level select
+		Update scoreboard to not rely on actual board
+	Achievements
+		Unlock themes, pieces, prof pics, and titles (e.g. GODDESS Yeshi) [titles in gold so you cant fake them]
+	Settings
+		Change theme, pieces, prof pic, title
+		Change audio settings
+
+________________________________________________________________________________
+Unlockables
+================================================================================
+
+Music
+	8-bit version of soundtrack
+Themes
+	Fishing Theme
+	Fairy Forest Theme
+	Golden Theme
+Pieces
+	Mountain
+	Rubber Duck
+	Red Checkers Piece
+	Black Checkers Piece
+	Fishing Hook
+	Princess Crown
+	Magic Crystal Ball
+	Mummy
+	Skeleton
+	Butterfly
+	Viper
+	Skull and Crossbones
+	Computer Chip
+	Yin Yang Symbol
+	Hawk
+Icons
+	Rock With Face
+	Bill
+	Lee Ji-Ho
+	Kanako
+	Margaret
+	Giuseppe
+	Olga
+	Kent
+	Yeshi
+Titles
+	___ The Great
+	___ The Sneaky
+	Princess ___
+	Prince ___
+	___, Sica's Best Friend
+
+
+________________________________________________________________________________
+Campaign Mode
+================================================================================
+Dialog
+	Introductions
+	We meet again*
+	Ai wins
+	Ai loses first time
+	Ai loses second time*
+	Ai gets supa kyapucha
+	Human gets supa kyapucha
+	Ai about to lose (5 turns left, down by 10+ points)
+	Ai about to win (5 turns left, up by 10+ points)
+	Close game (5 turns left)
+	Rematch (human already won, but you want to play that level again)
+	Try again (human lost, but is persevering)
+
+Characters
+	Bill [prefers to be called william, very insecure, doesn’t say too much, probably balding but he covers it up well, does say too little]
+		Very defensive
+		Not likely to capture
+		May make mistakes
+		Special piece is generic black checkers piece or generic red checkers piece
+	Kanako (神奈子), Mini magic gurl (purple, big hair) [angsty, sullen, stoic yet juvenile, a lot like Near from death note]
+		Sets up traps (moves that lead to a capture but only in a position where she can capture back)
+		Special piece is a princess crown or crystal ball
+	Lee Ji-Ho (리 지호), Old man with fishing rod (oh, got one on the line!) [determined yet nice, eager, enjoys the thrill of competition, appears younger than his age but not in appearance]
+		Super aggressive,  likely to capture pieces / claim territory in the middle
+		Special piece is a fishing hook
+	Giuseppe, Fairy prince (also with face) [butterfly wings, entitled / thinks he better than everyone else]
+		Plays conservative but tries to fill gaps
+		Special piece is a butterfly (also need critters)
+	Olga, Gorgon (medusa type) [sinister, cunning, hair is literally snakes]
+		Special piece is a viper or skull and crossbones
+	Margaret, Female Ghost with tall hair (booooo) [trickster / prankster, has tall hair, always happy but you get the feeling shes hiding some deep pain (fake smile, sad eyes)]
+		Sets up traps (even more so than kanako)
+		Does unorthodox moves
+		Special piece is a mummy or skeleton
+	Kent, Karate Cyborg [the strong silent type, man of few words, strong like bull]
+		Special piece is a computer chip or yin yang symbol
+	Yeshi, Jesseagle (oh yeah, cawwwww) [brave, extraordinarily beautiful]
+		Plays the best AI strategy that we can make
+		Special piece is an eagle or another eagle
+	Rock with face (rock) [literally a rock with a face]
+		Randomly moves
+		Special piece is a mountain or rubber duck
+
+Levels
+	FOREST ENTRY (rock with face, bill, lee)
+		Rock with face
+			Tutorial Level
+		Bill
+			Plays normally
+		Rock with face
+			Gets to move twice for every human move
+		Bill
+			Plays normally but a little better
+		BOSS Lee
+			Need a supa kyapucha
+			Sometimes fishes up (removes) your pieces
+	DEEP FOREST (kanako, margaret, giuseppi)
+		Kanako
+			Place a piece on top of your current one to make it indestructible
+			Every few turns, kanako’s pieces turn invisible / kanako’s pieces are only visible for a certain number of turns after they’re placed
+		Margaret
+			Sometimes pieces disappear
+		Kanako
+			Place a piece on top of your current one to make it indestructible
+			All of your pieces are invisible (THIS IS EVIL… but I like it)
+		Margaret
+			Sometimes pieces are moved around
+			Sometimes your pieces are converted to hers
+		BOSS Giuseppi
+			Must win
+			Sometime forest crutters appear (maybe his pieces are sometimes generated as critters)
+			Must capture all forest critters
+	FOREST CENTER (kent, olga, yeshi)
+	Kent
+		Chain reactions (newly captured pieces can trigger captures
+	Olga
+		Every time she captures, she also gets a random other piece of yours
+	Kent
+		Chain reactions
+		His pieces that he uses to capture (ends of the capture, even in chain reactions) become indestructible
+	Olga
+		Every time she captures, she gets another move (pool rules, bitches) (THIS SEEMS OP) (IT IS)
+	GODDESS Yeshi
+		Tip-top ai
+		You cant win
+		Dont even try
+		Captured pieces disappear instead of getting converted
+		Goal is to make it to 100 points first
+
+________________________________________________________________________________
+Game Logic
+================================================================================
+
+single player
+	in_between
+
+	check_wincons
+		-number of supa kyapuchas
+		-percent of board controlled
+		-did you winned
+		-number special tiles  (critters)
