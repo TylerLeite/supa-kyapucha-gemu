@@ -20,6 +20,11 @@ Programming
 	Settings
 		Change theme, pieces, prof pic, title
 		Change audio settings
+	Artificial Intelligence
+		Add heuristic to rank moves in a list
+		Able to set goals (kinda ambitious)
+			-e.g. goal is to control the center, goal is to block the other guy from capturing
+		Able to handle special rules (like kanako's reinforcement rule)
 
 ________________________________________________________________________________
 Unlockables
@@ -169,4 +174,4 @@ single player
 		-number of supa kyapuchas
 		-percent of board controlled
 		-did you winned
-		-number special tiles  (critters)
+		-number special tiles (critters)
