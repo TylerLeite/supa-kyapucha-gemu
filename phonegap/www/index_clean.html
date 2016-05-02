@@ -28,8 +28,19 @@
 				$.mobile.pushStateEnabled = false;
 			});
 
-			GT.vars = new Object();
+			if (GT === null || typeof(GT) != 'object'){ var GT = new Object();}
+
+			if (!GT.hasAttribute('vars')){GT.vars = new Object();}
+			if (!GT.hasAttribute('const')){GT.const = new Object();}
+
+
 			GT.vars.music = new GT.Music('menu');
+			//GT.vars.board = new GT.Board(7, 7);
+			//GT.vars.opponent = new GT.Actor();
+			//GT.vars.player = new GT.Player();
+			GT.vars.gamemode = 'single';
+
+			//GT.const.server = new GT.Server();
 
 			/*
 			* 'turn' keeps track of the current turn starting with 1
@@ -39,17 +50,17 @@
 			* 'sArray' is the 2D array of tiles
 			* 'randoBot' is the AI object
 			*/
-			var turn = 1;
-			var maxTurn = 2;
-			var single = false;
-			var sBoard = new GT.Board(7,7);
-			var sArray = sBoard.tiles();
-			var randoBot = new GT.AI(sBoard);
-			var level = 0;
-			var numLevels = 20;
-			var scoreVal =[[0,0],[0,0]]
-			var settings = new GT.Settings();
-			var save = {name:"", theme:"standard", chip:"standard", progress:0}
+			var turn = 1; //GT.vars.turn
+			var maxTurn = 2; //not used
+			var single = false; //GT.vars.gamemode [now 'single' or 'multi']
+			var sBoard = new GT.Board(7,7); //GT.vars.board
+			var sArray = sBoard.tiles(); //GT.vars.board.tile
+			var randoBot = new GT.AI(sBoard); //GT.vars.opponent.ai
+			var level = 0; //GT.vars.level
+			var numLevels = 20; //GT.const.levelsct
+			var scoreVal =[[0,0],[0,0]] //GT.vars.Scoreboard
+			var settings = new GT.Settings(); //GT.vars.settings
+			var save = {name:"", theme:"standard", chip:"standard", progress:0} //GT.vars.player.save
 
 		</script>
 	</head>
