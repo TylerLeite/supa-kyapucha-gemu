@@ -25,6 +25,7 @@ Programming
 		Able to set goals (kinda ambitious)
 			-e.g. goal is to control the center, goal is to block the other guy from capturing
 		Able to handle special rules (like kanako's reinforcement rule)
+		Nerual net?
 
 ________________________________________________________________________________
 Unlockables
@@ -218,3 +219,40 @@ single player
 		-did you winned
 		-number special tiles (critters)
 		-compare to requirements
+________________________________________________________________________________
+Game Logic
+================================================================================
+GT
+	Classes
+		Game
+		Board
+		Actor
+			AI
+			Settings
+			WinCondition[]
+			SpecialRule[]
+		Player
+			Inventory
+			Achievements
+			Settings
+			save()
+			load()
+			sync()
+		Music
+		Level
+			Actor
+			Music
+			Theme
+		Theme
+			name, border img, bg image, etc
+		Server
+			server info
+	Constants
+		Map<String, Actor> cpus
+		Map<String, Theme> themes
+		Server server
+	Variables
+		Music music
+		Board board
+		Actor opponent
+		Player player

@@ -13,6 +13,7 @@
 		<script src="js/ai.js"></script>
 		<script src="js/settings.js"></script>
 
+		<script src="js/classes/music.js"></script>
 		<script>
 			$(document).bind("mobileinit",function() {
 				$.mobile.changePage.defaults.changeHash = false;
@@ -20,22 +21,10 @@
 				$.mobile.pushStateEnabled = false;
 			});
 
-			var cur_music = 'menu';
-			var music = new Audio('aud/' + cur_music + '.ogg');
-			music.addEventListener('ended', function() {
-				this.currentTime = 0;
-				this.play();
-			}, false);
+			GT.vars = new Object();
 
-			music.play();
+			GT.vars.music = new GT.Music('menu');
 
-			// Audio
-			switch_music = function(new_music) {
-				cur_music = new_music;
-				music.setAttribute('src', 'aud/' + cur_music + '.ogg');
-				music.load();
-				music.play();
-			}
 		</script>
 	</head>
 	<body class="body">
@@ -162,11 +151,11 @@
 		*/
 		$(window).on('hashchange', function(e){
 		 if (window.location.href.indexOf('board')>-1){
-			 switch_music('game');
+			 GT.Music.switch(GT.vars.music, 'game');
 		 } else if (window.location.href.indexOf('level-select')>-1){
-			 switch_music('level-select');
+			 GT.Music.switch(GT.vars.music, 'level-select');
 		 } else {
-			 switch_music('menu');
+			 GT.Music.switch(GT.vars.music, 'menu');
 		 }
 	 	});
 
