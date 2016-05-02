@@ -29,9 +29,6 @@ Programming
 ________________________________________________________________________________
 Unlockables
 ================================================================================
-
-*you can't buy these, you have to unlock them in-game
-
 Music
 	8-bit version of soundtrack
 Themes
@@ -76,6 +73,7 @@ Titles
 	Prince ___
 	___, Sica's Best Friend
 
+*you can't buy these, you have to unlock them in-game
 
 ________________________________________________________________________________
 Campaign Mode
@@ -173,12 +171,50 @@ Levels
 ________________________________________________________________________________
 Game Logic
 ================================================================================
-
 single player
+	Game object
+		board
+		requirements to win
+		player 1 (ai)
+		player 2 (human)
+
+	prompt_move
+		get input / call ai for move
+		place_piece()
+
+	place_piece
+		check if move is legal
+		puts piece on board
+		checks captures
+		if (is_move_over)
+			in_between()
+			check_wincons()
+			change the turn to the other guy
+			prompt_move()
+		else
+			prompt_move()
+
+	do_captures
+		make captures happen
+		check if supa kyapucha
+		if (chain reactions & supa kyapucha)
+			do chain reactions
+
+	is_move_over
+		lets certain character move twice
+			rock with face 2
+			olga 2
+
 	in_between
+		-edit board
+			steal pieces
+			move pieces
+			remove pieces
+			make pieces invisible
 
 	check_wincons
 		-number of supa kyapuchas
 		-percent of board controlled
 		-did you winned
 		-number special tiles (critters)
+		-compare to requirements
