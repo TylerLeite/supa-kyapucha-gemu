@@ -8,53 +8,11 @@ $(window).on("orientationchange",function(){
 	setTimeout(function(){
 		$('#board').children().hide().show(0);
 		$('.score-board').empty();
-		resize();
-		updateScore();
+		GT.UI.resize();
+		GT.UI.ScoreBoard.update();
 		$('.alert').hide();
 	},100);
 });
-/*
-* This function increases the score of a scoreboard given the
-* scoreboard class, the old score and the new score
-* setTimeout is to make it look all cool and count uppy... the score
-* board has a separate tens and ones place cause I'm an asshole and it
-* looks nicer when counting up to have it this way.  You can fix it if
-* you want to make it simple again.
-*/
-function increaseScore(label,oldS,newS,w){
-	if (oldS < newS){
-		if(scoreVal[w][1] === 9){
-			scoreVal[w][0] += 1;
-			$(label).children('.tens').text(scoreVal[w][0].toString());
-			scoreVal[w][1] = 0;
-			$(label).children('.ones').text(scoreVal[w][1].toString());
-		} else {
-			scoreVal[w][1] += 1;
-			$(label).children('.ones').text(scoreVal[w][1].toString());
-		}
-		oldS += 1;
-		setTimeout(function(){increaseScore(label,oldS,newS,w)}, 100);
-	}
-}
-
-/*
-* Opposite of the increase score function
-*/
-function decreaseScore(label,oldS,newS,w){
-	if (oldS > newS){
-		if(scoreVal[w][1]===0){
-			scoreVal[w][0] -= 1;
-			$(label).children('.tens').text(scoreVal[w][0].toString());
-			scoreVal[w][1] = 9;
-			$(label).children('.ones').text(scoreVal[w][1].toString());
-		} else {
-			scoreVal[w][1] -= 1;
-			$(label).children('.ones').text(scoreVal[w][1].toString());
-		}
-		oldS -= 1;
-		setTimeout(function(){decreaseScore(label,oldS,newS,w)}, 100);
-	}
-}
 
 /*
 * makes randobot moves
@@ -64,36 +22,6 @@ function aiMove() {
 	var file = '.' + String.fromCharCode(97+mv[0]);
 	var rank = '.' + (mv[1]+1).toString();
 	$(file).children(rank).click();
-}
-
-/*
-* Handles when a tile is clicked, first checks if valid, then changes the
-* tile and updates the board, then checks if all tiles have been filled
-* and if so declares a winner.
-*/
-function addTile() {
-	var file = $(this).parent().attr('class').slice(-1).charCodeAt(0) - 97;
-	var rank = parseInt($(this).attr('class').slice(-1)) - 1;
-
-	if (sBoard.place(file, rank, turn)){
-		var front = '<div class="player'+turn.toString()+' front"></div>';
-		var back = '<div class="player'+turn.toString()+' back"></div>';
-		$(this).append('<div class="disc">'+front+back+'</div>');
-		$(this).css("opacity",(1.0).toString());
-		if (turn === maxTurn){
-			turn = 1;
-		} else {
-			turn += 1;
-			if (single === true && sBoard.emp() > 0){
-				$('.board-rank').off('click',addTile);
-				setTimeout(function(){
-					$('.board-rank').on('click',addTile);
-					aiMove();
-				}, 1000);
-			}
-		}
-		update();
-	}
 }
 
 /*
@@ -115,3 +43,48 @@ function getSquareSize(){
 function nextChar(c) {
 	return String.fromCharCode(c.charCodeAt(0) + 1);
 }
+
+function resetTurn(){
+	GT.vars.turn = 1;
+}
+
+/*
+* JqueryMobile has a loader symbol that needs to be hidden after page load
+*/
+window.onload = function (){
+	$(".ui-loader").hide();
+};
+
+/*
+* When the back button is pressed, reset everything
+*/
+$(window).on('hashchange', function(e){
+ if (window.location.href.indexOf('board')>-1){
+	 GT.Music.switch('game');
+ } else if (window.location.href.indexOf('level-select')>-1){
+	 GT.Music.switch('level-select');
+ } else {
+	 GT.Music.switch('menu');
+ }
+});
+
+/*
+*	When single, multi or online is clicked, single is toggled to true or false
+*/
+$('.single').click(function(){GT.vars.gamemode = 'single';});
+$('.multi').click(function(){GT.vars.gamemode = 'multi';});
+$('.level').click(function(){GT.vars.level = $(this).attr('id'); window.scrollTo(0,0);});
+$('.online').click(function(){GT.vars.gamemode = 'multi';});
+
+$('.back-btn').click(function(){GT.UI.reset(); resetTurn();});
+
+/*
+*	When the ok button on the alert is pressed, reset everything and have the
+* AI make it's move if it is the first turn in single player mode.
+*/
+
+$('.ok-btn').click(GT.UI.Alert.sumbit());
+
+$('.sub-btn').click(GT.UI.Prompt.submit());
+
+$('.board-rank').on('click',GT.UI.Board.addTile());
