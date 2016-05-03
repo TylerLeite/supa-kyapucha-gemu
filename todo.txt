@@ -219,6 +219,7 @@ single player
 		-did you winned
 		-number special tiles (critters)
 		-compare to requirements
+
 ________________________________________________________________________________
 Game Logic
 ================================================================================
