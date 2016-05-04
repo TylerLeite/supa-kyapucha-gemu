@@ -297,7 +297,7 @@ GT.Board.prototype.makeMove() {
 	var legalMove = true;
 	while (!legalMove){
 		move = prompt();
-		legalMove = placePiece(move[0], move[1])
+		legalMove = this.placePiece(move[0], move[1]);
 	}
 
 	if (this.checkWincons()){
@@ -315,10 +315,19 @@ GT.Board.prototype.makeMove() {
 	}
 };
 
+/*
+ * Prompt the current player for a move (poll AI or prompt human)
+ */
 GT.Board.prototype.prompt = function() {
 	//
 };
 
+/*
+ * Checks whether a given move would be legal
+ * @param {int} x The x coordinate of the location to check
+ * @param {int} y The y coordinate of the location to check
+ * @return {boolean} Whether the move passes all legality rules
+ */
 GT.Board.prototype.checkLegal = function(x, y) {
 	for (var i = 0; i < this.legalityRules.length; i++) {
 		if (this.legalityRules[i](x, y)){
@@ -329,31 +338,111 @@ GT.Board.prototype.checkLegal = function(x, y) {
 	return true;
 };
 
-GT.Board.prototype.placePiece = function(x, y)
+/*
+ * Attempt to place a piece at the location (x, y)
+ * @param {int} x The x coordinate of the location at which to place the piece
+ * @param {int} y The y coordinate of the location at which to place the piece
+ * @return {boolean} Whether the move was legal
+ */
+GT.Board.prototype.placePiece = function(x, y) {
 	if (this.checkLegal(x, y)){
 		return false;
 	}
 
+	var tile = new GT.Tile(this.turn, false);
+	this.set(x, y, tile);
+
 	//check captures
+	this.checkCaptures(x, y);
 
 	//do captures
+	this.doCaptures();
 
+	return true;
 };
 
-GT.Board.prototype.checkCaptures() {
-	//
+/*
+ * Check for captures in a single direction
+ * @param {int} sx The x position at which to start
+ * @param {int} sy The y position at which to start
+ * @param {int} xdir The x component of the direction to check
+ * @param {int} ydir The y component of the direction to check
+ * @return {boolean} true if there was a capture in that direction, else false
+ */
+GT.Board.prototype.checkOneDirection(sx, sy, xdir, ydir) {
+	var nx = sx + xdir;
+	var ny = sy + ydir;
+
+
+	if (!this.inBounds(nx, ny)){
+		return false;
+	} else if (this.get(nx, ny).type == GT.Tile.types.EMPTY){
+		return false;
+	} else if (this.get(nx, ny).type == this.turn){
+		if (this.get(sx, sy) != this.turn){
+			this.kyapuchas.push([sx, sy]);
+		}
+		return true;
+	} else if (this.get(nx, ny).turn == this.oppTurn()){
+		if (this.checkOneDirection(nx, ny, xdir, ydir)){{
+			this.kyapuchas.push([sx, sy]);
+		}
+		return true;
+	} else {
+		return false;
+	}
 };
 
+/*
+ * Check to see if placing a piece at (x, y) would cause any captures
+ * @param {int} x The x position where the piece was placed
+ * @param {int} y The y position where the piece was placed
+ * @modifies this.kyapuchas
+ * @effects fills this.kyapuchas with the pieces that got captured
+ * @return {boolean} true if captures occurred, else false
+ */
+GT.Board.prototype.checkCaptures(x, y) {
+	this.kyapuchas = [];
+	var out = false;
+
+	for (var i = -1; i < 2; i++){
+		for (var j = 0; j < 2; j++){
+			var nx = x+i;
+			var ny = y+i;
+			if (this.inBounds(nx, ny) && this.get(nx, ny).type == this.oppTurn()){
+				out = out || this.checkOneDirection(x, y, i, j);
+			}
+		}
+	}
+
+	return out;
+};
+
+
+/*
+ * Perform any captures that occurred do to the last move
+ */
 GT.Board.prototype.doCaptures() {
-	//
+	for (var i = 0; i < this.kyapuchas.length(); i++){
+		var cur = this.kyapuchas[i];
+		var tile = new GT.Tile(this.turn, false);
+		this.set(cur[0], cur[1], tile);
+	}
 };
 
+/*
+ * Perform any actions that must occur between moves
+ */
 GT.Board.prototype.betweenMoves() {
 	for (var i = 0; i < this.actionsBetweenMoves; i++){
 		this.actionsBetweenMoves[i]();
 	}
 };
 
+/*
+ * Check to see if someone has won yet
+ * @return {boolean} True if all wincons are met, else false
+ */
 GT.Board.prototype.checkWincons() {
 	//This is going to change
 	return this.emptySquares == 0;
