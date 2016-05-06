@@ -1,8 +1,7 @@
 if (GT === null || typeof(GT) != "object") { var GT = new Object(); }
-if (GT.UI === null || typeof(GT.UI) != "object") { GT.UI = newObject(); }
-if (GT.vars === null || typeof(GT.vars) != "object") { GT.vars = newObject(); }
-if (GT.const === null || typeof(GT.const) != "object") { GT.const = newObject(); }
-if (GT.UI.Prompt === null || typeof(GT.UI.Prompt) != "object") { GT.UI.Prompt = newObject(); }
+if (GT.vars === null || typeof(GT.vars) != "object") { GT.vars = new Object(); }
+if (GT.const === null || typeof(GT.const) != "object") { GT.const = new Object(); }
+if (GT.UI.Prompt === null || typeof(GT.UI.Prompt) != "object") { GT.UI.Prompt = new Object(); }
 
 GT.UI.Menu = function(){};
 

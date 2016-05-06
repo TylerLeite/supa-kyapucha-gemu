@@ -2,7 +2,7 @@ if (GT === null || typeof(GT) != "object") { var GT = new Object();}
 
 GT.UI = function() {};
 GT.UI.prototype.initialize = function(){
-  this.Alert.initialize();
+  GT.UI.Alert.initialize();
   this.Prompt.initialize();
   this.Menu.initialize();
   this.Board.initialize();

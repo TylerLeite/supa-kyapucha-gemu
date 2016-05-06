@@ -1,5 +1,7 @@
 /////////////////////////////////OTHER FUNCTIONS////////////////////////////////
-
+UI = new GT.UI();
+UI.initialize();
+UI.resize();
 /*
 * on window orientation change resize everything ... this probably
 * doesn't work correctly
@@ -8,8 +10,8 @@ $(window).on("orientationchange",function(){
 	setTimeout(function(){
 		$('#board').children().hide().show(0);
 		$('.score-board').empty();
-		GT.UI.resize();
-		GT.UI.ScoreBoard.update();
+		UI.resize();
+		UI.ScoreBoard.update();
 		$('.alert').hide();
 	},100);
 });
@@ -76,15 +78,15 @@ $('.multi').click(function(){GT.vars.gamemode = 'multi';});
 $('.level').click(function(){GT.vars.level = $(this).attr('id'); window.scrollTo(0,0);});
 $('.online').click(function(){GT.vars.gamemode = 'multi';});
 
-$('.back-btn').click(function(){GT.UI.reset(); resetTurn();});
+$('.back-btn').click(function(){UI.reset(); resetTurn();});
 
 /*
 *	When the ok button on the alert is pressed, reset everything and have the
 * AI make it's move if it is the first turn in single player mode.
 */
 
-$('.ok-btn').click(GT.UI.Alert.sumbit());
+$('.ok-btn').click(UI.Alert.sumbit());
 
-$('.sub-btn').click(GT.UI.Prompt.submit());
+$('.sub-btn').click(UI.Prompt.submit());
 
-$('.board-rank').on('click',GT.UI.Board.addTile());
+$('.board-rank').on('click',UI.Board.addTile());

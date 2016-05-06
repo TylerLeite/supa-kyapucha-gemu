@@ -1,6 +1,5 @@
 if (GT === null || typeof(GT) != "object") { var GT = new Object(); }
-if (GT.UI === null || typeof(GT.UI) != "object") { GT.UI = newObject(); }
-if (GT.vars === null || typeof(GT.vars) != "object") { GT.vars = newObject(); }
+if (GT.vars === null || typeof(GT.vars) != "object") { GT.vars = new Object(); }
 
 function appendFiles(){
   /*
