@@ -1,19 +1,13 @@
 if (GT === null || typeof(GT) != "object") { var GT = new Object(); }
 
-GT.UI.vars = function(){
-  var turn = 1;
-  var gamemode = "single";
-  var board = new GT.Board(7,7);
-  var level = 0;
-  var Scoreboard = [[0,0],[0,0]];
-  var settings = new GT.Settings();
-  var save = {name:"", theme:"standard", chip:"standard", progress:0};
-};
-
-GT.UI.vars.opponent = function(){
-  var ai = new GT.AI(this.board);
-};
-
-GT.UI.vars.player = function(){
-  var save = {name:"", theme:"standard", chip:"standard", progress:0};
-};
+GT.vars.turn = 1;
+GT.vars.gamemode = "single";
+GT.vars.board = new GT.Board(7,7);
+GT.vars.board.tiles = GT.vars.board.tiles();
+GT.vars.level = 0;
+GT.vars.Scoreboard = [[0,0],[0,0]];
+GT.vars.settings = new GT.Settings();
+GT.vars.opponent = {};
+GT.vars.player = {};
+GT.vars.opponent.ai = new GT.AI(GT.vars.board);
+GT.vars.player.save = {name:"", theme:"standard", chip:"standard", progress:0};

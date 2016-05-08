@@ -1,8 +1,10 @@
 if (GT === null || typeof(GT) != "object") { var GT = new Object();}
 
-GT.UI = function() {};
+GT.UI = function() {
+
+};
 GT.UI.prototype.initialize = function(){
-  GT.UI.Alert.initialize();
+  this.Alert.initialize();
   this.Prompt.initialize();
   this.Menu.initialize();
   this.Board.initialize();
@@ -17,9 +19,9 @@ GT.UI.prototype.reset = function(){
 };
 
 GT.UI.prototype.resize = function(){
-  this.Menu.initialize();
-  this.Board.initialize();
-  this.ScoreBoard.initialize();
+  this.Menu.resize();
+  this.Board.resize();
+  this.ScoreBoard.resize();
 };
 
 GT.UI.prototype.update = function(){

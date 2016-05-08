@@ -12,9 +12,10 @@ GT.UI.Menu.prototype.initialize = function(){
       setStore = localStorage.getItem("save");
       GT.vars.player.save = setStore;
     } else {
-      GT.UI.Prompt.update();
+      //GT.UI.Prompt.update();
     }
   }
+  console.log(GT.const.levelsct);
   for (var i = 1; i <= GT.const.levelsct; i++){
     var img = "background-image: url(img/icons/lvl/"+i.toString()+".png)";
     var obj = '<a href="#board" class = "level" id = "'+i.toString()+'"><div class="menu-float" style="'+img+'"></div></a>';

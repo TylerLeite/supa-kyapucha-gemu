@@ -7,44 +7,27 @@
 		<meta name="viewport" content="width=device-width; initial-scale = 1.0; maximum-scale=1.0; user-scalable=no"/>
 		<link rel="stylesheet" href="js/lib/jQueryMobile/jquery.mobile-1.4.5.min.css">
 		<link rel="stylesheet" href="css/index.css" id="styling">
-		<script src="js/lib/jQuery/jquery-1.12.2.min.js"></script>
-		<script src="js/lib/jQueryMobile/jquery.mobile-1.4.5.min.js"></script>
-		<script src="js/board.js"></script>
-		<script src="js/ai.js"></script>
-		<script src="js/settings.js"></script>
-		<script src="js/classes/music.js"></script>
-		<script src="js/classes/ui.js"></script>
-		<script src="js/classes/uialert.js"></script>
-		<script src="js/classes/uiboard.js"></script>
-		<script src="js/classes/uimenu.js"></script>
-		<script src="js/classes/uiprompt.js"></script>
-		<script src="js/classes/uiscoreboard.js"></script>
-		<script src="js/classes/const.js"></script>
-		<script src="js/classes/vars.js"></script>
-		<script src="js/functions/misc.js"></script>
+		<script type="text/javascript" src="js/lib/jQuery/jquery-1.12.2.min.js"></script>
+		<script type="text/javascript" src="js/lib/jQueryMobile/jquery.mobile-1.4.5.min.js"></script>
+		<script type="text/javascript" defer="defer" src="js/board.js"></script>
+		<script type="text/javascript" defer="defer" src="js/ai.js"></script>
+		<script type="text/javascript" defer="defer" src="js/settings.js"></script>
+		<script type="text/javascript" defer="defer" src="js/classes/music.js"></script>
+		<script type="text/javascript" defer="defer" src="js/classes/ui.js"></script>
+		<script type="text/javascript" defer="defer" src="js/classes/uialert.js"></script>
+		<script type="text/javascript" defer="defer" src="js/classes/uiboard.js"></script>
+		<script type="text/javascript" defer="defer" src="js/classes/uimenu.js"></script>
+		<script type="text/javascript" defer="defer" src="js/classes/uiprompt.js"></script>
+		<script type="text/javascript" defer="defer" src="js/classes/uiscoreboard.js"></script>
+		<script type="text/javascript" defer="defer" src="js/classes/const.js"></script>
+		<script type="text/javascript" defer="defer" src="js/classes/vars.js"></script>
+		<script type="text/javascript" defer="defer" src="js/functions/misc.js"></script>
 		<script>
 			$(document).bind("mobileinit",function() {
 				$.mobile.changePage.defaults.changeHash = false;
 				$.mobile.hashListeningEnabled = false;
 				$.mobile.pushStateEnabled = false;
 			});
-
-			var cur_music = 'menu';
-			var music = new Audio('aud/' + cur_music + '.ogg');
-			music.addEventListener('ended', function() {
-				this.currentTime = 0;
-				this.play();
-			}, false);
-
-			music.play();
-
-			// Audio
-			switch_music = function(new_music) {
-				cur_music = new_music;
-				music.setAttribute('src', 'aud/' + cur_music + '.ogg');
-				music.load();
-				music.play();
-			}
 		</script>
 	</head>
 	<body class="body">
@@ -122,7 +105,7 @@
 		var settings = new GT.Settings();
 		var save = {name:"", theme:"standard", chip:"standard", progress:0}
 		*/
-		
+
 
 
 /////////////////////////////////INITIALIZATIONS////////////////////////////////

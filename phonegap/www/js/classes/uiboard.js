@@ -1,4 +1,5 @@
 if (GT === null || typeof(GT) != "object") { var GT = new Object(); }
+//if (GT.UI === null || typeof(GT.UI) != "object") { GT.UI = new Object(); }
 if (GT.vars === null || typeof(GT.vars) != "object") { GT.vars = new Object(); }
 
 function appendFiles(){
@@ -73,9 +74,9 @@ GT.UI.Board.prototype.update = function(){
       var file = '.' + String.fromCharCode(97+x);
       var rank = '.' + (y+1).toString();
 
-      if (GT.vars.board.tile[y][x] != (3)){
+      if (GT.vars.board.tiles[y][x] != (3)){
         var pnum = '1';
-        if (GT.vars.board.tile[y][x] == 2 || GT.vars.board.tile[y][x] == 5){
+        if (GT.vars.board.tiles[y][x] == 2 || GT.vars.board.tiles[y][x] == 5){
           pnum = '2';
         }
 
@@ -108,35 +109,5 @@ GT.UI.Board.prototype.update = function(){
         $(file).children(rank).css('opacity',(0.6).toString());
       }
     }
-  }
-};
-
-GT.UI.Board.prototype.addTile = function(){
-  /*
-  * Handles when a tile is clicked, first checks if valid, then changes the
-  * tile and updates the board, then checks if all tiles have been filled
-  * and if so declares a winner.
-  */
-  var file = $(this).parent().attr('class').slice(-1).charCodeAt(0) - 97;
-  var rank = parseInt($(this).attr('class').slice(-1)) - 1;
-
-  if (GT.vars.board.place(file, rank, GT.vars.turn)){
-    var front = '<div class="player'+GT.vars.turn.toString()+' front"></div>';
-    var back = '<div class="player'+GT.vars.turn.toString()+' back"></div>';
-    $(this).append('<div class="disc">'+front+back+'</div>');
-    $(this).css("opacity",(1.0).toString());
-    if (GT.vars.turn === 2){
-      GT.vars.turn = 1;
-    } else {
-      GT.vars.turn += 1;
-      if (GT.vars.gamemode === 'single' && GT.vars.board.emp() > 0){
-        $('.board-rank').off('click',addTile);
-        setTimeout(function(){
-          $('.board-rank').on('click',addTile);
-          aiMove();
-        }, 1000);
-      }
-    }
-    GT.UI.update();
   }
 };

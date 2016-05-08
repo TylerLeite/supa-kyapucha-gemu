@@ -26,7 +26,7 @@ GT.UI.Prompt.prototype.submit = function(){
   } else {
     GT.vars.player.save.name = name;
     setStore = JSON.stringify(GT.vars.player.save);
-    GT.UI.reset();
+    reset();
     localStorage.setItem("save",setStore);
   }
 };

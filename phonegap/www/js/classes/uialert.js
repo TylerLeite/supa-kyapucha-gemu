@@ -36,7 +36,7 @@ GT.UI.Alert.prototype.update = function(){
 };
 
 GT.UI.Alert.prototype.submit = function(){
-  GT.UI.reset();
+  reset();
   if (GT.vars.gamemode === 'single' && GT.vars.turn === 2){
     aiMove();
   }
