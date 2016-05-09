@@ -8,7 +8,7 @@ GT.UI.Menu = function(){};
 GT.UI.Menu.prototype.initialize = function(){
   if(typeof(Storage) !== "undefined"){
     if(localStorage.getItem("save") !== null){
-      localStorage.clear();
+      //localStorage.clear();
       setStore = localStorage.getItem("save");
       GT.vars.player.save = setStore;
     } else {
