@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>スーパーキャプチャゲーム!</title>
+		<!-- Sūpā Kyapucha Gēmu! -->
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="viewport" content="width=device-width; initial-scale = 1.0; maximum-scale=1.0; user-scalable=no"/>
+		<link rel="stylesheet" href="js/lib/jQueryMobile/jquery.mobile-1.4.5.min.css">
+		<link rel="stylesheet" href="css/index.css" id="styling">
+		<script src="js/lib/jQuery/jquery-1.12.2.min.js"></script>
+		<script src="js/lib/jQueryMobile/jquery.mobile-1.4.5.min.js"></script>
+		<script src="js/board.js"></script>
+		<script src="js/ai.js"></script>
+		<script src="js/settings.js"></script>
+
+		<script src="js/functions/init.js"></script>
+		<script src="js/functions/reset.js"></script>
+		<script src="js/functions/update.js"></script>
+		<script src="js/functions/resize.js"></script>
+		<script src="js/functions/misc.js"></script>
+		<script src="js/functions/uibuttons.js"></script>
+
+		<script src="js/classes/music.js"></script>
+		<script>
+			$(document).bind("mobileinit",function() {
+				$.mobile.changePage.defaults.changeHash = false;
+				$.mobile.hashListeningEnabled = false;
+				$.mobile.pushStateEnabled = false;
+			});
+
+			if (GT === null || typeof(GT) != 'object'){ var GT = new Object();}
+
+			if (!GT.hasAttribute('vars')){GT.vars = new Object();}
+			if (!GT.hasAttribute('const')){GT.const = new Object();}
+
+
+			GT.vars.music = new GT.Music('menu');
+			//GT.vars.board = new GT.Board(7, 7);
+			//GT.vars.opponent = new GT.Actor();
+			//GT.vars.player = new GT.Player();
+			GT.vars.gamemode = 'single';
+
+			//GT.const.server = new GT.Server();
+
+			/*
+			* 'turn' keeps track of the current turn starting with 1
+			* 'maxTurn' holds the maximum number of players
+			* 'single' keeps track of whether the game is single or multi player
+			* 'sBoard' is the board object (should have board size in config eventually)
+			* 'sArray' is the 2D array of tiles
+			* 'randoBot' is the AI object
+			*/
+			var turn = 1; //GT.vars.turn
+			var maxTurn = 2; //not used
+			var single = false; //GT.vars.gamemode [now 'single' or 'multi']
+			var sBoard = new GT.Board(7,7); //GT.vars.board
+			var sArray = sBoard.tiles(); //GT.vars.board.tile
+			var randoBot = new GT.AI(sBoard); //GT.vars.opponent.ai
+			var level = 0; //GT.vars.level
+			var numLevels = 20; //GT.const.levelsct
+			var scoreVal =[[0,0],[0,0]] //GT.vars.Scoreboard
+			var settings = new GT.Settings(); //GT.vars.settings
+			var save = {name:"", theme:"standard", chip:"standard", progress:0} //GT.vars.player.save
+
+		</script>
+	</head>
+	<body class="body">
+		<div class="text-resize"><div class = "sizer">0</div></div>
+		<div data-role="page" id="home" class = "menu">
+			<div class="title"></div>
+			<center>
+				<a href="#level-select" class = "single">
+					<div class="menu-float" style="background-image: url(img/icons/singleplayer.png);"></div>
+				</a>
+				<a href="#board" class = "multi">
+					<div class="menu-float" style="background-image: url(img/icons/multiplayer.png);"></div>
+				</a>
+				<a href="#board" class = "online">
+					<div class="menu-float" style="background-image: url(img/icons/online.png);"></div>
+				</a>
+				<a href="#settings" class = "settings">
+					<div class="menu-float" style="background-image: url(img/icons/settings.png);"></div>
+				</a>
+			</center>
+			<div class="prompt pop-up">
+				<center>
+					<div class="prompt-message">Welcome to SKG! You are?</div>
+					<input type="text" class = "prompt-input" placeholder="Username"/>
+					<div class="sub-btn pop-up-btn">OK</div>
+				</center>
+			</div>
+			<div class="overlay"></div>
+		</div>
+		<div data-role="page" id="level-select" class = "menu">
+			<center>
+			</center>
+			<a class="back-btn ui-btn ui-icon-back ui-btn-icon-left" onclick="history.go(-1);">BACK</a>
+		</div>
+		<div data-role="page" id="board">
+			<center>
+				<div class="top-score score-board">
+				</div>
+				<div class="game-board">
+
+				</div>
+				<div class="bottom-score score-board">
+				</div>
+			</center>
+			<a class="back-btn ui-btn ui-icon-back ui-btn-icon-left" onclick="history.go(-1);">BACK</a>
+			<a class="settings-btn ui-btn ui-icon-gear ui-btn-icon-left">SETTINGS</a>
+			<div class="alert pop-up">
+				<center>
+					<div class="alert-message"></div>
+					<div class="ok-btn pop-up-btn">OK</div>
+				</center>
+			</div>
+			<div class="overlay"></div>
+		</div>
+	</body>
+	<script>
+		initialize();
+		resize();
+	</script>
+</html>

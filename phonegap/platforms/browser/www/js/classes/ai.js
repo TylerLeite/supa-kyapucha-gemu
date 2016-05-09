@@ -165,7 +165,7 @@ GT.AI.prototype.hasEmpty = function(sx,sy,xdir,ydir){
 	var empty = 3;
 	var nx = sx + xdir;
 	var ny = sy + ydir;
-	if (!GT.validTile(GT.vars.turn) || !this.gamestate.inBounds(nx, ny)){
+	if (!GT.validTile(turn) || !this.gamestate.inBounds(nx, ny)){
 		//return 'x';
 		return false;
 	} else if (this.gamestate.get(nx, ny) == empty){

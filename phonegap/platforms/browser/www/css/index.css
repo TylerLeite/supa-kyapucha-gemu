@@ -147,6 +147,8 @@ a{
  */
 .disc.flipped{
   transform: translateX( -100% ) rotateY(180deg);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 /*
  * the sides of the disc... back-face vis hides the back side
@@ -158,6 +160,7 @@ a{
   height:100%;
   display:block;
   backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 .back{
   transform: rotateY( 180deg );
@@ -176,10 +179,11 @@ a{
  * custom alert, the background color allows it to be clear but have
  * fully colored text
  */
-.alert{
+.pop-up{
   position:absolute;
   left:50%;
   top:50%;
+  z-index:3;
   margin-top:-75px;
   margin-left:-150px;
   width:300px;
@@ -187,16 +191,47 @@ a{
   border-radius:5px;
   background-color:rgba(255,255,255,0.9);
 }
+
+.overlay{
+  width:100%;
+  height:100%;
+  background-color:black;
+  opacity:.3;
+  z-index:2;
+  position:absolute;
+  top:0;
+  left:0;
+}
+
+.prompt{
+  height:140px;
+}
+
 .alert-message{
   color:black;
   padding-top:20px;
   width:100%;
 }
+
+.prompt-message{
+  color:black;
+  padding-top:10px;
+  font-size:20px;
+  width:100%;
+}
+
+.prompt-input{
+  width:80%;
+  height:30px;
+  margin-top:15px;
+  margin-bottom:10px;
+  text-align:center;
+}
 /*
  * all the select nones make it so the button isn't selectable... ask
  * tyler why he cares about this so much
  */
-.ok-btn{
+.pop-up-btn{
   padding-top:10px;
   border-bottom-left-radius:5px;
   border-bottom-right-radius:5px;
@@ -212,6 +247,6 @@ a{
 	user-select: none;
   background-color:rgba(200,200,200,0.8);
 }
-.ok-btn:hover{
+.pop-up-btn:hover{
   background-color:rgba(200,200,200,1);
 }

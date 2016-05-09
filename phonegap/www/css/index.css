@@ -147,6 +147,8 @@ a{
  */
 .disc.flipped{
   transform: translateX( -100% ) rotateY(180deg);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 /*
  * the sides of the disc... back-face vis hides the back side
@@ -158,6 +160,7 @@ a{
   height:100%;
   display:block;
   backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 .back{
   transform: rotateY( 180deg );
