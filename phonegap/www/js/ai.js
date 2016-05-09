@@ -352,7 +352,7 @@ GT.AI.prototype.makeMove = function() {
 	if (edges.length > 0){
 		corners = this.filterCorners(edges);
 	}
-	var priorities = [corners, edgeDefenses, edgeClose, oddGaps, captures, defenses, safes, legalMoves];
+	var priorities = [corners, edgeDefenses, edgeClose, edgeSafes, oddGaps, captures, defenses, safes, legalMoves];
 //*/
 
 	var out = [];
