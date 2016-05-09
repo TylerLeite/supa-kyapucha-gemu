@@ -122,4 +122,29 @@ $('.ok-btn').click(Alert.submit);
 
 $('.sub-btn').click(Prompt.submit);
 
-$('.board-rank').on('click',function(){Board.addTile(this);});
+function addTile(){
+	var file = $(this).parent().attr('class').slice(-1).charCodeAt(0) - 97;
+  var rank = parseInt($(this).attr('class').slice(-1)) - 1;
+
+  if (GT.vars.board.place(file, rank, GT.vars.turn)){
+    var front = '<div class="player'+GT.vars.turn.toString()+' front"></div>';
+    var back = '<div class="player'+GT.vars.turn.toString()+' back"></div>';
+    $(this).append('<div class="disc">'+front+back+'</div>');
+    $(this).css("opacity",(1.0).toString());
+    if (GT.vars.turn === 2){
+      GT.vars.turn = 1;
+    } else {
+      GT.vars.turn += 1;
+      if (GT.vars.gamemode === 'single' && GT.vars.board.emp() > 0){
+        $('.board-rank').off('click',addTile);
+        setTimeout(function(){
+          $('.board-rank').on('click',addTile);
+          aiMove();
+        }, 1000);
+      }
+    }
+    update();
+  }
+}
+
+$('.board-rank').on('click',addTile);
