@@ -2,7 +2,7 @@ if (GT === null || typeof(GT) != "object") { var GT = new Object(); }
 
 GT.vars.turn = 1;
 GT.vars.gamemode = "single";
-GT.vars.board = new GT.Board(3,3);
+GT.vars.board = new GT.Board(7,7);
 GT.vars.board.tiles = GT.vars.board.tiles();
 GT.vars.level = 0;
 GT.vars.Scoreboard = [[0,0],[0,0]];
