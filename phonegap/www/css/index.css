@@ -56,7 +56,7 @@ a{
   z-index:2;
   max-height:200px;
   max-width:400px;
-  opacity:.6;
+  opacity:.85;
 }
 /*
  * top score shows up on the left or top side of the screen
@@ -70,8 +70,8 @@ a{
 .bottom-score{
   right:10px;
   top:10px;
-  background-color:black;
-  color:white;
+  background-color:white;
+  color:black;
 }
 .logo{
   width:50%;
@@ -139,14 +139,20 @@ a{
   height:100%;
   position:absolute;
   transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
   transform-origin: right center;
+  -webkit-transform-origin: right center;
   transition: transform 800ms;
+  -webkit-transition: -webkit-transform 800ms;
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
 }
 /*
  * flipped is toggled in the JS to flip the disc
  */
 .disc.flipped{
   transform: translateX( -100% ) rotateY(180deg);
+  -webkit-transform: translateX( -100% ) rotateY(180deg);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
 }

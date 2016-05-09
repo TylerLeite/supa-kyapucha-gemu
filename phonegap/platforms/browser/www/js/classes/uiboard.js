@@ -103,7 +103,6 @@ GT.UI.Board.prototype.update = function(){
         }
         disc.hide().show(0);
       } else {
-        console.log("test");
         $(file).children(rank).children().remove();
         $(file).children(rank).css('opacity',(0.6).toString());
       }

@@ -7,8 +7,8 @@ var Board = new GT.UI.Board();
 var ScoreBoard = new GT.UI.ScoreBoard();
 initialize();
 resize();
+Board.update();
 var test = new GT.UI();
-localStorage.clear();
 
 function initialize() {
 	Alert.initialize();

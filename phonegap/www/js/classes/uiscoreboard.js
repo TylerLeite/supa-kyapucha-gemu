@@ -173,4 +173,15 @@ GT.UI.ScoreBoard.prototype.update = function(){
   } else if (score2 < dom[2]){
     increaseScore('.score2',score2,dom[2],1);
   }
+  if (GT.vars.turn === 1){
+    $('.score1').css({opacity:"1.0"});
+    $('.logo1').css({opacity:"1.0"});
+    $('.score2').css({opacity:"0.6"});
+    $('.logo2').css({opacity:"0.6"});
+  } else {
+    $('.score2').css({opacity:"1.0"});
+    $('.logo2').css({opacity:"1.0"});
+    $('.score1').css({opacity:"0.6"});
+    $('.logo1').css({opacity:"0.6"});
+  }
 };
