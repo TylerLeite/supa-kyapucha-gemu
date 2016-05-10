@@ -7,8 +7,8 @@ var Board = new GT.UI.Board();
 var ScoreBoard = new GT.UI.ScoreBoard();
 initialize();
 resize();
+Board.update();
 var test = new GT.UI();
-localStorage.clear();
 
 function initialize() {
 	Alert.initialize();
@@ -75,6 +75,10 @@ function getSquareSize(){
 */
 function nextChar(c) {
 	return String.fromCharCode(c.charCodeAt(0) + 1);
+}
+
+function randColor(){
+	return '#'+Math.floor(Math.random()*16777215).toString(16);
 }
 
 function resetTurn(){

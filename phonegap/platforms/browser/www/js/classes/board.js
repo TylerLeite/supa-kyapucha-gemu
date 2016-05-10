@@ -297,13 +297,15 @@ GT.Board.prototype.makeMove() {
 	var legalMove = true;
 	while (!legalMove){
 		move = prompt();
-		legalMove = this.placePiece(move[0], move[1]);
+		legalMove = this.checkLegal(move[0], move[1]);
 	}
+
+	this.placePiece(move[0], move[1]);
 
 	if (this.checkWincons()){
 		//TODO SOMEONE JUST WON
 	} else {
-		if (this.finishedWithMove){
+		if (this.finishedWithMove()){
 			this.betweenMoves();
 		}
 
@@ -318,8 +320,8 @@ GT.Board.prototype.makeMove() {
 /*
  * Prompt the current player for a move (poll AI or prompt human)
  */
-GT.Board.prototype.prompt = function() {
-	//
+GT.Board.prototype.prompt = function(x, y) {
+	return [x, y];
 };
 
 /*
@@ -345,10 +347,6 @@ GT.Board.prototype.checkLegal = function(x, y) {
  * @return {boolean} Whether the move was legal
  */
 GT.Board.prototype.placePiece = function(x, y) {
-	if (this.checkLegal(x, y)){
-		return false;
-	}
-
 	var tile = new GT.Tile(this.turn, false);
 	this.set(x, y, tile);
 
@@ -360,6 +358,16 @@ GT.Board.prototype.placePiece = function(x, y) {
 
 	return true;
 };
+
+/*
+ * Check to see if someone has won yet
+ * @return {boolean} True if all wincons are met, else false
+ */
+GT.Board.prototype.checkWincons() {
+	//This is going to change
+	return this.emptySquares == 0;
+};
+
 
 /*
  * Check for captures in a single direction
@@ -437,13 +445,4 @@ GT.Board.prototype.betweenMoves() {
 	for (var i = 0; i < this.actionsBetweenMoves; i++){
 		this.actionsBetweenMoves[i]();
 	}
-};
-
-/*
- * Check to see if someone has won yet
- * @return {boolean} True if all wincons are met, else false
- */
-GT.Board.prototype.checkWincons() {
-	//This is going to change
-	return this.emptySquares == 0;
 };
