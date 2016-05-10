@@ -20,7 +20,8 @@ GT.Settings = function() {
 };
 
 GT.Settings.prototype.getTwoDistinctRandomLogos = function() {
-	/*var choices = ['1cm', '2am', '2ne1', '2pm', '4minute', 'akdongmusician',
+	//*
+	var choices = ['1cm', '2am', '2ne1', '2pm', '4minute', 'akdongmusician',
 				   'aoa', 'apink', 'b1a4', 'bap', 'bigbang', 'blockb', 'bts',
 				   'crayonpop', 'dalshabet', 'exo', 'fiestar', 'fx', 'girlsday',
 				   'girlsgeneration', 'gna', 'got7', 'hellovenus', 'hyuna',
@@ -28,9 +29,9 @@ GT.Settings.prototype.getTwoDistinctRandomLogos = function() {
 				   'ninemuses', 'nsyoong', 'nuest', 'orangecaramel', 'redvelvet',
 				   'shinee', 'sistar', 'sonamoo', 'spica', 'superjunior', 't-ara',
 				   'ukiss', 'vixx', 'winner', 'wondergirls'];
-   */
+   //*/
 
-	var choices = ['white', 'black'];
+	//var choices = ['white', 'black'];
 
 	var rand1 = Math.floor(Math.random() * choices.length);
 	var rand2 = Math.floor(Math.random() * choices.length);
