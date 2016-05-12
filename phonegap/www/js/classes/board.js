@@ -280,6 +280,10 @@ GT.Board.prototype.changeTurn = function() {
 
 /// GAME LOGIC ///
 
+GT.Board.prototype.runGame = function() {
+
+};
+
 /**
  * Makes a move in the game. The following steps are involved:
  *  Fetch move from player
@@ -290,9 +294,9 @@ GT.Board.prototype.changeTurn = function() {
  *  Check for win conditions
  *  Perform any in-between-move actions
  *  Check for win conditions again
- *  Make another move
+ * @return {boolean} Whether the current game is over
  */
-GT.Board.prototype.makeMove() {
+GT.Board.prototype.makeMove = function() {
 	var move = [];
 	var legalMove = true;
 	while (!legalMove){
@@ -312,7 +316,7 @@ GT.Board.prototype.makeMove() {
 		if (this.checkWincons()){
 			//TODO SOMEONE JUST WON
 		} else {
-			this.makeMove(); //TODO recursion is probably bad in js
+			return true;
 		}
 	}
 };
