@@ -9,8 +9,8 @@ function resizeText(){
   while($('.sizer').height() < digitHgt && $('.sizer').width()<digitWdt){
     fontSize += 1;
     $('.sizer').css("font-size", fontSize+"px");
-    $('.ones').css("font-size", fontSize+"px");
-    $('.tens').css("font-size", fontSize+"px");
+    $('.ones').css("font-size", fontSize-1+"px");
+    $('.tens').css("font-size", fontSize-1+"px");
   }
 }
 
@@ -174,14 +174,14 @@ GT.UI.ScoreBoard.prototype.update = function(){
     increaseScore('.score2',score2,dom[2],1);
   }
   if (GT.vars.turn === 1){
-    $('.score1').css({opacity:"1.0"});
-    $('.logo1').css({opacity:"1.0"});
-    $('.score2').css({opacity:"0.6"});
-    $('.logo2').css({opacity:"0.6"});
+    $('.score1').css({opacity:"1.0", "border-color":"grey"});
+    $('.logo1').css({opacity:"1.0", "border-color":"grey"});
+    $('.score2').css({opacity:"0.8", "border-color":"white"});
+    $('.logo2').css({opacity:"0.8", "border-color":"white"});
   } else {
-    $('.score2').css({opacity:"1.0"});
-    $('.logo2').css({opacity:"1.0"});
-    $('.score1').css({opacity:"0.6"});
-    $('.logo1').css({opacity:"0.6"});
+    $('.score2').css({opacity:"1.0", "border-color":"grey"});
+    $('.logo2').css({opacity:"1.0", "border-color":"grey"});
+    $('.score1').css({opacity:"0.8", "border-color":"white"});
+    $('.logo1').css({opacity:"0.8", "border-color":"white"});
   }
 };

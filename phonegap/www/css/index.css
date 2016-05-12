@@ -78,12 +78,24 @@ a{
   position:relative;
   float:left;
   height:100%;
+  box-sizing:border-box;
+  border-style:solid;
+  border-color:grey;
+  border-right-style:none;
+  border-width:2px;
+  border-left-width:4px;
 }
 .score{
   height:100%;
   width:50%;
   position:relative;
   float:left;
+  box-sizing:border-box;
+  border-style:solid;
+  border-color:grey;
+  border-left-style:none;
+  border-width:2px;
+  border-right-width:4px;
 }
 .ones, .tens{
   float:left;
