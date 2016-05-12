@@ -127,6 +127,22 @@ a{
   box-sizing:border-box;
   perspective:800px;
   position:relative;
+  transition: background .5s ease-in-out;
+}
+.board-rank.one{
+  background: #0066ff;
+}
+.board-rank.two{
+  background: #33cc33;
+}
+.board-rank.three{
+  background: #ffff00;
+}
+.board-rank.four{
+  background: #cc0099;
+}
+.board-rank.supa{
+  background: #ff0000;
 }
 /*
  * disc has a front and back and flips depending on control
