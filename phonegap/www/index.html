@@ -57,6 +57,16 @@
 			</div>
 			<div class="overlay"></div>
 		</div>
+		<div data-role="popup" id="settings" data-close-btn="right" class = "settings">
+			<div data-role="header" data-theme="b">
+        <h3>Settings</h3>
+      </div>
+			<ul data-role = "listview" data-theme="b">
+				<li><a href = "#">Themes</a></li>
+				<li><a href = "#">Tokens</a></li>
+				<li><a href = "#">Sound</a></li>
+			</ul>
+		</div>
 		<div data-role="page" id="level-select" class = "menu">
 			<center>
 			</center>
@@ -73,7 +83,7 @@
 				</div>
 			</center>
 			<a class="back-btn ui-btn ui-icon-back ui-btn-icon-left" onclick="history.go(-1);">BACK</a>
-			<a class="settings-btn ui-btn ui-icon-gear ui-btn-icon-left">SETTINGS</a>
+			<a class="settings-btn ui-btn ui-icon-gear ui-btn-icon-left" data-rel="dialog" href="#settings">SETTINGS</a>
 			<div class="alert pop-up">
 				<center>
 					<div class="alert-message"></div>
@@ -84,6 +94,7 @@
 		</div>
 	</body>
 	<script>
+
 		/*
 		* 'turn' keeps track of the current turn starting with 1
 		* 'maxTurn' holds the maximum number of players

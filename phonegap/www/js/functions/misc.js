@@ -41,9 +41,9 @@ $(window).on("orientationchange",function(){
 	setTimeout(function(){
 		$('#board').children().hide().show(0);
 		$('.score-board').empty();
-		UI.resize();
-		UI.ScoreBoard.update();
-		$('.alert').hide();
+		resize();
+		ScoreBoard.update();
+		Alert.reset();
 	},100);
 });
 
