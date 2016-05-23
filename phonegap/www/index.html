@@ -64,13 +64,9 @@
 		</div>
 		<div data-role="page" id="board">
 			<center>
-				<div class="top-score score-board">
-				</div>
-				<div class="game-board">
-
-				</div>
-				<div class="bottom-score score-board">
-				</div>
+				<div class="top-score score-board"></div>
+				<div class="game-board"></div>
+				<div class="bottom-score score-board"></div>
 			</center>
 			<a class="back-btn ui-btn ui-icon-back ui-btn-icon-left" onclick="history.go(-1);">BACK</a>
 			<a class="settings-btn ui-btn ui-icon-gear ui-btn-icon-left">SETTINGS</a>
@@ -83,89 +79,4 @@
 			<div class="overlay"></div>
 		</div>
 	</body>
-	<script>
-		/*
-		* 'turn' keeps track of the current turn starting with 1
-		* 'maxTurn' holds the maximum number of players
-		* 'single' keeps track of whether the game is single or multi player
-		* 'sBoard' is the board object (should have board size in config eventually)
-		* 'sArray' is the 2D array of tiles
-		* 'randoBot' is the AI object
-		*/
-		/*
-		var turn = 1;
-		var maxTurn = 2;
-		var single = false;
-		var sBoard = new GT.Board(7,7);
-		var sArray = GT.vars.board.tiles();
-		var randoBot = new GT.AI(GT.vars.board);
-		var level = 0;
-		var numLevels = 20;
-		var scoreVal =[[0,0],[0,0]]
-		var settings = new GT.Settings();
-		var save = {name:"", theme:"standard", chip:"standard", progress:0}
-		*/
-
-
-
-/////////////////////////////////INITIALIZATIONS////////////////////////////////
-		//function initializeAlert(){}
-
-		//function initializePrompt(){}
-
-		//function initializeScoreBoard(){}
-
-		//function initializeBoard(){}
-
-		//function initializeMenu(){}
-
-/////////////////////////////////////RESETS/////////////////////////////////////
-
-
-	//	function resetBoard(){}
-
-		//function resetAlert(){}
-
-		//function resetPrompt(){}
-
-		//function resetScoreBoard(){}
-
-////////////////////////////////////UPDATES/////////////////////////////////////
-
-		//function updatePrompt(){}
-
-		//function updateAlert(){}
-
-		/*
-		* This function updates the scores by checking the dominance function
-		* of the baord object nad calling increase/decrease score
-		*/
-		//function updateScore(){}
-
-		/*
-		* Updates the UI to display the current layout
-		*/
-		//function updateBoard() {}
-/////////////////////////////////////RESIZES////////////////////////////////////
-
-		/*
-		*	This function resizes the text of the scores to be the right height and
-		* width, this is separated from the resize function because it needs to be
-		* called after the DOM objects are initialized since it relies on the
-		* height and width of the .score container.
-		*/
-		//function resizeText(){}
-
-		//function resizeMenu(){}
-		/*
-		*	The resize function resizes the board DOM objects to the right size.
-		*/
-		//function resizeScoreBoard(){}
-
-		//function resizeBoard(){}
-/////////////////////////////////OTHER FUNCTIONS////////////////////////////////
-
-
-
-	</script>
 </html>

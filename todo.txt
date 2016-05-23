@@ -221,14 +221,15 @@ single player
 		-compare to requirements
 
 ________________________________________________________________________________
-Game Logic
+Game Skeleton
 ================================================================================
 GT
 	Classes
 		Game
 		Board
 		Actor
-			AI
+			CpuOpponent
+				AI
 			Settings
 			WinCondition[]
 			SpecialRule[]
@@ -257,3 +258,50 @@ GT
 		Board board
 		Actor opponent
 		Player player
+
+________________________________________________________________________________
+Server
+================================================================================
+Exposed
+	Login
+Behind the scenes
+
+________________________________________________________________________________
+Voice Recordings
+================================================================================
+Kyapucha
+Supa Kyapucha
+Supa Kyapucha Gemu
+Combo
+Crazy
+So Good
+Amazing
+Spectacular
+Genius Move
+Supa Move
+Victory
+Defeat
+You Win
+You Lose
+Battle Start
+Battle With
+Duel With
+Challenged By
+Gemu Start
+HAJIMARU
+BAKANA
+NANI?
+Damn, son
+Player
+Versus
+Rock With Face
+Bill
+Ji-Ho Lee
+Kanako
+Margaret
+Giuseppe
+Giuseppe, Fairy Prince
+Kent
+Olga
+Yeshi
+Jesseagle
