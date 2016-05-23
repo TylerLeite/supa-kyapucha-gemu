@@ -1,0 +1,27 @@
+in the database
+-------------
+list
+	id
+	name
+	owner
+	members
+	items
+
+item 
+	id
+	name
+	amount
+	timer
+	added-by
+
+user
+	id
+	name
+	email
+	password
+	salt
+	activation_code
+	lists
+	contacts
+	date-joined
+	prof-pic
