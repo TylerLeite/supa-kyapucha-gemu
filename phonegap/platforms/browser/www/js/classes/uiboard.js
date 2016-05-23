@@ -14,6 +14,30 @@ function appendFiles(){
     }
   });
 }
+function toggleOff(button){
+  button.toggleClass("one",false);
+  button.toggleClass("two",false);
+  button.toggleClass("three",false);
+  button.toggleClass("four",false);
+  button.toggleClass("supa",false);
+}
+function toggleColors(buttons){
+  console.log(buttons, buttons.length)
+  captureSize = buttons.length;
+  for (var i = 0; i < buttons.length; i++){
+    if (captureSize === 1){
+      buttons[i].toggleClass("one");
+    } else if (captureSize === 2){
+      buttons[i].toggleClass("two");
+    } else if (captureSize === 3){
+      buttons[i].toggleClass("three");
+    } else if (captureSize === 4){
+      buttons[i].toggleClass("four");
+    } else if (captureSize === 5){
+      buttons[i].toggleClass("supa");
+    }
+  }
+}
 
 GT.UI.Board = function(){};
 
@@ -67,17 +91,18 @@ GT.UI.Board.prototype.resize = function(){
 };
 
 GT.UI.Board.prototype.update = function(){
+  var ranks = [];
   for (var y = 0; y < GT.vars.board.hgt(); y++){
     for (var x = 0; x < GT.vars.board.wdt(); x++){
       var file = '.' + String.fromCharCode(97+x);
       var rank = '.' + (y+1).toString();
-
+      var disc = $(file).children(rank).children('.disc');
+      toggleOff(disc.parent());
       if (GT.vars.board.tiles[y][x] != (3)){
         var pnum = '1';
         if (GT.vars.board.tiles[y][x] == 2 || GT.vars.board.tiles[y][x] == 5){
           pnum = '2';
         }
-
         /*
         * this part adds player logos to the discs
         * it is a bit more complex in order to accomidate more than
@@ -87,18 +112,19 @@ GT.UI.Board.prototype.update = function(){
         var player = 'player'+pnum;
         var front = $(file).children(rank).find('.front');
         var back = $(file).children(rank).find('.back');
-        var disc = $(file).children(rank).children('.disc');
         if (disc.attr('class').indexOf('flipped') <= -1){
           if (front.attr('class').indexOf(player) <= -1){
             player = player + ' back';
             back.attr('class', player);
             disc.toggleClass('flipped');
+            ranks.push(disc.parent());
           }
         } else {
           if (back.attr('class').indexOf(player) <= -1){
             player = player + ' front';
             front.attr('class', player);
             disc.toggleClass('flipped');
+            ranks.push(disc.parent());
           }
         }
         disc.hide().show(0);
@@ -108,4 +134,5 @@ GT.UI.Board.prototype.update = function(){
       }
     }
   }
+  toggleColors(ranks);
 };

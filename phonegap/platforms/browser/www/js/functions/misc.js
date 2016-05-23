@@ -41,9 +41,9 @@ $(window).on("orientationchange",function(){
 	setTimeout(function(){
 		$('#board').children().hide().show(0);
 		$('.score-board').empty();
-		UI.resize();
-		UI.ScoreBoard.update();
-		$('.alert').hide();
+		resize();
+		ScoreBoard.update();
+		Alert.reset();
 	},100);
 });
 
@@ -75,6 +75,10 @@ function getSquareSize(){
 */
 function nextChar(c) {
 	return String.fromCharCode(c.charCodeAt(0) + 1);
+}
+
+function randColor(){
+	return '#'+Math.floor(Math.random()*16777215).toString(16);
 }
 
 function resetTurn(){

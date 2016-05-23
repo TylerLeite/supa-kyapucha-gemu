@@ -78,12 +78,24 @@ a{
   position:relative;
   float:left;
   height:100%;
+  box-sizing:border-box;
+  border-style:solid;
+  border-color:grey;
+  border-right-style:none;
+  border-width:2px;
+  border-left-width:4px;
 }
 .score{
   height:100%;
   width:50%;
   position:relative;
   float:left;
+  box-sizing:border-box;
+  border-style:solid;
+  border-color:grey;
+  border-left-style:none;
+  border-width:2px;
+  border-right-width:4px;
 }
 .ones, .tens{
   float:left;
@@ -127,6 +139,22 @@ a{
   box-sizing:border-box;
   perspective:800px;
   position:relative;
+  transition: background .5s ease-in-out;
+}
+.board-rank.one{
+  background: #0066ff;
+}
+.board-rank.two{
+  background: #33cc33;
+}
+.board-rank.three{
+  background: #ffff00;
+}
+.board-rank.four{
+  background: #cc0099;
+}
+.board-rank.supa{
+  background: #ff0000;
 }
 /*
  * disc has a front and back and flips depending on control
@@ -139,22 +167,15 @@ a{
   height:100%;
   position:absolute;
   transform-style: preserve-3d;
-  -webkit-transform-style: preserve-3d;
   transform-origin: right center;
-  -webkit-transform-origin: right center;
   transition: transform 800ms;
-  -webkit-transition: -webkit-transform 800ms;
-  -webkit-transform: translate3d(0, 0, 0);
-  transform: translate3d(0, 0, 0);
 }
 /*
  * flipped is toggled in the JS to flip the disc
  */
 .disc.flipped{
   transform: translateX( -100% ) rotateY(180deg);
-  -webkit-transform: translateX( -100% ) rotateY(180deg);
   backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
 }
 /*
  * the sides of the disc... back-face vis hides the back side
@@ -166,7 +187,6 @@ a{
   height:100%;
   display:block;
   backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
 }
 .back{
   transform: rotateY( 180deg );
