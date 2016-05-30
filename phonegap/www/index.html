@@ -44,7 +44,7 @@
 				<a href="#board" class = "online">
 					<div class="menu-float" style="background-image: url(img/icons/online.png);"></div>
 				</a>
-				<a href="#settings" class = "settings">
+				<a href="#main-settings" class = "settings">
 					<div class="menu-float" style="background-image: url(img/icons/settings.png);"></div>
 				</a>
 			</center>
@@ -57,9 +57,19 @@
 			</div>
 			<div class="overlay"></div>
 		</div>
-		<div data-role="popup" id="settings" data-close-btn="right" class = "settings">
+		<div data-role="page" id="main-settings">
 			<div data-role="header" data-theme="b">
-        <h3>Settings</h3>
+        <h3>Bill</h3>
+      </div>
+			<ul data-role = "listview" data-theme="b">
+				<li><a href = "#">Themes</a></li>
+				<li><a href = "#">Tokens</a></li>
+				<li><a href = "#">Sound</a></li>
+			</ul>
+		</div>
+		<div id="game-settings" class = "game-settings pop-up ui-icon-close">
+			<div data-role="header" data-theme="b">
+        <h3>Bill</h3>
       </div>
 			<ul data-role = "listview" data-theme="b">
 				<li><a href = "#">Themes</a></li>
@@ -79,7 +89,7 @@
 				<div class="bottom-score score-board"></div>
 			</center>
 			<a class="back-btn ui-btn ui-icon-back ui-btn-icon-left" onclick="history.go(-1);">BACK</a>
-			<a class="settings-btn ui-btn ui-icon-gear ui-btn-icon-left" data-rel="dialog" href="#settings">SETTINGS</a>
+			<a class="settings-btn ui-btn ui-icon-gear ui-btn-icon-left">SETTINGS</a>
 			<div class="alert pop-up">
 				<center>
 					<div class="alert-message"></div>
@@ -90,3 +100,7 @@
 		</div>
 	</body>
 </html>
+<script>
+$('.game-settings').hide();
+$('.game-settings-btn').click(function(){$('.game-settings').show();});
+</script>
