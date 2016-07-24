@@ -2,10 +2,10 @@ if (GT === null || typeof(GT) != "object") { var GT = new Object(); }
 //if (GT.UI === null || typeof(GT.UI) != "object") { GT.UI = new Object(); }
 if (GT.vars === null || typeof(GT.vars) != "object") { GT.vars = new Object(); }
 
+/**
+ * This function appends ranks to the files on the board.
+ */
 function appendFiles(){
-  /*
-  * In each file column, for the height of the board, add rank squares
-  */
   $('.board-file').each(function() {
     number = GT.vars.board.hgt();
     for (var i = 0; i < GT.vars.board.hgt(); i++){
@@ -14,6 +14,12 @@ function appendFiles(){
     }
   });
 }
+
+/**
+ * Turns off all of the class toggles for a div, so that there are no
+ * colors associated with it.
+ * @param  takes a div, but more specifically a rank square on the board
+ */
 function toggleOff(button){
   button.toggleClass("one",false);
   button.toggleClass("two",false);
@@ -21,6 +27,11 @@ function toggleOff(button){
   button.toggleClass("four",false);
   button.toggleClass("supa",false);
 }
+
+/**
+ * Toggles on certain classes depending on how a player scored.
+ * @param  takes a list of divs
+ */
 function toggleColors(buttons){
   console.log(buttons, buttons.length)
   captureSize = buttons.length;
@@ -41,6 +52,12 @@ function toggleColors(buttons){
 
 GT.UI.Board = function(){};
 
+/**
+ * Initializes the UI Board including adding the background images
+ * for players, creating file columns and calling the function to append
+ * the rows.
+ * @see         appendFiles
+ */
 GT.UI.Board.prototype.initialize = function(){
   /*
   *	Since jQuery can only change styles for existing DOM objects, this for
@@ -73,11 +90,18 @@ GT.UI.Board.prototype.initialize = function(){
   }
 };
 
+/**
+ * @see         reset
+ * @see         update
+ */
 GT.UI.Board.prototype.reset = function(){
   GT.vars.board.reset();
   this.update();
 };
 
+/**
+ * Resizes the board to the correct height and width based on the window
+ */
 GT.UI.Board.prototype.resize = function(){
 	var squareSize = getSquareSize();
 	var winHgt = $(window).height();
@@ -90,6 +114,10 @@ GT.UI.Board.prototype.resize = function(){
 	$('.board-rank').css('height',squareSize.toString());
 };
 
+/**
+ * Updates the board by making the tiles the correct colors
+ * and doing the correct animations.
+ */
 GT.UI.Board.prototype.update = function(){
   var ranks = [];
   for (var y = 0; y < GT.vars.board.hgt(); y++){
