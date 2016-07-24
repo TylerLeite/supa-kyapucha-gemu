@@ -276,3 +276,18 @@ a{
 .pop-up-btn:hover{
   background-color:rgba(200,200,200,1);
 }
+.ui-dialog-background {
+    opacity: 0.5;
+    display: block !important;
+    -webkit-transition: opacity 0.5s ease-in;
+}
+
+.ui-dialog-background.pop.in {
+    opacity: 1;
+    -webkit-transition: opacity 0.5s ease-in;
+}
+
+.ui-dialog {
+    min-height: 100% !important;
+    background: transparent !important;
+}

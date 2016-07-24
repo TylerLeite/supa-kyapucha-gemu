@@ -162,5 +162,5 @@ GT.UI.Board.prototype.update = function(){
       }
     }
   }
-  toggleColors(ranks);
+  //toggleColors(ranks);
 };
