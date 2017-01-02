@@ -24,7 +24,7 @@ GT.UI.Prompt.prototype.submit = function(){
     $('.prompt-message').css({color:"red"});
     $('.prompt-message').text("Uh... that's no good");
   } else {
-    GT.vars.player.save.set("name", name);
+    GT.vars.player.save.name = name;
     setStore = JSON.stringify(GT.vars.player.save);
     reset();
   }
