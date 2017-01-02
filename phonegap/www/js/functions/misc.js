@@ -5,6 +5,7 @@ var Prompt = new GT.UI.Prompt();
 var Menu = new GT.UI.Menu();
 var Board = new GT.UI.Board();
 var ScoreBoard = new GT.UI.ScoreBoard();
+var Music = new GT.Music('menu');
 initialize();
 resize();
 Board.update();
@@ -97,11 +98,11 @@ window.onload = function (){
 */
 $(window).on('hashchange', function(e){
  if (window.location.href.indexOf('board')>-1){
-	 GT.Music.switch('game');
+	 Music.switch('game');
  } else if (window.location.href.indexOf('level-select')>-1){
-	 GT.Music.switch('level-select');
+	 Music.switch('level-select');
  } else {
-	 GT.Music.switch('menu');
+	 Music.switch('menu');
  }
 });
 

@@ -14,9 +14,9 @@ GT.Music = function(name) {
 	this.music.play();
 };
 
-GT.Music.switch = function(that, name) {
+GT.Music.prototype.switch = function(name) {
 	var src = src_from_name(name);
-	that.music.src = src;
-	that.music.load();
-	that.music.play();
+	this.music.src = src;
+	this.music.load();
+	this.music.play();
 };
