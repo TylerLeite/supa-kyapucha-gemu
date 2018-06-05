@@ -9,7 +9,6 @@ export class Board {
     public tiles: Array<Tile>[] = new Array<Tile[]>();
 
     bind() {
-        logger.debug(this.width.toString(), this.height, this.tiles);
         for (let i = 0; i < this.height; i++) {
             this.tiles.push(new Array<any>(this.width));
         }

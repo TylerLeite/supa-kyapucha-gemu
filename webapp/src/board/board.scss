@@ -1,5 +1,18 @@
 .board-row {
-    width: 100%;
     position: relative;
-    overflow: auto;
+    display: table-row;
+}
+
+board {
+    display: table;
+    table-layout: fixed;
+}
+
+tile {
+    display: table-cell;
+    position: relative;
+}
+
+.board-row::after {
+    content:"";
 }

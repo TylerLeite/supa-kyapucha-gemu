@@ -1,15 +1,18 @@
 .scene {
-    width: 200px;
-    height: 200px;
     perspective: 600px;
-    float: left;
-    position: relative;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    border-width: 1px;
+    border-style: solid;
+    border-color: white;
 }
 
 .tile {
     width: 100%;
     height: 100%;
-    position: relative;
+    position: absolute;
     transition: transform 1s;
     transform-style: preserve-3d;
 }
