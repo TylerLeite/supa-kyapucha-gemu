@@ -6,6 +6,10 @@
     "displayName": "Aurelia-CLI"
   },
   "build": {
+    "copyFiles": {
+      "scripts/*": "www/scripts",
+      "index.html": "www"
+    },
     "targets": [
       {
         "id": "web",
