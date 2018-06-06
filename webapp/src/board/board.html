@@ -2,6 +2,6 @@
     <require from="../tile/tile"></require>
     <require from="./board.css"></require>
     <div class="board-row" repeat.for="i of height">
-        <tile repeat.for="j of width" view-model.ref="tiles[i][j]" click.delegate="place(i,j)"></tile>
+        <tile repeat.for="j of width" view-model.ref="tiles[i][j]" click.delegate="place(j,i)"></tile>
     </div>
 </template>
