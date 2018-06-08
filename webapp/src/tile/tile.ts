@@ -14,8 +14,6 @@ export class Tile {
 
     private flipClass = 'is-flipped';
 
-
-
     public attached() {
         this.tileFrontUi.style.backgroundColor = this.emptyColor;
     }

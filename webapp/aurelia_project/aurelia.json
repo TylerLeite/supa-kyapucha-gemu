@@ -68,6 +68,12 @@
           "aurelia-templating",
           "aurelia-templating-binding",
           {
+            "name": "firebase",
+            "path": "../node_modules/firebase",
+            "main":"firebase",
+            "exports": "firebase"
+          },
+          {
             "name": "aurelia-templating-resources",
             "path": "../node_modules/aurelia-templating-resources/dist/amd",
             "main": "aurelia-templating-resources"

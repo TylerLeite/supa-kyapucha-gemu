@@ -2,9 +2,17 @@ html, body {
     min-height: 100%;
     width: 100%;
     position: absolute;
+    overflow: hidden;
+    margin: 0;
 }
-  
-board {
-    width: 1000px;
-    height: 600px;
+
+.board-container {
+    width: 95%;
+    left: 2.5%;
+    height: 95%;
+    position: absolute;
+}
+
+board.is-disabled {
+    pointer-events: none;
 }

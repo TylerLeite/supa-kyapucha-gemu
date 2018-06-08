@@ -1,5 +1,8 @@
 <template>
   <require from="../board/board"></require>
   <require from="./app.css"></require>
-  <board height.bind="7" width.bind="7"></board>
+  ${status}
+  <div class="board-container">
+    <board height.bind="8" width.bind="8" view-model.ref="board" ref="boardUi"></board>
+  </div>
 </template>

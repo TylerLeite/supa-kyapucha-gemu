@@ -7,12 +7,24 @@ export class Board {
     @bindable public height: number;
     @bindable public width: number;
     public tiles: Array<Tile>[] = new Array<Tile[]>();
+    public boardUi: HTMLElement;
     private turn: States = States.PLAYER1;
+    public emptyTiles: number;
+    public lastMove = {x: undefined, y: undefined};
 
     public bind() {
         for (let i = 0; i < this.height; i++) {
             this.tiles.push(new Array<any>(this.width));
         }
+        this.emptyTiles = this.height * this.width;
+    }
+
+    public getTurn() {
+        return this.turn;
+    }
+
+    public setTurn(turn: States) {
+        this.turn = turn;
     }
 
     public place(x: number, y: number) {
@@ -33,11 +45,14 @@ export class Board {
         } else {
             this.turn = States.PLAYER1;
         }
+
+        this.emptyTiles -= 1;
+        this.lastMove = {x: x, y: y};
     }
 
     public reset() {
         for (let i = 0; i < this.height; i++) {
-            for (let j = 0; j < this.width; i++) {
+            for (let j = 0; j < this.width; j++) {
                 this.tiles[i][j].reset();
             }
         }
@@ -76,5 +91,5 @@ export class Board {
                 return false;
             }
         }
-    };
+    }
 }
