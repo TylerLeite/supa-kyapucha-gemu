@@ -32,6 +32,9 @@ export class App {
           messagingSenderId: "37300630730"
       };
       firebase.initializeApp(config);
+      return firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION).then(() => {
+        return firebase.auth().signInAnonymously();
+      });
     }
 
     public attached() {
@@ -54,35 +57,33 @@ export class App {
         this.disable();
         this.userRef = firebase.database().ref('players/');
         this.gameRef = firebase.database().ref('games/');
-        firebase.auth().signInAnonymously().then(() => {
-            this.userKey = firebase.auth().currentUser.uid;
-            this.tempKey = this.userRef.push({
-                uid: this.userKey,
-                status: 'waiting',
-                rank: 0
-            }).key;
-            this.status = `User: ${this.userKey}, waiting for match...`;
-            this.gameRef.on('child_changed', (table) => {
-                if (table.val().player1 === this.userKey) {
-                    this.tableRef = table.ref;
-                    logger.debug("matched as player 1");
-                    this.status = 'You are player 1... ';
-                    this.board.setTurn(States.PLAYER1);
-                    if (table.val().player2 !== "") {
-                    this.gameRef.off('child_changed');
-                    this.playMultiPlayerGame();
-                    }
-                } else if (table.val().player2 === this.userKey) {
-                    this.tableRef = table.ref;
-                    logger.debug("matched as player 2");
-                    this.status = 'You are player 2... ';
-                    this.board.setTurn(States.PLAYER2);
-                    if (table.val().player1 !== "") {
-                    this.gameRef.off('child_changed');
-                    this.playMultiPlayerGame();
-                    }
+        this.userKey = firebase.auth().currentUser.uid;
+        this.tempKey = this.userRef.push({
+            uid: this.userKey,
+            status: 'waiting',
+            rank: 0
+        }).key;
+        this.status = `User: ${this.userKey}, waiting for match...`;
+        this.gameRef.on('child_changed', (table) => {
+            if (table.val().player1 === this.userKey) {
+                this.tableRef = table.ref;
+                logger.debug("matched as player 1");
+                this.status = 'You are player 1... ';
+                this.board.setTurn(States.PLAYER1);
+                if (table.val().player2 !== "") {
+                this.gameRef.off('child_changed');
+                this.playMultiPlayerGame();
                 }
-            });
+            } else if (table.val().player2 === this.userKey) {
+                this.tableRef = table.ref;
+                logger.debug("matched as player 2");
+                this.status = 'You are player 2... ';
+                this.board.setTurn(States.PLAYER2);
+                if (table.val().player1 !== "") {
+                this.gameRef.off('child_changed');
+                this.playMultiPlayerGame();
+                }
+            }
         });
     }
 
