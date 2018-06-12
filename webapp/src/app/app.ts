@@ -12,8 +12,8 @@ export class App {
     private userRef: firebase.database.Reference;
     private gameRef: firebase.database.Reference;
     private tableRef: firebase.database.Reference;
-    private userKey: string;
-    private tempKey: string;
+    private userId: string;
+    private playerKey: string;
     private bindingEngine: BindingEngine;
     private boardUi: HTMLElement;
     private disableClass = 'is-disabled';
@@ -57,15 +57,16 @@ export class App {
         this.disable();
         this.userRef = firebase.database().ref('players/');
         this.gameRef = firebase.database().ref('games/');
-        this.userKey = firebase.auth().currentUser.uid;
-        this.tempKey = this.userRef.push({
-            uid: this.userKey,
+        this.userId = firebase.auth().currentUser.uid;
+        this.playerKey = this.userRef.push({
+            uid: this.userId,
             status: 'waiting',
             rank: 0
         }).key;
-        this.status = `User: ${this.userKey}, waiting for match...`;
+        this.userRef.child(this.playerKey).onDisconnect().remove();
+        this.status = `User: ${this.userId}, waiting for match...`;
         this.gameRef.on('child_changed', (table) => {
-            if (table.val().player1 === this.userKey) {
+            if (table.val().player1 === this.userId) {
                 this.tableRef = table.ref;
                 logger.debug("matched as player 1");
                 this.status = 'You are player 1... ';
@@ -74,7 +75,7 @@ export class App {
                 this.gameRef.off('child_changed');
                 this.playMultiPlayerGame();
                 }
-            } else if (table.val().player2 === this.userKey) {
+            } else if (table.val().player2 === this.userId) {
                 this.tableRef = table.ref;
                 logger.debug("matched as player 2");
                 this.status = 'You are player 2... ';
@@ -99,15 +100,11 @@ export class App {
         this.handleMultiPlayerTurn(1, 1);
     }
 
-    public deactivate() {
-        this.userRef.child(this.tempKey).remove();
-    }
-
     private handleMultiPlayerTurn = (newValue: any, oldValue: any) => {
         if (newValue === 0) {
             logger.debug("GAME OVER");
             this.tableRef.child('moves').ref.off('child_added');
-            this.userRef.child(this.tempKey).remove();
+            this.userRef.child(this.playerKey).remove();
             return;
         }
         if (this.board.getTurn() === States.PLAYER1) {
