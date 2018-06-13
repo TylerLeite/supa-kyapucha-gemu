@@ -1,18 +1,7 @@
 html, body {
-    min-height: 100%;
-    width: 100%;
-    position: absolute;
-    overflow: hidden;
-    margin: 0;
-}
-
-.board-container {
-    width: 95%;
-    left: 2.5%;
-    height: 95%;
-    position: absolute;
-}
-
-board.is-disabled {
-    pointer-events: none;
+  min-height: 100%;
+  width: 100%;
+  position: absolute;
+  overflow: hidden;
+  margin: 0;
 }

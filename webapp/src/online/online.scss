@@ -1,0 +1,10 @@
+.board-container {
+  width: 95%;
+  left: 2.5%;
+  height: 95%;
+  position: absolute;
+}
+
+board.is-disabled {
+  pointer-events: none;
+}
