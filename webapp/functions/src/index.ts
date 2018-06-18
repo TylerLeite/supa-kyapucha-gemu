@@ -8,9 +8,7 @@ exports.observeNewPlayers = functions.database.ref('players/{pushId}/')
         console.log("found a player!")
         const gameRef = admin.database().ref('games/')
         let matched = false;
-        console.log('initially sleeping to allow cleanup to occur first')
         while(!matched) {
-            await sleep(3000);
             console.log("waking up and trying again!")
             await gameRef.once('value').then(async (tables: admin.database.DataSnapshot) => {
                 console.log("searching for matches")
@@ -52,6 +50,7 @@ exports.observeNewPlayers = functions.database.ref('players/{pushId}/')
                 break;
             }
             console.log("no tables open, sleeping for a little");
+            await sleep(3000);
         }
         const player = snapshot.val();
         console.log('Player', context.params.pushId, player);

@@ -6,24 +6,47 @@ import { States } from '../tile/tile';
 const logger = LogManager.getLogger('online');
 
 @inject(BindingEngine)
+/**
+ * A class for handling online Multiplyer games
+ * @class
+ */
 export class Online {
+    /** The game board being used */
     public board: Board;
+    /** The display status to show the user playing the game */
     public status: string;
-    private userRef: firebase.database.Reference;
-    private gameRef: firebase.database.Reference;
-    private tableRef: firebase.database.Reference;
-    private userId: string;
-    private playerKey: string;
-    private bindingEngine: BindingEngine;
-    private boardUi: HTMLElement;
-    private disableClass = 'is-disabled';
+    /** The firebase application */
     private app: firebase.app.App;
+    /** A reference to the user stored in the firebase database */
+    private userRef: firebase.database.Reference;
+    /** A reference to the table that the user is assigned to */
+    private tableRef: firebase.database.Reference;
+    /** The id of the current user */
+    private userId: string;
+    /** The player key that the user is assigned */
+    private playerKey: string;
+    /** The aurelia binding engine */
+    private bindingEngine: BindingEngine;
+    /** A reference to the board dom object */
+    private boardUi: HTMLElement;
+    /** The class for enabling or disabling the UI */
+    private disableClass = 'is-disabled';
 
+    /**
+     * The constructor for online multiplayer games
+     * @constructor
+     * @param {BindingEngine} beng the aurelia binding engine
+     */
     public constructor(beng: BindingEngine) {
         this.bindingEngine = beng;
     }
 
-    public activate() {
+    /**
+     * The aurelia activate method, configures the firebase application, initializes it, and
+     * signs in an anonymous user.
+     * @returns {Promise<void>} the promise from setting the persistence and logging in
+     */
+    public activate(): Promise<void> {
         const config = {
             apiKey: "AIzaSyAY539UWapvbIRNTSs_57NBCllvTYK0zKc",
             authDomain: "supa-kyapucha-gemu.firebaseapp.com",
@@ -38,31 +61,32 @@ export class Online {
         });
     }
 
+    /**
+     * The aurelia deactivate method, deletes the application before the page deactivates
+     */
     public deactivate() {
         this.app.delete();
     }
 
+    /**
+     * The aurelia attached method, disables the board, gathers user info and then starts
+     * the multi player game setup.
+     */
     public attached() {
+        this.disable();
+        this.userRef = firebase.database().ref('players/');
+        this.userId = firebase.auth().currentUser.uid;
         this.setupMultiPlayerGame();
     }
 
-    public disable() {
-        if (!this.boardUi.classList.contains(this.disableClass)) {
-            this.boardUi.classList.add(this.disableClass);
-        }
-    }
-
-    public enable() {
-        if (this.boardUi.classList.contains(this.disableClass)) {
-            this.boardUi.classList.remove(this.disableClass);
-        }
-    }
-
+    /**
+     * Sets up the multi player game.  This adds the user to the
+     * list of players.  The server will then find an empty table
+     * spot for the player and assign the user id to the table.  
+     * While that is happening this method will observe table
+     * changes with the wait for table method.
+     */
     private setupMultiPlayerGame() {
-        this.disable();
-        this.userRef = firebase.database().ref('players/');
-        this.gameRef = firebase.database().ref('games/');
-        this.userId = firebase.auth().currentUser.uid;
         this.playerKey = this.userRef.push({
             uid: this.userId,
             status: 'waiting',
@@ -70,29 +94,14 @@ export class Online {
         }).key;
         this.userRef.child(this.playerKey).onDisconnect().remove();
         this.status = `User: ${this.userId}, waiting for match...`;
-        this.gameRef.on('child_changed', (table) => {
-            if (table.val().player1 === this.userId) {
-                this.tableRef = table.ref;
-                logger.debug("matched as player 1");
-                this.status = 'You are player 1... ';
-                this.board.setTurn(States.PLAYER1);
-                if (table.val().player2 !== "") {
-                this.gameRef.off('child_changed');
-                this.playMultiPlayerGame();
-                }
-            } else if (table.val().player2 === this.userId) {
-                this.tableRef = table.ref;
-                logger.debug("matched as player 2");
-                this.status = 'You are player 2... ';
-                this.board.setTurn(States.PLAYER2);
-                if (table.val().player1 !== "") {
-                this.gameRef.off('child_changed');
-                this.playMultiPlayerGame();
-                }
-            }
-        });
+        firebase.database().ref('games/').on('child_changed', this.waitForTable);
     }
 
+    /**
+     * Kicks off a multiplayer game, waits for both server moves to be added
+     * and local moves to be added.  Local moves are handled by the handleMultiPlayerTurn handler
+     * and server moves are handled by placing the move on the board.
+     */
     private playMultiPlayerGame() {
         this.status += 'match has begun!';
         this.tableRef.child('moves').ref.on('child_added', (move) => {
@@ -102,10 +111,45 @@ export class Online {
             this.board.place(x, y);
         });
         this.bindingEngine.propertyObserver(this.board, 'emptyTiles').subscribe(this.handleMultiPlayerTurn);
-        this.handleMultiPlayerTurn(1, 1);
+        /** Kicks off handle multiplayer turn one time to start the back and forth gameplay */
+        this.handleMultiPlayerTurn(undefined, undefined);
     }
 
-    private handleMultiPlayerTurn = (newValue: any, oldValue: any) => {
+    /**
+     * Waits for table changes to occur, when one does then
+     * it checks if the user is player 1 or 2 at the table.
+     * If the user is player 1 or player 2 then it will wait for the table
+     * to have two players and then start the game.  If the user is
+     * not player 1 or 2 then it will ignore the change.
+     */
+    private waitForTable = (table: firebase.database.DataSnapshot) => {
+        if (table.val().player1 === this.userId) {
+            this.tableRef = table.ref;
+            logger.debug("matched as player 1");
+            this.status = 'You are player 1... awaiting game to start...';
+            this.board.setTurn(States.PLAYER1);
+            if (table.val().player2 !== "") {
+                firebase.database().ref('games/').off('child_changed');
+                this.playMultiPlayerGame();
+            }
+        } else if (table.val().player2 === this.userId) {
+            this.tableRef = table.ref;
+            logger.debug("matched as player 2");
+            this.status = 'You are player 2... awaiting game to start...';
+            this.board.setTurn(States.PLAYER2);
+            if (table.val().player1 !== "") {
+                firebase.database().ref('games/').off('child_changed');
+                this.playMultiPlayerGame();
+            }
+        }
+    }
+
+    /**
+     * Handles online multiplayer turns by watching the board for empty
+     * tile changes and then enabling/disabling the board and pushing moves
+     * to the server.
+     */
+    private handleMultiPlayerTurn = (newValue?: any, oldValue?: any) => {
         if (newValue === 0) {
             logger.debug("GAME OVER");
             this.tableRef.child('moves').ref.off('child_added');
@@ -125,6 +169,24 @@ export class Online {
                     y: this.board.getLastTurn().y
                 });
             }
+        }
+    }
+
+    /**
+     * Disables the board
+     */
+    private disable() {
+        if (!this.boardUi.classList.contains(this.disableClass)) {
+            this.boardUi.classList.add(this.disableClass);
+        }
+    }
+
+    /**
+     * Enables the board
+     */
+    private enable() {
+        if (this.boardUi.classList.contains(this.disableClass)) {
+            this.boardUi.classList.remove(this.disableClass);
         }
     }
 }
