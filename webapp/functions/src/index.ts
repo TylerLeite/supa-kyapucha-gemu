@@ -1,16 +1,16 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
-import { DataSnapshot } from 'firebase-functions/lib/providers/database';
 admin.initializeApp();
 
 enum PlayerStatuses {
     WAITING,
     PLAYING,
-    OFFLINE
+    OFFLINE,
+    NEW
 }
 
 exports.observePlayerChanges = functions.database.ref('players/{pushId}/')
-    .onUpdate(async (change: functions.Change<functions.database.DataSnapshot>, context: EventContext) => {
+    .onUpdate(async (change: functions.Change<functions.database.DataSnapshot>, context: functions.EventContext) => {
         const player = change.after.val();
         switch(player.status) {
             case PlayerStatuses.OFFLINE: {
@@ -36,12 +36,9 @@ exports.observePlayerChanges = functions.database.ref('players/{pushId}/')
 
 exports.observeNewPlayers = functions.database.ref('players/{pushId}/')
     .onCreate(async (snapshot: functions.database.DataSnapshot, context: functions.EventContext) => {
-        return snapshot.ref.child('status').set(PlayerStatuses.WAITING);
-    });
-
-exports.observeLeavingPlayers = functions.database.ref('players/{pushId}/')
-    .onDelete((snapshot: admin.database.DataSnapshot, context: functions.EventContext) => {
-        return snapshot.ref.child('status').set(PlayerStatuses.OFFLINE);
+        return snapshot.ref.child('status').set(PlayerStatuses.NEW).then(() => {
+            return snapshot.ref.child('status').set(PlayerStatuses.WAITING);
+        });  
     });
 
 async function findMatch(player): Promise<void> {

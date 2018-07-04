@@ -5,6 +5,12 @@ import { States } from '../tile/tile';
 
 const logger = LogManager.getLogger('online');
 
+enum PlayerStatuses {
+    WAITING,
+    PLAYING,
+    OFFLINE
+}
+
 @inject(BindingEngine)
 /**
  * A class for handling online Multiplyer games
@@ -23,8 +29,6 @@ export class Online {
     private tableRef: firebase.database.Reference;
     /** The id of the current user */
     private userId: string;
-    /** The player key that the user is assigned */
-    private playerKey: string;
     /** The aurelia binding engine */
     private bindingEngine: BindingEngine;
     /** A reference to the board dom object */
@@ -87,12 +91,16 @@ export class Online {
      * changes with the wait for table method.
      */
     private setupMultiPlayerGame() {
-        this.playerKey = this.userRef.push({
+        this.userRef.child(this.userId).set({
             uid: this.userId,
-            status: 'waiting',
+            status: PlayerStatuses.WAITING,
             rank: 0
-        }).key;
-        this.userRef.child(this.playerKey).onDisconnect().remove();
+        });
+        this.userRef.child(this.userId).onDisconnect().set({
+            uid: this.userId,
+            status: PlayerStatuses.OFFLINE,
+            rank: 0
+        });
         this.status = `User: ${this.userId}, waiting for match...`;
         firebase.database().ref('games/').on('child_changed', this.waitForTable);
     }
@@ -153,7 +161,11 @@ export class Online {
         if (newValue === 0) {
             logger.debug("GAME OVER");
             this.tableRef.child('moves').ref.off('child_added');
-            this.userRef.child(this.playerKey).remove();
+            this.userRef.child(this.userId).set({
+                uid: this.userId,
+                status: PlayerStatuses.WAITING,
+                rank: 0
+            });
             return;
         }
         if (this.board.getTurn() === States.PLAYER1) {

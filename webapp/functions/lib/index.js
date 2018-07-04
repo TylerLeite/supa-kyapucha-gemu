@@ -11,72 +11,104 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 admin.initializeApp();
-exports.observeNewPlayers = functions.database.ref('players/{pushId}/')
-    .onCreate((snapshot, context) => __awaiter(this, void 0, void 0, function* () {
-    // Grab the current value of what was written to the Realtime Database.
-    console.log("found a player!");
-    const gameRef = admin.database().ref('games/');
-    let matched = false;
-    console.log('initially sleeping to allow cleanup to occur first');
-    while (!matched) {
-        yield sleep(3000);
-        console.log("waking up and trying again!");
-        yield gameRef.once('value').then((tables) => __awaiter(this, void 0, void 0, function* () {
-            console.log("searching for matches");
-            for (let i = 0; i < tables.numChildren(); i++) {
-                console.log(`searching table ${i}`);
-                const result = yield admin.database().ref(`games/table${i}/`).transaction((players) => {
-                    if (players === null) {
-                        return 0;
-                    }
-                    if (players.player1 === "") {
-                        console.log("adding as player1");
-                        players.player1 = snapshot.val().uid;
-                        matched = true;
-                        return players;
-                    }
-                    else if (players.player2 === "") {
-                        console.log("adding as player2");
-                        players.player2 = snapshot.val().uid;
-                        matched = true;
-                        return players;
-                    }
-                }).catch((reason) => {
-                    console.warn("transaction failed!");
-                    return {
-                        committed: false,
-                        snapshot: undefined
-                    };
-                });
-                if (result.committed === true) {
-                    if (matched) {
-                        break;
-                    }
-                }
-            }
-        })).catch(() => {
-            console.error("unable to get snapshot of tables!");
-            matched = true;
-        });
-        if (matched) {
+var PlayerStatuses;
+(function (PlayerStatuses) {
+    PlayerStatuses[PlayerStatuses["WAITING"] = 0] = "WAITING";
+    PlayerStatuses[PlayerStatuses["PLAYING"] = 1] = "PLAYING";
+    PlayerStatuses[PlayerStatuses["OFFLINE"] = 2] = "OFFLINE";
+    PlayerStatuses[PlayerStatuses["NEW"] = 3] = "NEW";
+})(PlayerStatuses || (PlayerStatuses = {}));
+exports.observePlayerChanges = functions.database.ref('players/{pushId}/')
+    .onUpdate((change, context) => __awaiter(this, void 0, void 0, function* () {
+    const player = change.after.val();
+    switch (player.status) {
+        case PlayerStatuses.OFFLINE: {
+            return cleanUpPlayer(player)
+                .catch((reason) => {
+                console.error(`Was unable to clean up the user after they left.  Details: ${reason}`);
+            });
+        }
+        case PlayerStatuses.PLAYING: {
             break;
         }
-        console.log("no tables open, sleeping for a little");
+        case PlayerStatuses.WAITING: {
+            return findMatch(player)
+                .then(() => {
+                return change.after.ref.child('status').set(PlayerStatuses.PLAYING);
+            })
+                .catch((reason) => {
+                console.error(`Was unable to find match for the user, might be overloaded? Details: ${reason}`);
+            });
+        }
     }
-    const player = snapshot.val();
-    console.log('Player', context.params.pushId, player);
-    return Promise.resolve();
 }));
-exports.observeLeavingPlayers = functions.database.ref('players/{pushId}/')
-    .onDelete((snapshot, context) => {
+exports.observeNewPlayers = functions.database.ref('players/{pushId}/')
+    .onCreate((snapshot, context) => __awaiter(this, void 0, void 0, function* () {
+    return snapshot.ref.child('status').set(PlayerStatuses.NEW).then(() => {
+        return snapshot.ref.child('status').set(PlayerStatuses.WAITING);
+    });
+}));
+function findMatch(player) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const gameRef = admin.database().ref('games/');
+        let matched = false;
+        while (!matched) {
+            yield gameRef.once('value').then((tables) => __awaiter(this, void 0, void 0, function* () {
+                console.log("searching for matches");
+                for (let i = 0; i < tables.numChildren(); i++) {
+                    console.log(`searching table ${i}`);
+                    const result = yield admin.database().ref(`games/table${i}/`).transaction((players) => {
+                        if (players === null) {
+                            return 0;
+                        }
+                        if (players.player1 === "") {
+                            console.log("adding as player1");
+                            players.player1 = player.uid;
+                            matched = true;
+                            return players;
+                        }
+                        else if (players.player2 === "") {
+                            console.log("adding as player2");
+                            players.player2 = player.uid;
+                            matched = true;
+                            return players;
+                        }
+                    }).catch((reason) => {
+                        console.warn("transaction failed!");
+                        return {
+                            committed: false,
+                            snapshot: undefined
+                        };
+                    });
+                    if (result.committed === true) {
+                        if (matched) {
+                            break;
+                        }
+                    }
+                }
+            })).catch(() => {
+                console.error("unable to get snapshot of tables!");
+                matched = true;
+            });
+            if (matched) {
+                break;
+            }
+            console.log("no tables open, sleeping for a little");
+            yield sleep(3000);
+            console.log("waking up and trying again!");
+        }
+        return Promise.resolve();
+    });
+}
+function cleanUpPlayer(player) {
     // Grab the current value of what was written to the Realtime Database.
     console.log("player left!");
     const gameRef = admin.database().ref('games/');
-    gameRef.once('value').then((tables) => {
+    return gameRef.once('value').then((tables) => {
         console.log("searching through matches to see if user is there");
         tables.forEach((table) => {
             const players = table.val();
-            if (players.player1 === context.auth.uid) {
+            if (players.player1 === player.uid) {
                 console.log("removing from player1");
                 table.ref.update({
                     player1: ""
@@ -89,7 +121,7 @@ exports.observeLeavingPlayers = functions.database.ref('players/{pushId}/')
                     console.warn('could not delete moves');
                 });
             }
-            if (players.player2 === context.auth.uid) {
+            if (players.player2 === player.uid) {
                 console.log("removing from player2");
                 table.ref.update({
                     player2: ""
@@ -104,11 +136,12 @@ exports.observeLeavingPlayers = functions.database.ref('players/{pushId}/')
             }
             return false;
         });
-    }).catch((reason) => {
-        console.error("Could not get the list of tables!");
+    })
+        .catch((reason) => {
+        console.error(`Unable to find a table for the user: ${reason}`);
+        return Promise.reject(reason);
     });
-    return Promise.resolve();
-});
+}
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
