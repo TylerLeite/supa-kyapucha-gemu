@@ -126,7 +126,13 @@ export class Online {
             const x = move!.val().x;
             // tslint:disable-next-line:no-non-null-assertion
             const y = move!.val().y;
-            this.board.place(x, y);
+            if (this.board.lastMove !== undefined) {
+                // If the move came from the other player
+                if (x !== this.board.lastMove.x || y !== this.board.lastMove.y) {
+                    // Add it to the board
+                    this.board.place(x, y);
+                }
+            }
         });
         this.tableRef.child('player1').ref.on('value', this.checkPlayerLeft);
         this.bindingEngine.propertyObserver(this.board, 'emptyCount').subscribe(this.handleMultiPlayerTurn);
@@ -170,6 +176,8 @@ export class Online {
         if (snapshot.val() === "") {
             this.status = "The other player left :(";
             setTimeout(() => {
+                this.tableRef.child('moves').ref.off('child_added');
+                this.tableRef.child('player1').ref.off('value');
                 this.reQueue();
             }, 2000);
         }
@@ -180,8 +188,6 @@ export class Online {
      */
     private reQueue() {
         logger.debug("GAME OVER");
-        this.tableRef.child('moves').ref.off('child_added');
-        this.tableRef.child('player1').ref.off('value');
         this.disable();
         this.board.reset();
         setTimeout(() => {
@@ -199,6 +205,8 @@ export class Online {
     private handleMultiPlayerTurn = (newValue?: any, oldValue?: any) => {
         if (newValue === 0) {
             this.status = "Game OVER!~";
+            this.tableRef.child('moves').ref.off('child_added');
+            this.tableRef.child('player1').ref.off('value');
             setTimeout(() => {
                 this.reQueue();
             }, 2000);
