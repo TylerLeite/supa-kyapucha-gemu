@@ -69,7 +69,13 @@ export class Online {
      * The aurelia deactivate method, deletes the application before the page deactivates
      */
     public deactivate() {
-        this.app.delete();
+        this.tableRef.child('moves').ref.off('child_added');
+        this.tableRef.child('player1').ref.off('value');
+        firebase.database().ref('games/').off('child_changed');
+        this.app.delete()
+        .catch(() => {
+            logger.error("Could not delete the firebase app!");
+        });
     }
 
     /**
@@ -79,7 +85,8 @@ export class Online {
     public attached() {
         this.disable();
         this.userRef = firebase.database().ref('players/');
-        this.userId = firebase.auth().currentUser.uid;
+        // tslint:disable-next-line:no-non-null-assertion
+        this.userId = firebase.auth()!.currentUser!.uid;
         this.setupMultiPlayerGame();
     }
 
@@ -92,14 +99,16 @@ export class Online {
      */
     private setupMultiPlayerGame() {
         this.userRef.child(this.userId).set({
-            uid: this.userId,
-            status: PlayerStatuses.WAITING,
-            rank: 0
+            status: PlayerStatuses.WAITING
+        })
+        .catch((reason) => {
+            logger.error("Could not set status to waiting, never going to be able to join a game.");
         });
         this.userRef.child(this.userId).onDisconnect().set({
-            uid: this.userId,
-            status: PlayerStatuses.OFFLINE,
-            rank: 0
+            status: PlayerStatuses.OFFLINE
+        })
+        .catch((reason) => {
+            logger.error("Could not set status to offline, could be requeued.");
         });
         this.status = `User: ${this.userId}, waiting for match...`;
         firebase.database().ref('games/').on('child_changed', this.waitForTable);
@@ -113,11 +122,13 @@ export class Online {
     private playMultiPlayerGame() {
         this.status += 'match has begun!';
         this.tableRef.child('moves').ref.on('child_added', (move) => {
-            logger.debug(`move: ${move.val().x} ${move.val().y}`);
-            const x = move.val().x;
-            const y = move.val().y;
+            // tslint:disable-next-line:no-non-null-assertion
+            const x = move!.val().x;
+            // tslint:disable-next-line:no-non-null-assertion
+            const y = move!.val().y;
             this.board.place(x, y);
         });
+        this.tableRef.child('player1').ref.on('value', this.checkPlayerLeft);
         this.bindingEngine.propertyObserver(this.board, 'emptyTiles').subscribe(this.handleMultiPlayerTurn);
         /** Kicks off handle multiplayer turn one time to start the back and forth gameplay */
         this.handleMultiPlayerTurn(undefined, undefined);
@@ -153,20 +164,37 @@ export class Online {
     }
 
     /**
+     * Handles another player leaving the game
+     */
+    private checkPlayerLeft = (snapshot: firebase.database.DataSnapshot) => {
+        if (snapshot.val() === "") {
+            this.status = "The other player left :(";
+            setTimeout(() => {
+                this.reQueue();
+            }, 2000);
+        }
+    }
+
+    /**
+     * Stops listening to game events and sets status to waiting
+     */
+    private reQueue() {
+        logger.debug("GAME OVER");
+        this.tableRef.child('moves').ref.off('child_added');
+        this.tableRef.child('player1').ref.off('value');
+        this.board.reset();
+        this.setupMultiPlayerGame();
+        return;
+    }
+
+    /**
      * Handles online multiplayer turns by watching the board for empty
      * tile changes and then enabling/disabling the board and pushing moves
      * to the server.
      */
     private handleMultiPlayerTurn = (newValue?: any, oldValue?: any) => {
         if (newValue === 0) {
-            logger.debug("GAME OVER");
-            this.tableRef.child('moves').ref.off('child_added');
-            this.userRef.child(this.userId).set({
-                uid: this.userId,
-                status: PlayerStatuses.WAITING,
-                rank: 0
-            });
-            return;
+            this.reQueue();
         }
         if (this.board.getTurn() === States.PLAYER1) {
             this.status = 'It is your turn!';

@@ -23,7 +23,7 @@ exports.observePlayerChanges = functions.database.ref('players/{pushId}/')
     const player = change.after.val();
     switch (player.status) {
         case PlayerStatuses.OFFLINE: {
-            return cleanUpPlayer(player)
+            return cleanUpPlayer(player, context.params.pushId)
                 .catch((reason) => {
                 console.error(`Was unable to clean up the user after they left.  Details: ${reason}`);
             });
@@ -32,9 +32,15 @@ exports.observePlayerChanges = functions.database.ref('players/{pushId}/')
             break;
         }
         case PlayerStatuses.WAITING: {
-            return findMatch(player)
+            return cleanUpPlayer(player, context.params.pushId)
                 .then(() => {
-                return change.after.ref.child('status').set(PlayerStatuses.PLAYING);
+                return findMatch(player, context.params.pushId)
+                    .then(() => {
+                    return change.after.ref.child('status').set(PlayerStatuses.PLAYING);
+                })
+                    .catch((reason) => {
+                    console.error(`Was unable to find match for the user, might be overloaded? Details: ${reason}`);
+                });
             })
                 .catch((reason) => {
                 console.error(`Was unable to find match for the user, might be overloaded? Details: ${reason}`);
@@ -48,7 +54,7 @@ exports.observeNewPlayers = functions.database.ref('players/{pushId}/')
         return snapshot.ref.child('status').set(PlayerStatuses.WAITING);
     });
 }));
-function findMatch(player) {
+function findMatch(player, uid) {
     return __awaiter(this, void 0, void 0, function* () {
         const gameRef = admin.database().ref('games/');
         let matched = false;
@@ -63,13 +69,13 @@ function findMatch(player) {
                         }
                         if (players.player1 === "") {
                             console.log("adding as player1");
-                            players.player1 = player.uid;
+                            players.player1 = uid;
                             matched = true;
                             return players;
                         }
                         else if (players.player2 === "") {
                             console.log("adding as player2");
-                            players.player2 = player.uid;
+                            players.player2 = uid;
                             matched = true;
                             return players;
                         }
@@ -100,7 +106,7 @@ function findMatch(player) {
         return Promise.resolve();
     });
 }
-function cleanUpPlayer(player) {
+function cleanUpPlayer(player, uid) {
     // Grab the current value of what was written to the Realtime Database.
     console.log("player left!");
     const gameRef = admin.database().ref('games/');
@@ -108,7 +114,7 @@ function cleanUpPlayer(player) {
         console.log("searching through matches to see if user is there");
         tables.forEach((table) => {
             const players = table.val();
-            if (players.player1 === player.uid) {
+            if (players.player1 === uid || players.player2 === uid) {
                 console.log("removing from player1");
                 table.ref.update({
                     player1: ""
@@ -116,12 +122,6 @@ function cleanUpPlayer(player) {
                     .catch((reason) => {
                     console.error('could not remove user');
                 });
-                table.child('moves').ref.remove()
-                    .catch((reason) => {
-                    console.warn('could not delete moves');
-                });
-            }
-            if (players.player2 === player.uid) {
                 console.log("removing from player2");
                 table.ref.update({
                     player2: ""

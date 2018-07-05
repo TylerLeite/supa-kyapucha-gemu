@@ -68,6 +68,7 @@ export class Board {
      * @returns {boolean} true if placement succeeded, false otherwise
      */
     public place(x: number, y: number): boolean {
+        logger.debug(`Placing a piece at ${x}, ${y} for player ${this.turn}`);
         /** Check if placement is valid */
         if (this.tiles[y][x].getState() !== States.EMPTY || !this.inBounds(x, y)) {
             return false;
@@ -98,6 +99,7 @@ export class Board {
 
     /** Reset the board (set all tiles to empty) */
     public reset() {
+        logger.debug("Resetting the board");
         for (let i = 0; i < this.height; i++) {
             for (let j = 0; j < this.width; j++) {
                 this.tiles[i][j].reset();

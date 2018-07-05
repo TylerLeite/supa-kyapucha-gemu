@@ -1,6 +1,16 @@
-import { LogManager } from 'aurelia-framework';
+// import { LogManager } from 'aurelia-framework';
 
-const logger = LogManager.getLogger('tile');
+// const logger = LogManager.getLogger('tile');
+
+/**
+ * An enum defining the possible states, this is used for whose turn it is
+ * as well as who owns a certain tile
+ */
+export enum States {
+    PLAYER1,
+    PLAYER2,
+    EMPTY
+}
 
 /**
  * A class defining a single tile
@@ -59,7 +69,8 @@ export class Tile {
      */
     public setState(newState: States) {
         if (newState === States.EMPTY) {
-            return this.reset();
+            this.reset();
+            return;
         }
         if (newState === this.state) {
             return;
@@ -89,14 +100,4 @@ export class Tile {
             this.flip();
         }
     }
-}
-
-/**
- * An enum defining the possible states, this is used for whose turn it is
- * as well as who owns a certain tile
- */
-export enum States {
-    PLAYER1,
-    PLAYER2,
-    EMPTY
 }
