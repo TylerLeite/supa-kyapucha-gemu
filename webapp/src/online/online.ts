@@ -1,6 +1,7 @@
 import * as firebase from 'firebase';
 import { LogManager, BindingEngine, inject } from 'aurelia-framework';
 import { Board } from '../board/board';
+import { Layouts } from '../board/layouts';
 import { States } from '../tile/tile';
 
 const logger = LogManager.getLogger('online');
@@ -83,11 +84,10 @@ export class Online {
      * the multi player game setup.
      */
     public attached() {
-        this.disable();
         this.userRef = firebase.database().ref('players/');
         // tslint:disable-next-line:no-non-null-assertion
         this.userId = firebase.auth()!.currentUser!.uid;
-        this.setupMultiPlayerGame();
+        this.reQueue();
     }
 
     /**
@@ -129,7 +129,7 @@ export class Online {
             this.board.place(x, y);
         });
         this.tableRef.child('player1').ref.on('value', this.checkPlayerLeft);
-        this.bindingEngine.propertyObserver(this.board, 'emptyTiles').subscribe(this.handleMultiPlayerTurn);
+        this.bindingEngine.propertyObserver(this.board, 'emptyCount').subscribe(this.handleMultiPlayerTurn);
         /** Kicks off handle multiplayer turn one time to start the back and forth gameplay */
         this.handleMultiPlayerTurn(undefined, undefined);
     }
@@ -146,7 +146,7 @@ export class Online {
             this.tableRef = table.ref;
             logger.debug("matched as player 1");
             this.status = 'You are player 1... awaiting game to start...';
-            this.board.setTurn(States.PLAYER1);
+            this.board.turn = States.PLAYER1;
             if (table.val().player2 !== "") {
                 firebase.database().ref('games/').off('child_changed');
                 this.playMultiPlayerGame();
@@ -155,7 +155,7 @@ export class Online {
             this.tableRef = table.ref;
             logger.debug("matched as player 2");
             this.status = 'You are player 2... awaiting game to start...';
-            this.board.setTurn(States.PLAYER2);
+            this.board.turn = States.PLAYER2;
             if (table.val().player1 !== "") {
                 firebase.database().ref('games/').off('child_changed');
                 this.playMultiPlayerGame();
@@ -182,8 +182,12 @@ export class Online {
         logger.debug("GAME OVER");
         this.tableRef.child('moves').ref.off('child_added');
         this.tableRef.child('player1').ref.off('value');
+        this.disable();
         this.board.reset();
-        this.setupMultiPlayerGame();
+        setTimeout(() => {
+            this.board.disableTiles(Layouts.SevenBySeven.cornersCenter);
+            this.setupMultiPlayerGame();
+        });
         return;
     }
 
@@ -194,20 +198,25 @@ export class Online {
      */
     private handleMultiPlayerTurn = (newValue?: any, oldValue?: any) => {
         if (newValue === 0) {
-            this.reQueue();
+            this.status = "Game OVER!~";
+            setTimeout(() => {
+                this.reQueue();
+            }, 2000);
         }
-        if (this.board.getTurn() === States.PLAYER1) {
+        if (this.board.turn === States.PLAYER1) {
             this.status = 'It is your turn!';
             //this.tableRef.child('moves').ref.off('child_added');
             this.enable();
-        } else if (this.board.getTurn() === States.PLAYER2) {
+        } else if (this.board.turn === States.PLAYER2) {
             this.status = 'It is the other players turn';
             this.disable();
             if (newValue !== oldValue) {
-                this.tableRef.child('moves').ref.push({
-                    x: this.board.getLastTurn().x,
-                    y: this.board.getLastTurn().y
-                });
+                if (this.board.lastMove !== undefined) {
+                    this.tableRef.child('moves').ref.push({
+                        x: this.board.lastMove.x,
+                        y: this.board.lastMove.y
+                    });
+                }
             }
         }
     }

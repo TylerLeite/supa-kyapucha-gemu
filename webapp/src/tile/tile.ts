@@ -9,7 +9,8 @@
 export enum States {
     PLAYER1,
     PLAYER2,
-    EMPTY
+    EMPTY,
+    DISABLED
 }
 
 /**
@@ -18,7 +19,7 @@ export enum States {
  */
 export class Tile {
     /** The state that the tile is currently in */
-    private state: States = States.EMPTY;
+    private tileState: States = States.EMPTY;
     /** A reference to the UI tile */
     public tileUi: HTMLElement;
     /** A reference to the UI front of the tile */
@@ -26,18 +27,19 @@ export class Tile {
     /** A reference to the UI back of the tile */
     public tileBackUi: HTMLElement;
     /** The color when a tile is empty FIXME: support passing an image in instead */
-    private emptyColor = "grey";
+    private emptyColor: string = "grey";
     /** The color when a tile is owned by player 1 FIXME: support passing an image in instead */
-    private player1Color = "red";
+    private player1Color: string = "red";
     /** The color when a tile is owned by player 2 FIXME: support passing an image in instead */
-    private player2Color = "blue";
+    private player2Color: string = "blue";
+    /** The color when a tile is disabled */
+    private disabledColor: string = "white";
     /** The css class that can be toggled in order to flip a tile */
-    private flipClass = 'is-flipped';
-
-    /** The Aurelia attached lifecycle method, sets the tiles initially to an empty color on load. */
-    public attached() {
-        this.tileFrontUi.style.backgroundColor = this.emptyColor;
-    }
+    private flipClass: string = 'is-flipped';
+    /** The color of the front of the tile */
+    public tileFrontColor: string = this.emptyColor;
+    /** The color of the back of the tile */
+    public tileBackColor: string = this.emptyColor;
 
     /** Flips a tile over */
     private flip() {
@@ -56,8 +58,8 @@ export class Tile {
      * Get the current state of the tile
      * @returns {States} the current state of the tile
      */
-    public getState(): States {
-        return this.state;
+    public get state(): States {
+        return this.tileState;
     }
 
     /**
@@ -67,37 +69,50 @@ export class Tile {
      * the tile will flip over.
      * @param newState the new state to set the tile to
      */
-    public setState(newState: States) {
-        if (newState === States.EMPTY) {
-            this.reset();
+    public set state(newState: States) {
+        if (this.tileState === States.DISABLED) {
             return;
         }
-        if (newState === this.state) {
-            return;
-        }
-        if (this.state === States.EMPTY) {
-            if (newState === States.PLAYER1) {
-                this.tileFrontUi.style.backgroundColor = this.player1Color;
-                this.tileBackUi.style.backgroundColor = this.player2Color;
-            } else if (newState === States.PLAYER2) {
-                this.tileFrontUi.style.backgroundColor = this.player2Color;
-                this.tileBackUi.style.backgroundColor = this.player1Color;
+        switch (newState) {
+            case this.tileState: {
+                return;
             }
-        } else {
-            this.flip();
+            case States.DISABLED: {
+                this.tileFrontColor = this.disabledColor;
+                this.tileBackColor = this.disabledColor;
+                break;
+            }
+            case States.EMPTY: {
+                this.reset();
+                break;
+            }
+            default: {
+                if (this.tileState === States.EMPTY) {
+                    if (newState === States.PLAYER1) {
+                        this.tileFrontColor = this.player1Color;
+                        this.tileBackColor = this.player2Color;
+                    } else if (newState === States.PLAYER2) {
+                        this.tileFrontColor = this.player2Color;
+                        this.tileBackColor = this.player1Color;
+                    }
+                } else {
+                    this.flip();
+                }
+                break;
+            }
         }
-        this.state = newState;
+        this.tileState = newState;
     }
 
     /**
      * Reset a tile to it's initial state with an empty front and back
      */
     public reset() {
-        this.state = States.EMPTY;
-        this.tileFrontUi.style.backgroundColor = this.emptyColor;
-        this.tileBackUi.style.backgroundColor = this.emptyColor;
+        this.tileFrontColor = this.emptyColor;
+        this.tileBackColor = this.emptyColor;
         if (this.isFlipped()) {
             this.flip();
         }
+        this.tileState = States.EMPTY;
     }
 }

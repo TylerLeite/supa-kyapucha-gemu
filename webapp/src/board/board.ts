@@ -4,6 +4,14 @@ import { Tile, States } from '../tile/tile';
 const logger = LogManager.getLogger('board');
 
 /**
+ * Simple interface defining a coordinate
+ */
+export interface Coordinate {
+    x: number;
+    y: number;
+}
+
+/**
  * Class defining the gameboard and game logic
  * @class
  */
@@ -12,55 +20,59 @@ export class Board {
     @bindable public height: number;
     /** The width of the board */
     @bindable public width: number;
+    /** A list of tiles that should be disabled */
+    @bindable public disabledTiles: Array<Coordinate> = new Array<Coordinate>();
     /** A 2D array of tiles that make up the board */
     public tiles: Array<Tile>[] = new Array<Tile[]>();
     /** A reference to the board dom element */
     public boardUi: HTMLElement;
     /** The current turn */
-    private turn: States = States.PLAYER1;
-    /** Number of empty tiles on the board */
-    private emptyTiles: number;
+    public turn: States = States.PLAYER1;
     /** The last move that was made */
-    private lastMove: {x?: number, y?: number} = {x: undefined, y: undefined} ;
+    public lastMove?: Coordinate;
 
     /** Aurelia bind method, occurs when binding happens */
     public bind() {
         for (let i = 0; i < this.height; i++) {
-            this.tiles.push(new Array<any>(this.width));
+            this.tiles.push(new Array<Tile>(this.width));
         }
-        this.emptyTiles = this.height * this.width;
     }
 
     /**
-     * Get the current turn 
-     * @returns {States} ie: States.PLAYER1 (whose turn it is) 
+     * Get the number of empty tiles on the board
+     * @returns {number} - number of empty tiles
      */
-    public getTurn() {
-        return this.turn;
+    public get emptyCount(): number {
+        return this.getCountOfType(States.EMPTY);
     }
 
     /**
-     * Get the number of empty tiles remaining
-     * @returns {number} number of empty tiles
+     * Get the number of tiles that player 1 controls on the board
+     * @returns {number} - number of player 1 tiles
      */
-    public getEmptyTileNum() {
-        return this.emptyTiles;
+    public get player1Count(): number {
+        return this.getCountOfType(States.PLAYER1);
     }
 
     /**
-     * Get the coordinates of the last move that was made
-     * @returns {{x?: number, y?: number}} a set of coordinates FIXME: make an interface for this
+     * Get the number of tiles that player 2 controls on the board
+     * @returns {number} - number of player 2 tiles
      */
-    public getLastTurn(): {x?: number, y?: number} {
-        return this.lastMove;
+    public get player2Count(): number {
+        return this.getCountOfType(States.PLAYER2);
     }
 
-    /** 
-     * Set the current turn
-     * @param {States} turn - the turn to set
+    /**
+     * Take in a list of coordinates of tiles to disable, check if coordinates are in bounds
+     * and if they are, disable the tile at that coordinate.
+     * @param disabledTiles 
      */
-    public setTurn(turn: States) {
-        this.turn = turn;
+    public disableTiles(disabledTiles: Array<Coordinate>) {
+        disabledTiles.forEach((tile: Coordinate) => {
+            if (this.inBounds(tile.x, tile.y)) {
+                this.tiles[tile.y][tile.x].state = States.DISABLED;
+            }
+        });
     }
 
     /** 
@@ -70,12 +82,12 @@ export class Board {
     public place(x: number, y: number): boolean {
         logger.debug(`Placing a piece at ${x}, ${y} for player ${this.turn}`);
         /** Check if placement is valid */
-        if (this.tiles[y][x].getState() !== States.EMPTY || !this.inBounds(x, y)) {
+        if (this.tiles[y][x].state !== States.EMPTY || !this.inBounds(x, y)) {
             return false;
         }
 
         /** Set the tile to the current player */
-        this.tiles[y][x].setState(this.turn);
+        this.tiles[y][x].state = this.turn;
 
         /** Flip appropriate tiles */
         for (let i = -1; i < 2; i++) {
@@ -92,7 +104,6 @@ export class Board {
         }
 
         /** Update other stats */
-        this.emptyTiles -= 1;
         this.lastMove = {x: x, y: y};
         return true;
     }
@@ -123,6 +134,23 @@ export class Board {
         return true;
     }
 
+    /**
+     * Get the number of tiles of a certain type (state)
+     * @param {State} type - the type of tile to count
+     * @returns {number} number of tiles of the type
+     */
+    private getCountOfType(type: States): number {
+        let count = 0;
+        for (let i = 0; i < this.height; i++) {
+            for (let j = 0; j < this.width; j++) {
+                if (this.tiles[i][j].state === type) {
+                    count ++;
+                }
+            }
+        }
+        return count;
+    }
+
     /** 
      * Given a starting coordinate and a direction, flip appropriate tiles in that direction.
      * Using combinations of xdir and ydir such as (1, 1) will form a diagonal direction.
@@ -132,23 +160,25 @@ export class Board {
      * @param {number} ydir (-1, 0 or 1) to define down, center, or up
      * @returns {boolean} true if the call succeeded, false otherwise
      */
-    public checkReversi(sx: number, sy: number, xdir: number, ydir: number): boolean {
+    private checkReversi(sx: number, sy: number, xdir: number, ydir: number): boolean {
         const nx = sx + xdir;
         const ny = sy + ydir;
 
         if (!this.inBounds(nx, ny)) {
             return false;
-        } else if (this.tiles[ny][nx].getState() === States.EMPTY) {
+        } else if (this.tiles[ny][nx].state === States.DISABLED) {
             return false;
-        } else if (this.tiles[ny][nx].getState() === this.turn) {
-            if (this.tiles[sy][sx].getState() !== this.turn) {
-                this.tiles[sy][sx].setState(this.turn); // Comment this out if just checking
+        } else if (this.tiles[ny][nx].state === States.EMPTY) {
+            return false;
+        } else if (this.tiles[ny][nx].state === this.turn) {
+            if (this.tiles[sy][sx].state !== this.turn) {
+                this.tiles[sy][sx].state = this.turn; // Comment this out if just checking
             }
             return true;
         } else {
             if (this.checkReversi(nx, ny, xdir, ydir)) {
-                if (this.tiles[sy][sx].getState() !== this.turn) {
-                    this.tiles[sy][sx].setState(this.turn); // Comment this out if just checking
+                if (this.tiles[sy][sx].state !== this.turn) {
+                    this.tiles[sy][sx].state = this.turn; // Comment this out if just checking
                 }
                 return true;
             } else {
