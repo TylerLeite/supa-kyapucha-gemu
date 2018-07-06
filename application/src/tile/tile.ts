@@ -1,4 +1,4 @@
-// import { LogManager } from 'aurelia-framework';
+//import { bindable } from 'aurelia-framework';
 
 // const logger = LogManager.getLogger('tile');
 
@@ -27,19 +27,32 @@ export class Tile {
     /** A reference to the UI back of the tile */
     public tileBackUi: HTMLElement;
     /** The color when a tile is empty FIXME: support passing an image in instead */
-    private emptyColor: string = "grey";
-    /** The color when a tile is owned by player 1 FIXME: support passing an image in instead */
-    private player1Color: string = "red";
-    /** The color when a tile is owned by player 2 FIXME: support passing an image in instead */
-    private player2Color: string = "blue";
+    public emptyColor: string = "grey";
+    /** The image displayed when a tile is empty */
+    public emptyImageUrl: string = "";
+    /** The color when a tile is owned by player 1 */
+    public player1Color: string = "#f7e1e1";
+    /** The image when a tile is owned by player 1 */
+    public player1ImageUrl: string = "img/char/bill.png";
+    /** The color when a tile is owned by player 2 */
+    public player2Color: string = "#171c3d";
+    /** The image when a tile is owned by player 2 */
+    public player2ImageUrl: string = "img/char/kanako.png";
+    /** The image displayed when a tile is disabled */
+    public disabledImageUrl: string = "";
     /** The color when a tile is disabled */
-    private disabledColor: string = "white";
+    public disabledColor: string = "white";
     /** The css class that can be toggled in order to flip a tile */
     private flipClass: string = 'is-flipped';
+    private shakeClass: string = 'shake';
     /** The color of the front of the tile */
     public tileFrontColor: string = this.emptyColor;
     /** The color of the back of the tile */
     public tileBackColor: string = this.emptyColor;
+    /** The url of the image to display on the front of the tile */
+    public tileFrontImageUrl: string = "";
+    /** The url of the image to display on the back of the tile */
+    public tileBackImageUrl: string = "";
 
     /** Flips a tile over */
     private flip() {
@@ -52,6 +65,13 @@ export class Tile {
      */
     private isFlipped(): boolean {
         return this.tileUi.classList.contains(this.flipClass);
+    }
+
+    private shake() {
+        this.tileUi.classList.toggle(this.shakeClass);
+        setTimeout(() => {
+            //this.tileUi.classList.toggle(this.shakeClass);
+        });
     }
 
     /**
@@ -79,7 +99,9 @@ export class Tile {
             }
             case States.DISABLED: {
                 this.tileFrontColor = this.disabledColor;
+                this.tileFrontImageUrl = this.disabledImageUrl;
                 this.tileBackColor = this.disabledColor;
+                this.tileBackImageUrl = this.disabledImageUrl;
                 break;
             }
             case States.EMPTY: {
@@ -87,13 +109,18 @@ export class Tile {
                 break;
             }
             default: {
+                this.shake();
                 if (this.tileState === States.EMPTY) {
                     if (newState === States.PLAYER1) {
                         this.tileFrontColor = this.player1Color;
+                        this.tileFrontImageUrl = this.player1ImageUrl;
                         this.tileBackColor = this.player2Color;
+                        this.tileBackImageUrl = this.player2ImageUrl;
                     } else if (newState === States.PLAYER2) {
                         this.tileFrontColor = this.player2Color;
+                        this.tileFrontImageUrl = this.player2ImageUrl;
                         this.tileBackColor = this.player1Color;
+                        this.tileBackImageUrl = this.player1ImageUrl;
                     }
                 } else {
                     this.flip();
@@ -109,7 +136,9 @@ export class Tile {
      */
     public reset() {
         this.tileFrontColor = this.emptyColor;
+        this.tileFrontImageUrl = this.emptyImageUrl;
         this.tileBackColor = this.emptyColor;
+        this.tileBackImageUrl = this.emptyImageUrl;
         if (this.isFlipped()) {
             this.flip();
         }

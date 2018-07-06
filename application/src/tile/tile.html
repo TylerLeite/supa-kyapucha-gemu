@@ -2,8 +2,8 @@
     <require from="./tile.css"></require>
     <div class="scene">
         <div ref="tileUi" class="tile">
-          <div ref="tileFrontUi" css="background-color: ${tileFrontColor};" class="tile-face-front"></div>
-          <div ref="tileBackUi" css="background-color: ${tileBackColor};" class="tile-face-back"></div>
+          <div ref="tileFrontUi" css="background: url(${tileFrontImageUrl}) no-repeat, ${tileFrontColor};" class="tile-face-front"></div>
+          <div ref="tileBackUi" css="background: url(${tileBackImageUrl}) no-repeat, ${tileBackColor};" class="tile-face-back"></div>
         </div>
       </div>
 </template>
