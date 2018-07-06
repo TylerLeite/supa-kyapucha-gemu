@@ -20,8 +20,6 @@ export class Board {
     @bindable public height: number;
     /** The width of the board */
     @bindable public width: number;
-    /** A list of tiles that should be disabled */
-    @bindable public disabledTiles: Array<Coordinate> = new Array<Coordinate>();
     /** A 2D array of tiles that make up the board */
     public tiles: Array<Tile>[] = new Array<Tile[]>();
     /** A reference to the board dom element */
