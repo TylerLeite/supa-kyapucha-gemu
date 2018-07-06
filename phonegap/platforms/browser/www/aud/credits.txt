@@ -1,8 +1,0 @@
-menu
-	Somewhere Sunny (ver 2) - Kevin Macleod, incompetech.com
-
-level-select
-	Move Forward - Kevin Macleod, incompetech.com
-
-game
-	Son of a Rocket - Kevin Macleod, incompetech.com
