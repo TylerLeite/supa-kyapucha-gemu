@@ -109,8 +109,8 @@ export class Tile {
                 break;
             }
             default: {
-                this.shake();
                 if (this.tileState === States.EMPTY) {
+                    this.shake();
                     if (newState === States.PLAYER1) {
                         this.tileFrontColor = this.player1Color;
                         this.tileFrontImageUrl = this.player1ImageUrl;
