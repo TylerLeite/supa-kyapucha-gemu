@@ -44,7 +44,8 @@ export class Tile {
     public disabledColor: string = "white";
     /** The css class that can be toggled in order to flip a tile */
     private flipClass: string = 'is-flipped';
-    private shakeClass: string = 'shake';
+    /** The css class that can be toggled to push in a tile */
+    private pushClass: string = 'push';
     /** The color of the front of the tile */
     public tileFrontColor: string = this.emptyColor;
     /** The color of the back of the tile */
@@ -67,11 +68,11 @@ export class Tile {
         return this.tileUi.classList.contains(this.flipClass);
     }
 
-    private shake() {
-        this.tileUi.classList.toggle(this.shakeClass);
-        setTimeout(() => {
-            //this.tileUi.classList.toggle(this.shakeClass);
-        });
+    /**
+     * Pushes a tile in (on a click for example)
+     */
+    private push() {
+        this.tileUi.classList.toggle(this.pushClass);
     }
 
     /**
@@ -110,7 +111,7 @@ export class Tile {
             }
             default: {
                 if (this.tileState === States.EMPTY) {
-                    this.shake();
+                    this.push();
                     if (newState === States.PLAYER1) {
                         this.tileFrontColor = this.player1Color;
                         this.tileFrontImageUrl = this.player1ImageUrl;
