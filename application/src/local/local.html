@@ -1,6 +1,8 @@
 <template>
     <require from="../board/board"></require>
+    <require from="../score/score"></require>
     <require from="../local/local.css"></require>
+    <score></score>
     Player1: ${board.player1Count} Player2: ${board.player2Count}
     <div class="board-container">
         <board height.bind="7" width.bind="7" view-model.ref="board" ref="boardUi"></board>
