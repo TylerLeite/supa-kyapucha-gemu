@@ -20,9 +20,35 @@
 }
 
 .score-row {
-    height: 100px; 
+    height: 85%; 
 }
 
 .score-names {
-    height: 20px;
+    height: 15%;
+}
+
+@keyframes slideInFromLeft {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInFromRight {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+#score-player1-picture, #score-player1-points, #score-player1-name {
+    animation: 1s ease-out 0s 1 slideInFromLeft;
+}
+
+#score-player2-picture, #score-player2-points, #score-player2-name {
+    animation: 1s ease-out 0s 1 slideInFromRight;
 }
