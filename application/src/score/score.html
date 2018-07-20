@@ -1,13 +1,13 @@
 <template>
     <require from="./score.css"></require>
     <div class="score-row">
-        <div id="score-player1-picture" class="score-picture"></div>
-        <div id="score-player1-points" class="score-points"></div>
-        <div id="score-player2-points" class="score-points"></div>
-        <div id="score-player2-picture" class="score-picture"></div>
+        <div id="score-player1-picture" class="score-image-container"><img class="score-image" src.bind="player1Image"></div>
+        <div id="score-player1-points" class="score-points" ref.bind="player1ScoreRef">${player1Score}</div>
+        <div id="score-player2-points" class="score-points">${player2Score}</div>
+        <div id="score-player2-picture" class="score-image-container"><img class="score-image" src.bind="player2Image"></div>
     </div>
     <div class="score-names">
-        <div id="score-player1-name" class="score-name"></div>
-        <div id="score-player2-name" class="score-name"></div>
+        <div id="score-player1-name" class="score-name">${player1Name}</div>
+        <div id="score-player2-name" class="score-name">${player2Name}</div>
     </div>
 </template>

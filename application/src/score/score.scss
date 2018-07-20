@@ -1,8 +1,14 @@
-.score-picture {
+.score-image-container {
     width: 25%;
     background-color: red;
     float: left;
     height: 100%;
+}
+
+.score-image {
+    height: 100%;
+    max-width: 100%;
+    position: relative;
 }
 
 .score-points {
