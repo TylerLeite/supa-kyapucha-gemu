@@ -1,7 +1,8 @@
 <template>
     <require from="../board/board"></require>
+    <require from="../score/score"></require>
     <require from="../online/online.css"></require>
-    ${status} | You: ${board.player1Count} Opponent: ${board.player2Count}
+    <score player1-score.bind="board.player1Count" player2-score.bind="board.player2Count"></score>
     <div class="board-container">
         <board height.bind="7" width.bind="7" view-model.ref="board" ref="boardUi"></board>
     </div>

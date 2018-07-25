@@ -1,26 +1,37 @@
 .score-image-container {
     width: 25%;
-    background-color: red;
     float: left;
     height: 100%;
+}
+
+#score-player1-picture,
+#score-player1-points {
+    background-color: blue;
+}
+
+#score-player2-picture,
+#score-player2-points {
+    background-color: red;
 }
 
 .score-image {
     height: 100%;
     max-width: 100%;
     position: relative;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .score-points {
     width: 25%;
-    background-color: blue;
     float: left;
     height: 100%;
 }
 
 .score-name {
     width: 50%;
-    background-color: green;
+    background-color: black;
+    color: white;
     float: left;
     height: 100%;
 }

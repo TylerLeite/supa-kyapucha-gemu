@@ -68,6 +68,7 @@
           "aurelia-task-queue",
           "aurelia-templating",
           "aurelia-templating-binding",
+          "textfit",
           {
             "name": "firebase",
             "path": "../node_modules/firebase",
