@@ -1,19 +1,19 @@
 import { bindable, BindingEngine, inject } from 'aurelia-framework';
+import { Player } from '../player/player';
+import { NPCs } from '../player/npcs';
 import * as textFit from 'textfit';
 
 /**
  * The score class, displays a scoreboard
  * @class
  */
-@inject(BindingEngine)
+@inject(BindingEngine, NPCs)
 export class Score {
     /** Various bindable attributes to display in the score board */
+    @bindable public player1: Player = NPCs.random();
+    @bindable public player2: Player = NPCs.random();
     @bindable public player1Score: number = 0;
     @bindable public player2Score: number = 0;
-    @bindable public player1Image: string = "img/char/yeshi.png";
-    @bindable public player2Image: string = "img/char/bohyun.png";
-    @bindable public player1Name: string = "test";
-    @bindable public player2Name: string = "test";
     /** References to certain DOM elements */
     private player1ScoreRef: HTMLElement;
     private player2ScoreRef: HTMLElement;
