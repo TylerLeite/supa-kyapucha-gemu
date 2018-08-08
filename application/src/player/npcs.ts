@@ -1,13 +1,30 @@
 import { Player } from './player';
-/* tslint:disable-next-line:no-namespace */
+
+/**
+ * A class representing an NPC
+ * @class
+ * @extends Player
+ */
 class NPC extends Player {
-    constructor(attrs) {
+    /** A short and sweet statement describing the character */
+    public about: string;
+
+    /**
+     * Calls super which assigns the passed in attrs to the object
+     * @constructor
+     * @param {any} attrs attributes to assign to the npc
+     */
+    constructor(attrs: any) {
         super(attrs);
     }
 
-    public about: string;
+    // FIXME: We probably want some character lines for different situations
+    // FIXME: Do we want to store some sort of AI in here?
 }
 
+/**
+ * A namespace containing all of the NPCs in the game
+ */
 /* tslint:disable-next-line:no-namespace */
 export namespace NPCs {
     export const bill: NPC = new NPC({
@@ -70,6 +87,11 @@ export namespace NPCs {
         imageUrl: 'img/char/yeshi.png',
         about: 'Something about Yeshi'
     });
+
+    /**
+     * Simple function to get a random NPC
+     * @returns {NPC}
+     */
     export function random(): NPC {
         const characters = [
             bill,

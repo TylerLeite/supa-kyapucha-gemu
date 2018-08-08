@@ -1,6 +1,6 @@
 import { LogManager, BindingEngine, inject } from 'aurelia-framework';
 import { Board } from '../board/board';
-import { Layouts } from '../board/layouts';
+import { Layout, Layouts } from '../board/layouts';
 
 const logger = LogManager.getLogger('local');
 
@@ -10,6 +10,8 @@ export class Local {
     public board: Board;
     /** The aurelia binding engine */
     private bindingEngine: BindingEngine;
+    /** The current layout being used */
+    public layout: Layout = Layouts.random();
 
     /**
      * The constructor method of the local game
@@ -24,8 +26,6 @@ export class Local {
      * for the count of empty tiles to go to zero.
      */
     public attached() {
-        logger.debug("attaching the local game");
-        this.resetBoard();
         this.bindingEngine.propertyObserver(this.board, 'emptyCount').subscribe(this.handleGameEnd);
     }
 
@@ -46,6 +46,5 @@ export class Local {
      */
     private resetBoard() {
         this.board.reset();
-        this.board.disableTiles(Layouts.SevenBySeven.cornersCenter);
     }
 }

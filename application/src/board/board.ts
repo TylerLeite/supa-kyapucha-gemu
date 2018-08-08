@@ -1,5 +1,6 @@
 import { bindable, LogManager } from 'aurelia-framework';
 import { Tile, States } from '../tile/tile';
+import { Layout } from './layouts';
 
 const logger = LogManager.getLogger('board');
 
@@ -16,10 +17,13 @@ export interface Coordinate {
  * @class
  */
 export class Board {
+    @bindable public layout: Layout;
     /** The height of the board */
-    @bindable public height: number;
+    public height: number;
     /** The width of the board */
-    @bindable public width: number;
+    public width: number;
+    /** The blocked out tiles on the board */
+    public blockedOutTiles: Coordinate[];
     /** A 2D array of tiles that make up the board */
     public tiles: Array<Tile>[] = new Array<Tile[]>();
     /** A reference to the board dom element */
@@ -31,9 +35,16 @@ export class Board {
 
     /** Aurelia bind method, occurs when binding happens */
     public bind() {
+        this.height = this.layout.height;
+        this.width = this.layout.width;
+        this.blockedOutTiles = this.layout.blockedOutTiles;
         for (let i = 0; i < this.height; i++) {
             this.tiles.push(new Array<Tile>(this.width));
         }
+    }
+
+    public attached() {
+        this.disableTiles();
     }
 
     /**
@@ -65,8 +76,8 @@ export class Board {
      * and if they are, disable the tile at that coordinate.
      * @param disabledTiles 
      */
-    public disableTiles(disabledTiles: Array<Coordinate>) {
-        disabledTiles.forEach((tile: Coordinate) => {
+    private disableTiles() {
+        this.blockedOutTiles.forEach((tile: Coordinate) => {
             if (this.inBounds(tile.x, tile.y)) {
                 this.tiles[tile.y][tile.x].state = States.DISABLED;
             }

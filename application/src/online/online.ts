@@ -1,7 +1,7 @@
 import * as firebase from 'firebase';
 import { LogManager, BindingEngine, inject } from 'aurelia-framework';
 import { Board } from '../board/board';
-import { Layouts } from '../board/layouts';
+import { Layout, Layouts } from '../board/layouts';
 import { States } from '../tile/tile';
 
 const logger = LogManager.getLogger('online');
@@ -36,6 +36,8 @@ export class Online {
     private boardUi: HTMLElement;
     /** The class for enabling or disabling the UI */
     private disableClass = 'is-disabled';
+    /** The layout of the baord */
+    public layout: Layout = Layouts.standard;
 
     /**
      * The constructor for online multiplayer games
@@ -192,7 +194,6 @@ export class Online {
         logger.debug("GAME OVER");
         this.disable();
         this.board.reset();
-        this.board.disableTiles(Layouts.SevenBySeven.cornersCenter);
         this.setupMultiPlayerGame();
         return;
     }
