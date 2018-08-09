@@ -35,7 +35,9 @@ export class Local {
      */
     private handleGameEnd = (newValue?: any, oldValue?: any) => {
         if (newValue === 0) {
+            logger.info("Game over, starting new game");
             setTimeout(() => {
+                this.layout = Layouts.random();
                 this.resetBoard();
             }, 2000);
         }

@@ -1,4 +1,4 @@
-import { bindable, LogManager } from 'aurelia-framework';
+import { bindable, observable, LogManager } from 'aurelia-framework';
 import { Tile, States } from '../tile/tile';
 import { Layout } from './layouts';
 
@@ -17,7 +17,7 @@ export interface Coordinate {
  * @class
  */
 export class Board {
-    @bindable public layout: Layout;
+    @bindable @observable public layout: Layout;
     /** The height of the board */
     public height: number;
     /** The width of the board */
@@ -25,7 +25,7 @@ export class Board {
     /** The blocked out tiles on the board */
     public blockedOutTiles: Coordinate[];
     /** A 2D array of tiles that make up the board */
-    public tiles: Array<Tile>[] = new Array<Tile[]>();
+    public tiles: Array<Tile>[];
     /** A reference to the board dom element */
     public boardUi: HTMLElement;
     /** The current turn */
@@ -33,18 +33,15 @@ export class Board {
     /** The last move that was made */
     public lastMove?: Coordinate;
 
-    /** Aurelia bind method, occurs when binding happens */
-    public bind() {
-        this.height = this.layout.height;
-        this.width = this.layout.width;
-        this.blockedOutTiles = this.layout.blockedOutTiles;
-        for (let i = 0; i < this.height; i++) {
-            this.tiles.push(new Array<Tile>(this.width));
-        }
-    }
-
-    public attached() {
-        this.disableTiles();
+    /**
+     * This kicks off whenever the layout changes, it prepares the board
+     * and then disables the tiles once the DOM has finished loading
+     */
+    protected layoutChanged() {
+        this.assignAttributes();
+        setTimeout(() => {
+            this.disableTiles();
+        });
     }
 
     /**
@@ -71,10 +68,24 @@ export class Board {
         return this.getCountOfType(States.PLAYER2);
     }
 
+    /** 
+     * A small helper method that takes the layout and
+     * assigns it to various internal attributes that can
+     * be accessed easier.
+     */
+    private assignAttributes() {
+        this.height = this.layout.height;
+        this.width = this.layout.width;
+        this.blockedOutTiles = this.layout.blockedOutTiles;
+        this.tiles = new Array<Tile[]>();
+        for (let i = 0; i < this.height; i++) {
+            this.tiles.push(new Array<Tile>(this.width));
+        }
+    }
+
     /**
      * Take in a list of coordinates of tiles to disable, check if coordinates are in bounds
      * and if they are, disable the tile at that coordinate.
-     * @param disabledTiles 
      */
     private disableTiles() {
         this.blockedOutTiles.forEach((tile: Coordinate) => {

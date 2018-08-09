@@ -68,6 +68,21 @@ export namespace Layouts {
         ]
     });
 
+    export const plus: Layout = new Layout({
+        height: 7,
+        width: 7,
+        blockedOutTiles: [
+            {x: 0, y: 3},
+            {x: 2, y: 3},
+            {x: 3, y: 6},
+            {x: 3, y: 4},
+            {x: 3, y: 2},
+            {x: 3, y: 0},
+            {x: 4, y: 3},
+            {x: 6, y: 3}
+        ]
+    });
+
     /**
      * Simple function to get a random board layout
      * @returns {Layout}
@@ -77,7 +92,8 @@ export namespace Layouts {
             standard,
             cornersCenter,
             mini,
-            diamond
+            diamond,
+            plus
         ];
         return layouts[Math.floor(Math.random() * layouts.length)];
     }
