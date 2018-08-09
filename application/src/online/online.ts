@@ -117,32 +117,6 @@ export class Online {
     }
 
     /**
-     * Kicks off a multiplayer game, waits for both server moves to be added
-     * and local moves to be added.  Local moves are handled by the handleMultiPlayerTurn handler
-     * and server moves are handled by placing the move on the board.
-     */
-    private playMultiPlayerGame() {
-        this.status += 'match has begun!';
-        this.tableRef.child('moves').ref.on('child_added', (move) => {
-            // tslint:disable-next-line:no-non-null-assertion
-            const x = move!.val().x;
-            // tslint:disable-next-line:no-non-null-assertion
-            const y = move!.val().y;
-            if (this.board.lastMove !== undefined) {
-                // If the move came from the other player
-                if (x !== this.board.lastMove.x || y !== this.board.lastMove.y) {
-                    // Add it to the board
-                    this.board.place(x, y);
-                }
-            }
-        });
-        this.tableRef.child('player1').ref.on('value', this.checkPlayerLeft);
-        this.bindingEngine.propertyObserver(this.board, 'emptyCount').subscribe(this.handleMultiPlayerTurn);
-        /** Kicks off handle multiplayer turn one time to start the back and forth gameplay */
-        this.handleMultiPlayerTurn(undefined, undefined);
-    }
-
-    /**
      * Waits for table changes to occur, when one does then
      * it checks if the user is player 1 or 2 at the table.
      * If the user is player 1 or player 2 then it will wait for the table
@@ -169,6 +143,32 @@ export class Online {
                 this.playMultiPlayerGame();
             }
         }
+    }
+
+    /**
+     * Kicks off a multiplayer game, waits for both server moves to be added
+     * and local moves to be added.  Local moves are handled by the handleMultiPlayerTurn handler
+     * and server moves are handled by placing the move on the board.
+     */
+    private playMultiPlayerGame() {
+        this.status += 'match has begun!';
+        this.tableRef.child('moves').ref.on('child_added', (move) => {
+            // tslint:disable-next-line:no-non-null-assertion
+            const x = move!.val().x;
+            // tslint:disable-next-line:no-non-null-assertion
+            const y = move!.val().y;
+            if (this.board.lastMove !== undefined) {
+                // If the move came from the other player
+                if (x !== this.board.lastMove.x || y !== this.board.lastMove.y) {
+                    // Add it to the board
+                    this.board.place(x, y);
+                }
+            }
+        });
+        this.tableRef.child('player1').ref.on('value', this.checkPlayerLeft);
+        this.bindingEngine.propertyObserver(this.board, 'emptyCount').subscribe(this.handleMultiPlayerTurn);
+        /** Kicks off handle multiplayer turn one time to start the back and forth gameplay */
+        this.handleMultiPlayerTurn(undefined, undefined);
     }
 
     /**

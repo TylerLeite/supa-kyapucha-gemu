@@ -23,6 +23,7 @@ export class Layout {
         }
     }
 }
+
 /* tslint:disable-next-line:no-namespace */
 export namespace Layouts {
     export const standard: Layout = new Layout({
@@ -83,6 +84,12 @@ export namespace Layouts {
         ]
     });
 
+    export const tall: Layout = new Layout({
+        height: 7,
+        width: 5,
+        blockedOutTiles: []
+    });
+
     /**
      * Simple function to get a random board layout
      * @returns {Layout}
@@ -93,7 +100,8 @@ export namespace Layouts {
             cornersCenter,
             mini,
             diamond,
-            plus
+            plus,
+            tall
         ];
         return layouts[Math.floor(Math.random() * layouts.length)];
     }

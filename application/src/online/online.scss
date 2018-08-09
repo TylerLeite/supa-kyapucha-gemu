@@ -26,6 +26,15 @@ score {
   }
 }
 
+#online-status {
+    position: fixed;
+    width: 100%;
+    height: auto;
+    z-index: 100;
+    bottom: 0;
+    font-size: 10px;
+}
+
 board.is-disabled {
   pointer-events: none;
 }
