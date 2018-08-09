@@ -20,7 +20,7 @@ export class Score {
     private player1NameRef: HTMLElement;
     private player2NameRef: HTMLElement;
     /** The text-fit configuration */
-    private textFitConfig = {alignHoriz: true, alignVert: true, maxFontSize: 200, reProcess: true};
+    private textFitConfig = {alignVertWithFlexbox: true, alignHoriz: true, alignVert: true, maxFontSize: 200, reProcess: true};
     private bindingEngine: BindingEngine;
 
     public constructor(bindingEngine: BindingEngine) {
