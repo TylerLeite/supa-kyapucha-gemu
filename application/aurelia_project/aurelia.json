@@ -8,7 +8,8 @@
   "build": {
     "copyFiles": {
       "scripts/*": "www/scripts",
-      "index.html": "www"
+      "index.html": "www",
+      "img/**/*": "www/img"
     },
     "targets": [
       {
@@ -67,6 +68,7 @@
           "aurelia-task-queue",
           "aurelia-templating",
           "aurelia-templating-binding",
+          "textfit",
           {
             "name": "firebase",
             "path": "../node_modules/firebase",

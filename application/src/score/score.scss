@@ -1,0 +1,71 @@
+.score-image-container {
+    width: 25%;
+    float: left;
+    height: 100%;
+}
+
+#score-player1-picture,
+#score-player1-points {
+    background-color: blue;
+}
+
+#score-player2-picture,
+#score-player2-points {
+    background-color: red;
+}
+
+.score-image {
+    height: 100%;
+    max-width: 100%;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.score-points {
+    width: 25%;
+    float: left;
+    height: 100%;
+}
+
+.score-name {
+    width: 50%;
+    background-color: black;
+    color: white;
+    float: left;
+    height: 100%;
+}
+
+.score-row {
+    height: 85%; 
+}
+
+.score-names {
+    height: 15%;
+}
+
+@keyframes slideInFromLeft {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInFromRight {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+#score-player1-picture, #score-player1-points, #score-player1-name {
+    animation: 1s ease-out 0s 1 slideInFromLeft;
+}
+
+#score-player2-picture, #score-player2-points, #score-player2-name {
+    animation: 1s ease-out 0s 1 slideInFromRight;
+}

@@ -1,6 +1,29 @@
 .board-container {
-    width: 95%;
-    left: 2.5%;
-    height: 95%;
+    width: 100vw;
+    height: 100vw;
+    max-height: 80vh;
     position: absolute;
+    top: 60%;
+    transform: translateY(-50%);
 }
+
+score {
+    height: 20vh;
+    width: 100%;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+@media (min-width: 80vh) and (orientation:landscape) {
+    .board-container {
+        width: 78vh;
+        height: 78vh;
+        top: 21vh;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+

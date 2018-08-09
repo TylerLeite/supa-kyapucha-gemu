@@ -22,6 +22,7 @@
     height: 100%;
     width: 100%;
     backface-visibility: hidden;
+    background-size: 100% 100% !important;
 }
 
 .tile-face-front {
@@ -37,4 +38,24 @@
 
 .tile.is-flipped {
     transform: rotateY(180deg);
+}
+
+@keyframes push {
+    from {
+        transform: scale3d(1, 1, 1);
+    }
+    
+    50% {
+        transform: scale3d(.90, .90, .90);
+    }
+    
+    to {
+        transform: scale3d(1, 1, 1);
+    }
+}
+
+.tile.push {
+    animation-name: push;
+    transform-origin: center;
+    animation-duration: .35s;
 }
