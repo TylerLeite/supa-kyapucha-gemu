@@ -2,8 +2,8 @@
     <require from="./score.css"></require>
     <div class="score-row">
         <div id="score-player1-picture" class="score-image-container"><img class="score-image" src.bind="player1.imageUrl"></div>
-        <div id="score-player1-points" class="score-points" ref="player1ScoreRef">${player1Score}</div>
-        <div id="score-player2-points" class="score-points" ref="player2ScoreRef">${player2Score}</div>
+        <div id="score-player1-points" class="score-points" ref="player1ScoreRef"><span class="textFitted">${player1Score}</span></div>
+        <div id="score-player2-points" class="score-points" ref="player2ScoreRef"><span class="textFitted">${player2Score}</span></div>
         <div id="score-player2-picture" class="score-image-container"><img class="score-image" src.bind="player2.imageUrl"></div>
     </div>
     <div class="score-names">

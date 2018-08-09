@@ -44,6 +44,11 @@
     height: 15%;
 }
 
+.textFitted {
+    // For some reason chrome mobile can't figure this out... no idea why
+    display: inline-block;
+}
+
 @keyframes slideInFromLeft {
     0% {
         transform: translateX(-100%);

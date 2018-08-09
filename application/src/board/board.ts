@@ -36,6 +36,8 @@ export class Board {
     /**
      * This kicks off whenever the layout changes, it prepares the board
      * and then disables the tiles once the DOM has finished loading
+     * NOTE: This is really a private method, but tslint doesn't understand
+     * decorators
      */
     protected layoutChanged() {
         this.assignAttributes();
@@ -66,33 +68,6 @@ export class Board {
      */
     public get player2Count(): number {
         return this.getCountOfType(States.PLAYER2);
-    }
-
-    /** 
-     * A small helper method that takes the layout and
-     * assigns it to various internal attributes that can
-     * be accessed easier.
-     */
-    private assignAttributes() {
-        this.height = this.layout.height;
-        this.width = this.layout.width;
-        this.blockedOutTiles = this.layout.blockedOutTiles;
-        this.tiles = new Array<Tile[]>();
-        for (let i = 0; i < this.height; i++) {
-            this.tiles.push(new Array<Tile>(this.width));
-        }
-    }
-
-    /**
-     * Take in a list of coordinates of tiles to disable, check if coordinates are in bounds
-     * and if they are, disable the tile at that coordinate.
-     */
-    private disableTiles() {
-        this.blockedOutTiles.forEach((tile: Coordinate) => {
-            if (this.inBounds(tile.x, tile.y)) {
-                this.tiles[tile.y][tile.x].state = States.DISABLED;
-            }
-        });
     }
 
     /** 
@@ -152,6 +127,33 @@ export class Board {
             return false;
         }
         return true;
+    }
+
+    /** 
+     * A small helper method that takes the layout and
+     * assigns it to various internal attributes that can
+     * be accessed easier.
+     */
+    private assignAttributes() {
+        this.height = this.layout.height;
+        this.width = this.layout.width;
+        this.blockedOutTiles = this.layout.blockedOutTiles;
+        this.tiles = new Array<Tile[]>();
+        for (let i = 0; i < this.height; i++) {
+            this.tiles.push(new Array<Tile>(this.width));
+        }
+    }
+
+    /**
+     * Take in a list of coordinates of tiles to disable, check if coordinates are in bounds
+     * and if they are, disable the tile at that coordinate.
+     */
+    private disableTiles() {
+        this.blockedOutTiles.forEach((tile: Coordinate) => {
+            if (this.inBounds(tile.x, tile.y)) {
+                this.tiles[tile.y][tile.x].state = States.DISABLED;
+            }
+        });
     }
 
     /**
