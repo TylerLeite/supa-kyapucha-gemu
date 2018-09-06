@@ -9,8 +9,8 @@ export class Adventure {
         config.title = "SKG - Adventure";
         config.map([
             { route: '', redirect: 'levels' },
-            { route: 'levels', name: 'levels', moduleId: 'levels/levels' }
+            { route: 'level-select', name: 'level-select', moduleId: 'level-select/level-select' }
         ]);
-        config.mapUnknownRoutes('levels/levels');
+        config.mapUnknownRoutes('level-select/level-select');
     }
 }
