@@ -5,7 +5,7 @@ import { Player } from './player';
  * @class
  * @extends Player
  */
-class NPC extends Player {
+export class NPC extends Player {
     /** A short and sweet statement describing the character */
     public about: string;
 
