@@ -53,7 +53,7 @@ export class Online {
      * signs in an anonymous user.
      * @returns {Promise<void>} the promise from setting the persistence and logging in
      */
-    public activate(): Promise<void> {
+    public activate(): Promise<any> {
         const config = {
             apiKey: "AIzaSyAY539UWapvbIRNTSs_57NBCllvTYK0zKc",
             authDomain: "supa-kyapucha-gemu.firebaseapp.com",
@@ -163,6 +163,8 @@ export class Online {
                     // Add it to the board
                     this.board.place(x, y);
                 }
+            } else {
+                this.board.place(x, y);
             }
         });
         this.tableRef.child('player1').ref.on('value', this.checkPlayerLeft);

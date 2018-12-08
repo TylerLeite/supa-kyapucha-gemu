@@ -8,7 +8,7 @@ export class Adventure {
         logger.debug("configuring the router");
         config.title = "SKG - Adventure";
         config.map([
-            { route: '', redirect: 'levels' },
+            { route: '', redirect: 'level-select' },
             { route: 'level-select', name: 'level-select', moduleId: 'level-select/level-select' }
         ]);
         config.mapUnknownRoutes('level-select/level-select');
