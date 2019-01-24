@@ -159,29 +159,31 @@ export namespace Levels {
         board: undefined
     });
 
+    /** A list of all the levels */
+    export const levels = [
+        zero,
+        one,
+        two,
+        three,
+        four,
+        five,
+        six,
+        seven,
+        eight,
+        nine,
+        ten,
+        eleven,
+        twelve,
+        thirteen,
+        fourteen,
+        fifteen
+    ];
+
     /**
      * Simple function to get a random level
      * @returns {Level}
      */
     export function random(): Level {
-        const levels = [
-            zero,
-            one,
-            two,
-            three,
-            four,
-            five,
-            six,
-            seven,
-            eight,
-            nine,
-            ten,
-            eleven,
-            twelve,
-            thirteen,
-            fourteen,
-            fifteen
-        ];
         return levels[Math.floor(Math.random() * levels.length)];
     }
 }
