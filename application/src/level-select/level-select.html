@@ -1,3 +1,7 @@
 <template>
-    <button repeat.for="level of levels">${level.name}</button>
+    <require from="./level-select.css"></require>
+    <require from="../level-button/level-button"></require>
+    <div class="level-container">
+        <level-button view-model.ref="levelButtonVm" repeat.for="level of levels" click.trigger="startLevel(levelButtonVm)" level-name.bind="level.name"></level-button>
+    </div>
 </template>
