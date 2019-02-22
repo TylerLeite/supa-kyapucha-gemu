@@ -1,4 +1,5 @@
 import { Board } from '../board/board';
+import * as Boards from '../board/boards/boards';
 import { NPC, NPCs } from '../player/npcs';
 
 /**
@@ -36,7 +37,7 @@ export namespace Levels {
         name: "Tutorial",
         description: "Tutorial Level",
         npc: NPCs.bohyun,
-        board: undefined
+        board: Boards.TutorialBoard
     });
 
     export const one: Level = new Level({
@@ -44,7 +45,7 @@ export namespace Levels {
         name: "Level 1",
         description: "",
         npc: NPCs.rockWithFace,
-        board: undefined
+        board: Boards.LevelOneBoard
     });
 
     export const two: Level = new Level({
