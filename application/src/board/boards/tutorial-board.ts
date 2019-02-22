@@ -10,7 +10,7 @@ const logger = LogManager.getLogger('tutorial-board');
  * @class
  */
 export class TutorialBoard extends Board {
-    
+
     public layout: Layout = Layouts.mini;
 
 }
