@@ -19,7 +19,7 @@ export enum States {
  */
 export class Tile {
     /** A reference to the UI tile */
-    public tileUi: HTMLElement;
+    public tileUi: HTMLElement | undefined;
     /** A reference to the UI front of the tile */
     public tileFrontUi: HTMLElement;
     /** A reference to the UI back of the tile */
@@ -57,6 +57,7 @@ export class Tile {
 
     /** Flips a tile over */
     private flip() {
+        if (typeof this.tileUi === 'undefined') { return; }
         this.tileUi.classList.toggle(this.flipClass);
     }
 
@@ -65,6 +66,7 @@ export class Tile {
      * @returns {boolean} true if the tile is flipped over, false otherwise
      */
     private isFlipped(): boolean {
+        if (typeof this.tileUi === 'undefined') { return false; }
         return this.tileUi.classList.contains(this.flipClass);
     }
 
@@ -73,6 +75,7 @@ export class Tile {
      * @returns {boolean} true if the tile has been pushed in, false otherwise
      */
     private isPushed(): boolean {
+        if (typeof this.tileUi === 'undefined') { return false; }
         return this.tileUi.classList.contains(this.pushClass);
     }
 
@@ -80,6 +83,7 @@ export class Tile {
      * Pushes a tile in (on a click for example)
      */
     private push() {
+        if (typeof this.tileUi === 'undefined') { return; }
         this.tileUi.classList.toggle(this.pushClass);
     }
 
