@@ -92,7 +92,7 @@ export abstract class Skynet {
     protected loadBoardState(state: AIBoardState, board: Board): Board {
         board.tiles = [];
         board.blockedOutTiles = [];
-
+        board.turn = state.turn;
         for (let y = 0; y < board.height; y++) {
             board.tiles[y] = [];
 
