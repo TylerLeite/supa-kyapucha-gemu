@@ -13,8 +13,6 @@ export class MonteCarlo extends Skynet {
         const possibleMoves = this.getPossibleMoves(board);
         const safeMoves = this.spliceSafeMoves(board, possibleMoves);
         const takeMoves = this.spliceTakeMoves(board, possibleMoves);
-        console.log(safeMoves);
-        console.log(takeMoves);
         const movesToCheck: Array<Coordinate> = safeMoves.concat(takeMoves);
         const weights: Array<number> = [];
         for (let l = 0; l < movesToCheck.length; l++) { // l is for leaf
