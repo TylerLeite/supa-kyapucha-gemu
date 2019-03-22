@@ -3,7 +3,8 @@ import { Board } from '../board/board';
 import { Layout, Layouts } from '../board/layouts';
 
 import { States } from '../tile/tile';
-import { mcts } from '../skynet/mcts';
+import { MonteCarlo } from '../skynet/mcts';
+import { Skynet } from '../skynet/skynet';
 
 const logger = LogManager.getLogger('local');
 
@@ -11,6 +12,8 @@ const logger = LogManager.getLogger('local');
 export class Aigame {
     /** The game board being used */
     public board: Board;
+    /** The AI being used */
+    public ai: Skynet;
     /** The display status to show the user playing the game */
     public status: string;
     /** The aurelia binding engine */
@@ -28,6 +31,7 @@ export class Aigame {
      */
     public constructor(be: BindingEngine) {
         this.bindingEngine = be;
+        this.ai = new MonteCarlo();
     }
 
     /**
@@ -72,7 +76,7 @@ export class Aigame {
             + '01101101 01101111 01110110 01100101';
             //*/ 
             this.disable();
-            const aiMove = mcts(this.board);
+            const aiMove = this.ai.makeMove(this.board);
             if (typeof aiMove === 'undefined') {
                 this.handleGameEnd(0, 0);
             } else {
