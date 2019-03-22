@@ -75,7 +75,7 @@ export class Board {
      * @returns {boolean} true if placement succeeded, false otherwise
      */
     public place(x: number, y: number): boolean {
-        //logger.debug(`Placing a piece at ${x}, ${y} for player ${this.turn}`);
+        logger.debug(`Placing a piece at ${x}, ${y} for player ${this.turn}`);
         /** Check if placement is valid */
         if (this.tiles[y][x].state !== States.EMPTY || !this.inBounds(x, y)) {
             return false;

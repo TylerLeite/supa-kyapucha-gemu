@@ -46,7 +46,6 @@ export class MonteCarlo extends Skynet {
 
         // make the move that had the most victories from random playouts
         let bestMoveIndex = 0;
-        console.log(weights);
         for (let i = 1; i < weights.length; i++) {
             if (weights[i] > weights[bestMoveIndex]) {
                 bestMoveIndex = i;
