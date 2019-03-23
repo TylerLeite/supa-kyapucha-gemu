@@ -8,7 +8,7 @@ import { State } from 'aurelia-route-recognizer';
 
 export class MonteCarlo extends Skynet {
 
-    private k: number = 1000;
+    private k: number = 100;
 
     public makeMove (board: Board) : Coordinate | undefined {
         const possibleMoves = this.getPossibleMoves(board);
@@ -71,7 +71,8 @@ export class MonteCarlo extends Skynet {
                     if (
                         y+j < 0 || y+j >= board.height 
                         || x+i < 0 || x +i >= board.width
-                        || board.tiles[y+j][x+i].state == States.DISABLED
+                        || board.tiles[y+j][x+i].state === States.DISABLED
+                        || board.tiles[y+j][x+i].state === board.turn
                     ) {
                         unplayableAdjacentTiles += 1;
                     }
@@ -135,21 +136,25 @@ export class MonteCarlo extends Skynet {
         // Step 1: make hella random moves
         while (possibleMoves.length > 0) {
             // get the next tier of moves from our simple heuristic
-            const safeMoves = this.spliceSafeMoves(board, possibleMoves);
             const takeMoves = this.spliceTakeMoves(board, possibleMoves);
+            let safeMoves: Array<Coordinate> = [];
             let movesToCheck: Array<Coordinate> = [];
             if (takeMoves.length > 0) {
                 movesToCheck = takeMoves;
-            } else if (safeMoves.length > 0) {
-                movesToCheck = safeMoves;
             } else {
-                movesToCheck = possibleMoves;
+                safeMoves = this.spliceSafeMoves(board, possibleMoves);
+                if (safeMoves.length > 0) {
+                    movesToCheck = safeMoves;
+                } else {
+                    movesToCheck = possibleMoves;
+                }
             }
 
             // make a random one until the array is empty
             const choice = Math.floor(Math.random()*movesToCheck.length);
             board.place(movesToCheck[choice].x, movesToCheck[choice].y); // make the move
-            possibleMoves = this.getPossibleMoves(board);
+            movesToCheck.splice(choice, 1);
+            possibleMoves = possibleMoves.concat(safeMoves).concat(takeMoves);
         }
 
         // Step 2: check who won

@@ -68,21 +68,19 @@ export class Aigame {
             this.status = 'Your move.';
             this.enable();
         } else if (this.board.turn === States.PLAYER2) {
-            //*
             this.status = ''
-            + '01100011 01101111 01101101 01110000 01110101 01110100 '
-            + '01101001 01101110 01100111 00100000 01101111 01110000 '
-            + '01110100 01101001 01101101 01100001 01101100 00100000 '
-            + '01101101 01101111 01110110 01100101';
-            //*/ 
+                + '01100011 01101111 01101101 01110000 01110101 01110100 '
+                + '01101001 01101110 01100111 00100000 01101111 01110000 '
+                + '01110100 01101001 01101101 01100001 01101100 00100000 '
+                + '01101101 01101111 01110110 01100101';
             this.disable();
-            const aiMove = this.ai.makeMove(this.board);
-            if (typeof aiMove === 'undefined') {
-                this.handleGameEnd(0, 0);
-            } else {
-                this.board.place(aiMove.x, aiMove.y);
-            }
-            //this.enable();
+            setTimeout(() => {
+                const aiMove = this.ai.makeMove(this.board);
+                if (typeof aiMove !== 'undefined') {
+                    this.handleGameEnd(0, 0);
+                }
+                //this.enable();
+            }, 750);
         }
     }
 
