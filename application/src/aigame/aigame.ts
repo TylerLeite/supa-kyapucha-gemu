@@ -64,9 +64,13 @@ export class Aigame {
      * to the server.
      */
     private handleAiTurn = (newValue?: any, oldValue?: any) => {
+        this.enable();
+        if (newValue === 0) {
+            this.handleGameEnd(0, 0);
+            return;
+        }
         if (this.board.turn === States.PLAYER1) {
             this.status = 'Your move.';
-            this.enable();
         } else if (this.board.turn === States.PLAYER2) {
             this.status = ''
                 + '01100011 01101111 01101101 01110000 01110101 01110100 '
@@ -76,10 +80,10 @@ export class Aigame {
             this.disable();
             setTimeout(() => {
                 const aiMove = this.ai.makeMove(this.board);
-                if (aiMove === undefined) {
-                    this.handleGameEnd(0, 0);
-                } else {
+                if (aiMove !== undefined) {
                     this.board.place(aiMove.x, aiMove.y);
+                } else {
+                    logger.error("AI returned undefined move!");
                 }
                 //this.enable();
             }, 750);
