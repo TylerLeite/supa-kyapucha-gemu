@@ -76,8 +76,10 @@ export class Aigame {
             this.disable();
             setTimeout(() => {
                 const aiMove = this.ai.makeMove(this.board);
-                if (typeof aiMove !== 'undefined') {
+                if (aiMove === undefined) {
                     this.handleGameEnd(0, 0);
+                } else {
+                    this.board.place(aiMove.x, aiMove.y);
                 }
                 //this.enable();
             }, 750);
