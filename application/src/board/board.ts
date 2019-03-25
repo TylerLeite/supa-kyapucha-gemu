@@ -182,9 +182,12 @@ export class Board {
      * @param {number} ydir (-1, 0 or 1) to define down, center, or up
      * @returns {boolean} true if the call succeeded, false otherwise
      */
-    private checkReversi(sx: number, sy: number, xdir: number, ydir: number): boolean {
+    public checkReversi(sx: number, sy: number, xdir: number, ydir: number, justChecking: boolean = false, depth: number = 0): boolean {
         const nx = sx + xdir;
         const ny = sy + ydir;
+
+        // const turnToCheck = justChecking ? (this.turn + 1) % 2 : this.turn;
+        const turnToCheck = this.turn;
 
         if (!this.inBounds(nx, ny)) {
             return false;
@@ -193,14 +196,17 @@ export class Board {
         } else if (this.tiles[ny][nx].state === States.EMPTY) {
             return false;
         } else if (this.tiles[ny][nx].state === this.turn) {
-            if (this.tiles[sy][sx].state !== this.turn) {
-                this.tiles[sy][sx].state = this.turn; // Comment this out if just checking
+            if (depth === 0) {
+                return false;
+            }
+            if (this.tiles[sy][sx].state !== this.turn && !justChecking) {
+                this.tiles[sy][sx].state = this.turn;
             }
             return true;
         } else {
-            if (this.checkReversi(nx, ny, xdir, ydir)) {
-                if (this.tiles[sy][sx].state !== this.turn) {
-                    this.tiles[sy][sx].state = this.turn; // Comment this out if just checking
+            if (this.checkReversi(nx, ny, xdir, ydir, justChecking, depth + 1)) {
+                if (this.tiles[sy][sx].state !== this.turn && !justChecking) {
+                    this.tiles[sy][sx].state = this.turn;
                 }
                 return true;
             } else {

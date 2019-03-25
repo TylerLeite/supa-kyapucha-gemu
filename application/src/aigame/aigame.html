@@ -1,0 +1,10 @@
+<template>
+    <require from="../board/board"></require>
+    <require from="../score/score"></require>
+    <require from="../local/local.css"></require>
+    <span id="online-status">${status}</span>
+    <score player1-score.bind="board.player1Count" player2-score.bind="board.player2Count"></score>
+    <div class="board-container">
+        <board layout.bind="layout" view-model.ref="board" ref="boardUi"></board>
+    </div>
+</template>

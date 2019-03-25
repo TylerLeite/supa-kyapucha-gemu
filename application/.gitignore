@@ -24,6 +24,13 @@ Thumbs.db
 !.vscode/launch.json
 !.vscode/extensions.json
 
+# Ref: https://github.com/github/gitignore/blob/master/Global/Vim.gitignore
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+
 # Dependencies
 node_modules
 
