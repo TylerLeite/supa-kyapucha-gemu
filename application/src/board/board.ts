@@ -25,7 +25,7 @@ export class Board {
     /** The blocked out tiles on the board */
     public blockedOutTiles: Coordinate[];
     /** A 2D array of tiles that make up the board */
-    public tiles: Array<Tile>[];
+    public tiles: Array<Tile>[] = new Array<Tile[]>();
     /** A reference to the board dom element */
     public boardUi: HTMLElement;
     /** The current turn */
@@ -162,7 +162,7 @@ export class Board {
         this.height = this.layout.height;
         this.width = this.layout.width;
         this.blockedOutTiles = this.layout.blockedOutTiles;
-        this.tiles = new Array<Tile[]>();
+        this.tiles.length = 0;
         for (let i = 0; i < this.height; i++) {
             this.tiles.push(new Array<Tile>(this.width));
         }

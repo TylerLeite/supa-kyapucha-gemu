@@ -26,6 +26,52 @@ export class Layout {
 
 /* tslint:disable-next-line:no-namespace */
 export namespace Layouts {
+
+    /**
+     * Accepts a width, height, and number and returns that many randomly
+     * blocked out coordinates.
+     * @param {number} width the width of the board 
+     * @param {number} height the height of the board
+     * @param {number} numToBlock how many blocked out coordinates to return 
+     */
+    function randomBlockedTiles(width: number, height: number, numToBlock: number) {
+        const blockedOutTiles: Array<Coordinate> = new Array<Coordinate>();
+        const allTiles: Array<Coordinate> = new Array<Coordinate>();
+
+        for (let x = 0; x < width; x++) {
+            for (let y = 0; y < height; y++) {
+                allTiles.push({x: x, y: y});
+            }
+        }
+        for (let i = 0; i < numToBlock; i++) {
+            if (allTiles.length === 0) {
+                break;
+            }
+            const index = Math.floor(Math.random() * allTiles.length);
+            blockedOutTiles.push({x: allTiles[index].x, y: allTiles[index].y});
+            allTiles.splice(index, 1);
+        }
+        return blockedOutTiles;
+    }
+
+    export const randomFour: Layout = new Layout({
+        height: 7,
+        width: 7,
+        blockedOutTiles: randomBlockedTiles(7, 7, 4)
+    });
+
+    export const randomSix: Layout = new Layout({
+        height: 7,
+        width: 7,
+        blockedOutTiles: randomBlockedTiles(7, 7, 6)
+    });
+
+    export const randomEight: Layout = new Layout({
+        height: 7,
+        width: 7,
+        blockedOutTiles: randomBlockedTiles(7, 7, 8)
+    });
+
     export const standard: Layout = new Layout({
         height: 7,
         width: 7,
@@ -84,6 +130,17 @@ export namespace Layouts {
         ]
     });
 
+    export const pillars: Layout = new Layout({
+        height: 7,
+        width: 7,
+        blockedOutTiles: [
+            {x: 1, y: 1},
+            {x: 5, y: 1},
+            {x: 5, y: 5},
+            {x: 1, y: 5}
+        ]
+    });
+
     export const tall: Layout = new Layout({
         height: 7,
         width: 5,
@@ -101,7 +158,11 @@ export namespace Layouts {
             mini,
             diamond,
             plus,
-            tall
+            tall,
+            pillars,
+            randomFour,
+            randomSix,
+            randomEight
         ];
         return layouts[Math.floor(Math.random() * layouts.length)];
     }

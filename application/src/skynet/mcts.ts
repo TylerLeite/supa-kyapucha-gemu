@@ -4,11 +4,10 @@
 import { Skynet } from './skynet';
 import { Board, Coordinate } from '../board/board';
 import { States } from '../tile/tile';
-import { State } from 'aurelia-route-recognizer';
 
 export class MonteCarlo extends Skynet {
 
-    private k: number = 100;
+    private k: number = 75;
 
     public makeMove (board: Board) : Coordinate | undefined {
         const possibleMoves = this.getPossibleMoves(board);
