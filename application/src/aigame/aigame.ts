@@ -1,5 +1,5 @@
 import { LogManager, BindingEngine, inject } from 'aurelia-framework';
-import { Board } from '../board/board';
+import { AiBoard } from '../board/boards/ai-board';
 import { Layout, Layouts } from '../board/layouts';
 
 import { States } from '../tile/tile';
@@ -11,17 +11,13 @@ const logger = LogManager.getLogger('local');
 @inject(BindingEngine)
 export class Aigame {
     /** The game board being used */
-    public board: Board;
+    public board: AiBoard;
     /** The AI being used */
     public ai: Skynet;
     /** The display status to show the user playing the game */
     public status: string;
     /** The aurelia binding engine */
     private bindingEngine: BindingEngine;
-    /** A reference to the board dom object */
-    private boardUi: HTMLElement;
-    /** The class for enabling or disabling the UI */
-    private disableClass = 'is-disabled';
     /** The current layout being used */
     public layout: Layout = Layouts.random();
 
@@ -52,8 +48,12 @@ export class Aigame {
             logger.info("Game over, starting new game");
             this.status = "Game over, starting new game";
             setTimeout(() => {
-                this.layout = Layouts.random();
+                this.board.disable();
                 this.resetBoard();
+                this.layout = Layouts.random();
+                if (this.board.turn === States.PLAYER1) {
+                    this.board.enable();
+                }
             }, 2000);
         }
     }
@@ -64,7 +64,6 @@ export class Aigame {
      * to the server.
      */
     private handleAiTurn = (newValue?: any, oldValue?: any) => {
-        this.enable();
         if (newValue === 0) {
             this.handleGameEnd(0, 0);
             return;
@@ -72,39 +71,15 @@ export class Aigame {
         if (this.board.turn === States.PLAYER1) {
             this.status = 'Your move.';
         } else if (this.board.turn === States.PLAYER2) {
-            this.status = ''
-                + '01100011 01101111 01101101 01110000 01110101 01110100 '
-                + '01101001 01101110 01100111 00100000 01101111 01110000 '
-                + '01110100 01101001 01101101 01100001 01101100 00100000 '
-                + '01101101 01101111 01110110 01100101';
-            this.disable();
+            this.status = 'AI move.';
             setTimeout(() => {
                 const aiMove = this.ai.makeMove(this.board);
                 if (aiMove !== undefined) {
-                    this.board.place(aiMove.x, aiMove.y);
+                    this.board.place(aiMove.x, aiMove.y, true);
                 } else {
                     logger.error("AI returned undefined move!");
                 }
-                //this.enable();
             }, 750);
-        }
-    }
-
-    /**
-     * Disables the board
-     */
-    private disable() {
-        if (!this.boardUi.classList.contains(this.disableClass)) {
-            this.boardUi.classList.add(this.disableClass);
-        }
-    }
-
-    /**
-     * Enables the board
-     */
-    private enable() {
-        if (this.boardUi.classList.contains(this.disableClass)) {
-            this.boardUi.classList.remove(this.disableClass);
         }
     }
 

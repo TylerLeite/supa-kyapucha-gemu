@@ -1,4 +1,4 @@
-import { bindable, observable, LogManager } from 'aurelia-framework';
+import { bindable, observable, computedFrom, LogManager } from 'aurelia-framework';
 import { Tile, States } from '../tile/tile';
 import { Layout } from './layouts';
 
@@ -32,6 +32,10 @@ export class Board {
     public turn: States = States.PLAYER1;
     /** The last move that was made */
     public lastMove?: Coordinate;
+    /** The class for enabling or disabling the UI */
+    private disableClass = 'is-disabled';
+    /** Whether or not the board is disabled */
+    protected boardDisabled: boolean = false;
 
     /**
      * This kicks off whenever the layout changes, it prepares the board
@@ -44,6 +48,26 @@ export class Board {
         setTimeout(() => {
             this.disableTiles();
         });
+    }
+
+    /**
+     * Disables the board
+     */
+    public disable() {
+        if (!this.boardUi.classList.contains(this.disableClass)) {
+            this.boardUi.classList.add(this.disableClass);
+        }
+        this.boardDisabled = true;
+    }
+
+    /**
+     * Enables the board
+     */
+    public enable() {
+        if (this.boardUi.classList.contains(this.disableClass)) {
+            this.boardUi.classList.remove(this.disableClass);
+        }
+        this.boardDisabled = false;
     }
 
     /**

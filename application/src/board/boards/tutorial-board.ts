@@ -1,15 +1,17 @@
-import { bindable, observable, LogManager } from 'aurelia-framework';
-import { Tile, States } from '../../tile/tile';
+import { LogManager, useView } from 'aurelia-framework';
+// import { Tile, States } from '../../tile/tile';
 import { Layout, Layouts } from '../layouts';
-import { Board, Coordinate } from '../board';
+import { AiBoard } from './ai-board';
 
 const logger = LogManager.getLogger('tutorial-board');
+
+@useView('../board.html')
 
 /**
  * Class defining the gameboard and game logic
  * @class
  */
-export class TutorialBoard extends Board {
+export class TutorialBoard extends AiBoard {
 
     public layout: Layout = Layouts.mini;
 

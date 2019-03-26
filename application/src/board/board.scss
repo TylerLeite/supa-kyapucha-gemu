@@ -3,7 +3,7 @@
     display: table-row;
 }
 
-board {
+.board {
     display: table;
     table-layout: fixed;
     position: relative;
@@ -11,7 +11,7 @@ board {
     height: 100%;
 }
 
-tile {
+.board-tile {
     display: table-cell;
     position: relative;
 }
