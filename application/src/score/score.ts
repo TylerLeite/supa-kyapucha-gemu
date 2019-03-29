@@ -1,4 +1,4 @@
-import { bindable, BindingEngine, inject } from 'aurelia-framework';
+import { bindable, inject } from 'aurelia-framework';
 import { Player } from '../player/player';
 import { NPCs } from '../player/npcs';
 import * as textFit from 'textfit';
@@ -7,7 +7,7 @@ import * as textFit from 'textfit';
  * The score class, displays a scoreboard
  * @class
  */
-@inject(BindingEngine, NPCs)
+@inject(NPCs)
 export class Score {
     /** Various bindable attributes to display in the score board */
     @bindable public player1: Player = NPCs.random();
@@ -21,10 +21,28 @@ export class Score {
     private player2NameRef: HTMLElement;
     /** The text-fit configuration */
     private textFitConfig = {alignVertWithFlexbox: true, alignHoriz: true, alignVert: true, maxFontSize: 200, reProcess: true};
-    private bindingEngine: BindingEngine;
+    /** Whether or not the dom has loaded yet */
+    private domLoaded: boolean = false;
 
-    public constructor(bindingEngine: BindingEngine) {
-        this.bindingEngine = bindingEngine;
+    /**
+     * Simple changed method triggered by changes to the player 2 score,
+     * will re-fit the text depending on the score.
+     */
+    protected player1ScoreChanged(): void {
+        if (this.domLoaded) {
+            console.log("score changed!");
+            textFit(this.player1ScoreRef, this.textFitConfig);
+        }
+    }
+
+    /**
+     * Simple changed method triggered by changes to the player 2 score,
+     * will re-fit the text depending on the score.
+     */
+    protected player2ScoreChanged(): void {
+        if (this.domLoaded) {
+            textFit(this.player2ScoreRef, this.textFitConfig);
+        }
     }
 
     /**
@@ -33,13 +51,7 @@ export class Score {
      * fit the containers.
      */
     public attached() {
-        /** Text fit certain elements */
-        this.bindingEngine.propertyObserver(this, 'player1Score').subscribe(() => {
-            textFit(this.player1ScoreRef, this.textFitConfig);
-        });
-        this.bindingEngine.propertyObserver(this, 'player2Score').subscribe(() => {
-            textFit(this.player2ScoreRef, this.textFitConfig);
-        });
+        this.domLoaded = true;
         textFit([
             this.player1NameRef,
             this.player2NameRef,

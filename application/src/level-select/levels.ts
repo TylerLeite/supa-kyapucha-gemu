@@ -1,6 +1,8 @@
 import { Board } from '../board/board';
 import * as Boards from '../board/boards/boards';
 import { NPC, NPCs } from '../player/npcs';
+import { Skynet } from '../skynet/skynet';
+import * as NCPAIs from '../skynet/ncp-ais/ncp-ais';
 
 /**
  * A class representing a level of SKG
@@ -17,6 +19,8 @@ export class Level {
     public npc: NPC;
     /** The board that the level takes place on (defines rules and behavior) */
     public board: Board;
+    /** The AI that the NPC will be using on this level */
+    public ai: Skynet;
 
     /**
      * Takes the passed in attrs and assigns them to the Layout object
@@ -45,7 +49,8 @@ export namespace Levels {
         name: "Level 1",
         description: "",
         npc: NPCs.rockWithFace,
-        board: Boards.LevelOneBoard
+        board: Boards.LevelOneBoard,
+        ai: NCPAIs.RockWithFaceAi
     });
 
     export const two: Level = new Level({

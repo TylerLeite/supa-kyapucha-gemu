@@ -1,4 +1,4 @@
-import { bindable, observable, computedFrom, LogManager } from 'aurelia-framework';
+import { bindable, observable, LogManager } from 'aurelia-framework';
 import { Tile, States } from '../tile/tile';
 import { Layout } from './layouts';
 
