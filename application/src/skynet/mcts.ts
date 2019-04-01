@@ -7,12 +7,13 @@ import { States } from '../tile/tile';
 
 export class MonteCarlo extends Skynet {
 
-    private k: number = 75;
+    private k: number = 250;
 
     public makeMove (board: Board) : Coordinate | undefined {
         const possibleMoves = this.getPossibleMoves(board);
         const safeMoves = this.spliceSafeMoves(board, possibleMoves);
         const takeMoves = this.spliceTakeMoves(board, possibleMoves);
+        let bestMoveIndex = 0;
         let movesToCheck: Array<Coordinate> = safeMoves.concat(takeMoves);
         if (movesToCheck.length === 0) {
             movesToCheck = possibleMoves;
@@ -41,25 +42,20 @@ export class MonteCarlo extends Skynet {
                     weights[l] += 1;
                 }
             }
-        }
-
-        // make the move that had the most victories from random playouts
-        let bestMoveIndex = 0;
-        for (let i = 1; i < weights.length; i++) {
-            if (weights[i] > weights[bestMoveIndex]) {
-                bestMoveIndex = i;
+            if (weights[l] > weights[bestMoveIndex]) {
+                bestMoveIndex = l;
             }
         }
 
+        // make the move that had the most victories from random playouts
         return movesToCheck[bestMoveIndex];
     }
 
     private spliceSafeMoves (board: Board, possibleMoves: Array<Coordinate>) : Array<Coordinate> {
         let moves: Array<Coordinate> = [];
-        let toSplice: Array<number> = [];
         let safest = 0;
 
-        for (let m = 0; m < possibleMoves.length; m++) {
+        for (let m = possibleMoves.length - 1; m >= 0; m--) {
             const x = possibleMoves[m].x;
             const y = possibleMoves[m].y;
 
@@ -81,26 +77,19 @@ export class MonteCarlo extends Skynet {
             if (unplayableAdjacentTiles > safest) {
                 safest = unplayableAdjacentTiles;
                 moves = [];
-                toSplice = [];
             }
 
             if (unplayableAdjacentTiles == safest && unplayableAdjacentTiles > 0) {
                 moves.push({x, y});
-                toSplice.push(m);
+                possibleMoves.splice(m, 1);
             }
         }
-
-        for (let s = toSplice.length-1; s >= 0; s--) {
-            possibleMoves.splice(toSplice[s], 1);
-        }
-
         return moves;
     }
 
     private spliceTakeMoves (board: Board, possibleMoves: Array<Coordinate>) : Array<Coordinate> {
         let moves: Array<Coordinate> = [];
-        let toSplice: Array<number> = [];
-        for (let m = 0; m < possibleMoves.length; m++) {
+        for (let m = possibleMoves.length - 1; m >= 0; m--) {
             const x = possibleMoves[m].x;
             const y = possibleMoves[m].y;
 
@@ -116,15 +105,11 @@ export class MonteCarlo extends Skynet {
 
                     if (broken) {
                         moves.push({x, y});
-                        toSplice.push(m);
+                        possibleMoves.splice(m, 1);
                         break;
                     }
                 }
             }
-        }
-
-        for (let s = toSplice.length-1; s >= 0; s--) {
-            possibleMoves.splice(toSplice[s], 1);
         }
         return moves;
     }
