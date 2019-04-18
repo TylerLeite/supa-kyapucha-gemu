@@ -2,7 +2,7 @@ import { Board } from '../board/board';
 import * as Boards from '../board/boards/boards';
 import { NPC, NPCs } from '../player/npcs';
 import { Skynet } from '../skynet/skynet';
-import * as NCPAIs from '../skynet/ncp-ais/ncp-ais';
+import * as NPCAIs from '../skynet/npc-ais/npc-ais';
 
 /**
  * A class representing a level of SKG
@@ -50,7 +50,7 @@ export namespace Levels {
         description: "",
         npc: NPCs.rockWithFace,
         board: Boards.LevelOneBoard,
-        ai: NCPAIs.RockWithFaceAi
+        ai: NPCAIs.RockWithFaceAi
     });
 
     export const two: Level = new Level({

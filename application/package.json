@@ -12,6 +12,7 @@
     "aurelia-bootstrapper": "^2.3.1",
     "bluebird": "^3.5.3",
     "firebase": "^5.8.1",
+    "firebase-tools": "^6.6.0",
     "requirejs": "^2.3.6",
     "text": "github:requirejs/text#latest",
     "textfit": "^2.3.1"
