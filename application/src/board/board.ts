@@ -162,7 +162,15 @@ export class Board {
         this.height = this.layout.height;
         this.width = this.layout.width;
         this.blockedOutTiles = this.layout.blockedOutTiles;
-        this.tiles.length = 0;
+        /* 
+         * This loop shouldn't be necessary but it seems to fix problems 
+         * that aurelia has with binding to the emptyCount getter
+         * of this class.  FIXME: find a better way to resolve this.
+         */
+        for (let i = 0; i < this.tiles.length; i++) {
+            this.tiles[i].splice(0, this.tiles[i].length);
+        }
+        this.tiles.splice(0, this.tiles.length);
         for (let i = 0; i < this.height; i++) {
             this.tiles.push(new Array<Tile>(this.width));
         }
