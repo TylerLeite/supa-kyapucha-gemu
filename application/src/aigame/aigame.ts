@@ -49,8 +49,8 @@ export class Aigame {
             this.status = "Game over, starting new game";
             setTimeout(() => {
                 this.board.disable();
-                this.layout = Layouts.random();
                 this.resetBoard();
+                this.layout = Layouts.random();
                 if (this.board.turn === States.PLAYER1) {
                     this.board.enable();
                 }

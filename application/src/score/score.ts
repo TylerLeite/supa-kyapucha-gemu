@@ -25,12 +25,11 @@ export class Score {
     private domLoaded: boolean = false;
 
     /**
-     * Simple changed method triggered by changes to the player 2 score,
+     * Simple changed method triggered by changes to the player 1 score,
      * will re-fit the text depending on the score.
      */
     protected player1ScoreChanged(): void {
         if (this.domLoaded) {
-            console.log("score changed!");
             textFit(this.player1ScoreRef, this.textFitConfig);
         }
     }

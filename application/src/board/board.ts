@@ -167,13 +167,24 @@ export class Board {
          * that aurelia has with binding to the emptyCount getter
          * of this class.  FIXME: find a better way to resolve this.
          */
-        for (let i = 0; i < this.tiles.length; i++) {
-            this.tiles[i].splice(0, this.tiles[i].length);
-        }
-        this.tiles.splice(0, this.tiles.length);
-        for (let i = 0; i < this.height; i++) {
+        while (this.tiles.length < this.height) {
             this.tiles.push(new Array<Tile>(this.width));
         }
+        while (this.tiles.length > this.height) {
+            this.tiles.pop();
+        }
+        for (let i = 0; i < this.tiles.length; i++) {
+            while (this.tiles[i].length < this.width) {
+                this.tiles[i].push(new Tile());
+            }
+            while (this.tiles[i].length > this.width) {
+                this.tiles[i].pop();
+            }
+        }
+        // this.tiles.splice(0, this.tiles.length);
+        // for (let i = 0; i < this.height; i++) {
+        //     this.tiles.push(new Array<Tile>(this.width));
+        // }
     }
 
     /**
