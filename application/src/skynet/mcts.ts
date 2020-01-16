@@ -7,7 +7,12 @@ import { States } from '../tile/tile';
 
 export class MonteCarlo extends Skynet {
 
-    private k: number = 100;
+    private k: number;
+
+    public constructor(k: number = 100) {
+        super();
+        this.k = k;
+    }
 
     public makeMove (board: Board) : Coordinate | undefined {
         const possibleMoves = this.getPossibleMoves(board);

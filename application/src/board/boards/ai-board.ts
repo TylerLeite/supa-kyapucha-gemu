@@ -31,4 +31,17 @@ export class AiBoard extends Board {
             return false;
         }
     }
+
+    public attached(): void {
+        //tslint:disable-next-line
+        if (this.boardUi === undefined) {
+            this.boardUi = <HTMLElement>document.getElementsByClassName("board")[0];
+        }
+        this.layoutChanged();
+    }
+
+    public reset(): void {
+        super.reset();
+        this.layoutChanged();
+    }
 }

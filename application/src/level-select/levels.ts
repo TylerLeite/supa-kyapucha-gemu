@@ -1,4 +1,4 @@
-import { Board } from '../board/board';
+import { AiBoard } from '../board/boards/ai-board';
 import * as Boards from '../board/boards/boards';
 import { NPC, NPCs } from '../player/npcs';
 import { Skynet } from '../skynet/skynet';
@@ -18,7 +18,7 @@ export class Level {
     /** The level NPC */
     public npc: NPC;
     /** The board that the level takes place on (defines rules and behavior) */
-    public board: Board;
+    public board: AiBoard;
     /** The AI that the NPC will be using on this level */
     public ai: Skynet;
 
@@ -41,7 +41,7 @@ export namespace Levels {
         name: "Tutorial",
         description: "Tutorial Level",
         npc: NPCs.bohyun,
-        board: Boards.TutorialBoard
+        board: new Boards.TutorialBoard()
     });
 
     export const one: Level = new Level({
@@ -49,16 +49,17 @@ export namespace Levels {
         name: "Level 1",
         description: "",
         npc: NPCs.rockWithFace,
-        board: Boards.LevelOneBoard,
-        ai: NPCAIs.RockWithFaceAi
+        board: new Boards.LevelOneBoard(),
+        ai: new NPCAIs.RockWithFaceAi()
     });
 
     export const two: Level = new Level({
-        number: 1,
+        number: 2,
         name: "Level 2",
         description: "",
         npc: NPCs.bill,
-        board: undefined
+        board: new Boards.LevelTwoBoard(),
+        ai: new NPCAIs.BillAi()
     });
 
     export const three: Level = new Level({
@@ -184,6 +185,22 @@ export namespace Levels {
         fourteen,
         fifteen
     ];
+
+    /**
+     * Return a level for a given level number
+     * @param levelNo The number of the level to get
+     * @returns {Level}
+     */
+    export function getLevelByNumber(levelNo: number): Level {
+        for (let i = 0; i < levels.length; i++) {
+            if (levels[i].number === levelNo) {
+                console.log(levels[i]);
+                console.log(levelNo);
+                return levels[i];
+            }
+        }
+        return one;
+    }
 
     /**
      * Simple function to get a random level
