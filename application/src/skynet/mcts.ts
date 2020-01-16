@@ -7,12 +7,13 @@ import { States } from '../tile/tile';
 
 export class MonteCarlo extends Skynet {
 
-    private k: number = 150;
+    private k: number = 100;
 
     public makeMove (board: Board) : Coordinate | undefined {
         const possibleMoves = this.getPossibleMoves(board);
-        const safeMoves = this.spliceSafeMoves(board, possibleMoves);
         const takeMoves = this.spliceTakeMoves(board, possibleMoves);
+        const safeMoves = this.spliceSafeMoves(board, possibleMoves);
+        
         let bestMoveIndex = 0;
         let movesToCheck: Array<Coordinate> = safeMoves.concat(takeMoves);
         if (movesToCheck.length === 0) {
@@ -28,8 +29,6 @@ export class MonteCarlo extends Skynet {
 
             // make the chosen leaf move
             volatileBoard.place(movesToCheck[l].x, movesToCheck[l].y);
-            let newSafeMoves = movesToCheck.slice();
-            newSafeMoves.splice(l, 1);
 
             weights[l] = 0;
             const boardState = this.dumpBoardState(volatileBoard);
@@ -87,28 +86,56 @@ export class MonteCarlo extends Skynet {
         return moves;
     }
 
-    private spliceTakeMoves (board: Board, possibleMoves: Array<Coordinate>) : Array<Coordinate> {
+    private spliceTakeMoves (board: Board, possibleMoves: Array<Coordinate>, getAll: boolean = true) : Array<Coordinate> {
         let moves: Array<Coordinate> = [];
+        let rankingIndex: Array<number> = [];
+        let highestRank: number = 0;
         for (let m = possibleMoves.length - 1; m >= 0; m--) {
             const x = possibleMoves[m].x;
             const y = possibleMoves[m].y;
 
             // check all adjacent tiles for disabled / out of bounds
-            let broken = false;
+            let rank = 0;
+            let causedFlip = 0;
             for (let j = -1; j < 2; j++) {
-                if (broken) break;
                 for (let i = -1; i < 2; i++) {
                     if (i === 0 && j === 0) {
                         continue;
                     }
-                    broken = board.checkReversi(x, y, i, j, true);
-
-                    if (broken) {
-                        moves.push({x, y});
-                        possibleMoves.splice(m, 1);
-                        break;
+                    if (getAll === false) {
+                        rank = rank + board.checkReversi(x, y, i, j, true);
+                    } else {
+                        causedFlip = board.checkReversi(x, y, i, j, true);
+                        if (causedFlip > 0) {
+                            moves.push(possibleMoves[m]);
+                            possibleMoves.splice(m, 1);
+                            break;
+                        }
                     }
+                    
                 }
+                if (causedFlip > 0) {
+                    break;
+                }
+            }
+            // only keep the moves that flip the most tiles
+            if (rank > 0) {
+                if (rank > highestRank) {
+                    highestRank = rank;
+                    rankingIndex = new Array<number>();
+                }
+                if (rank === highestRank) {
+                    rankingIndex.push(m);
+                }
+            }
+        }
+        // splice out the moves in order from the possibleMoves array
+        // because we reversed through the array when checking the possibleMoves
+        // we should be able to splice these out in order
+        if (getAll === false) {
+            for (let i = 0; i < rankingIndex.length; i++) {
+                moves.push(possibleMoves[rankingIndex[i]]);
+                possibleMoves.splice(rankingIndex[i], 1);
             }
         }
         return moves;
@@ -120,7 +147,7 @@ export class MonteCarlo extends Skynet {
         // Step 1: make hella random moves
         while (possibleMoves.length > 0) {
             // get the next tier of moves from our simple heuristic
-            const takeMoves = this.spliceTakeMoves(board, possibleMoves);
+            const takeMoves = this.spliceTakeMoves(board, possibleMoves, false);
             let safeMoves: Array<Coordinate> = [];
             let movesToCheck: Array<Coordinate> = [];
             if (takeMoves.length > 0) {
