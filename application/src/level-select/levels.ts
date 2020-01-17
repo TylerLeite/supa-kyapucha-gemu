@@ -18,9 +18,9 @@ export class Level {
     /** The level NPC */
     public npc: NPC;
     /** The board that the level takes place on (defines rules and behavior) */
-    public board: AiBoard;
+    public board: new () => AiBoard;
     /** The AI that the NPC will be using on this level */
-    public ai: Skynet;
+    public ai: new () => Skynet;
 
     /**
      * Takes the passed in attrs and assigns them to the Layout object
@@ -41,7 +41,7 @@ export namespace Levels {
         name: "Tutorial",
         description: "Tutorial Level",
         npc: NPCs.bohyun,
-        board: new Boards.TutorialBoard()
+        board: Boards.TutorialBoard
     });
 
     export const one: Level = new Level({
@@ -49,8 +49,8 @@ export namespace Levels {
         name: "Level 1",
         description: "",
         npc: NPCs.rockWithFace,
-        board: new Boards.LevelOneBoard(),
-        ai: new NPCAIs.RockWithFaceAi()
+        board: Boards.LevelOneBoard,
+        ai: NPCAIs.RockWithFaceAi
     });
 
     export const two: Level = new Level({
@@ -58,8 +58,8 @@ export namespace Levels {
         name: "Level 2",
         description: "",
         npc: NPCs.bill,
-        board: new Boards.LevelTwoBoard(),
-        ai: new NPCAIs.BillAi()
+        board: Boards.LevelTwoBoard,
+        ai: NPCAIs.BillAi
     });
 
     export const three: Level = new Level({
@@ -194,8 +194,6 @@ export namespace Levels {
     export function getLevelByNumber(levelNo: number): Level {
         for (let i = 0; i < levels.length; i++) {
             if (levels[i].number === levelNo) {
-                console.log(levels[i]);
-                console.log(levelNo);
                 return levels[i];
             }
         }

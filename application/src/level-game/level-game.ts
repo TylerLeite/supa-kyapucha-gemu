@@ -1,4 +1,4 @@
-import { LogManager, BindingEngine, inject } from 'aurelia-framework';
+import { LogManager, BindingEngine, inject, Disposable } from 'aurelia-framework';
 import { AiBoard } from '../board/boards/ai-board';
 import { States } from '../tile/tile';
 import { NPC } from '../player/npcs';
@@ -21,6 +21,8 @@ export class LevelGame {
     private bindingEngine: BindingEngine;
     /** The current level being played */
     private level: Level;
+    /** The subscription to the property observer for the scoreboard to update */
+    private subscription: Disposable;
 
 
     /**
@@ -38,8 +40,8 @@ export class LevelGame {
      */
     public activate(params): void {
         this.level = Levels.getLevelByNumber(parseInt(params.id, 10));
-        this.board = this.level.board;
-        this.ai = this.level.ai;
+        this.board = new this.level.board();
+        this.ai = new this.level.ai();
         this.npc = this.level.npc;
     }
 
@@ -48,8 +50,13 @@ export class LevelGame {
      * for the count of empty tiles to go to zero.
      */
     public attached() {
-        this.bindingEngine.propertyObserver(this.board, 'emptyCount').subscribe(this.handleAiTurn);
+        this.subscription = this.bindingEngine.propertyObserver(this.board, 'emptyCount').subscribe(this.handleAiTurn);
         //this.bindingEngine.propertyObserver(this.board, 'emptyCount').subscribe(this.handleGameEnd);
+    }
+
+    public detached() {
+        this.resetBoard();
+        this.subscription.dispose();
     }
 
     /**
