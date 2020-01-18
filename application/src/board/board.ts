@@ -116,15 +116,23 @@ export class Board {
         }
 
         /** Set the turn */
+        this.toggleTurn();
+
+        /** Update other stats */
+        this.lastMove = {x: x, y: y};
+        return true;
+    }
+
+    /**
+     * Helper method to flip the turns back or forth
+     * Can be overwritten to make unfair turn orders
+     */
+    protected toggleTurn() {
         if (this.turn === States.PLAYER1) {
             this.turn = States.PLAYER2;
         } else {
             this.turn = States.PLAYER1;
         }
-
-        /** Update other stats */
-        this.lastMove = {x: x, y: y};
-        return true;
     }
 
     /** Reset the board (set all tiles to empty) */

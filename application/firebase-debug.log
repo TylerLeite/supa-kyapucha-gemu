@@ -1,0 +1,21 @@
+[debug] [2020-01-18T00:07:12.267Z] ----------------------------------------------------------------------
+[debug] [2020-01-18T00:07:12.274Z] Command:       /usr/bin/node /home/kstoner/.node_modules_global/bin/firebase deploy
+[debug] [2020-01-18T00:07:12.274Z] CLI Version:   7.12.1
+[debug] [2020-01-18T00:07:12.274Z] Platform:      linux
+[debug] [2020-01-18T00:07:12.279Z] Node Version:  v10.15.2
+[debug] [2020-01-18T00:07:12.279Z] Time:          Fri Jan 17 2020 17:07:12 GMT-0700 (Mountain Standard Time)
+[debug] [2020-01-18T00:07:12.280Z] ----------------------------------------------------------------------
+[debug] [2020-01-18T00:07:12.280Z] 
+[debug] [2020-01-18T00:07:12.321Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-01-18T00:07:12.337Z] > authorizing via signed-in user
+[debug] [2020-01-18T00:07:12.337Z] [iam] checking project supa-kyapucha-gemu for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2020-01-18T00:07:12.343Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2020-01-18T00:07:12.343Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2020-01-18T00:07:12.692Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-18T00:07:12.698Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/supa-kyapucha-gemu:testIamPermissions  
+
+[debug] [2020-01-18T00:07:12.936Z] <<< HTTP RESPONSE 200
+[debug] [2020-01-18T00:07:12.940Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/supa-kyapucha-gemu  
+ 
+[debug] [2020-01-18T00:07:13.270Z] <<< HTTP RESPONSE 200

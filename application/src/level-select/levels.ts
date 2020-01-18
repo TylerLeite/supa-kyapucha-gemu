@@ -67,7 +67,8 @@ export namespace Levels {
         name: "Level 3",
         description: "",
         npc: NPCs.rockWithFace,
-        board: undefined
+        board: Boards.LevelThreeBoard,
+        ai: NPCAIs.RockWithFaceAi
     });
 
     export const four: Level = new Level({
@@ -75,7 +76,8 @@ export namespace Levels {
         name: "Level 4",
         description: "",
         npc: NPCs.bill,
-        board: undefined
+        board: Boards.LevelFourBoard,
+        ai: NPCAIs.BillAi
     });
 
     export const five: Level = new Level({
