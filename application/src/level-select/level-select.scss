@@ -3,3 +3,10 @@
     flex-flow: row wrap;
     justify-content: space-around;
 }
+
+.level-select {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+}

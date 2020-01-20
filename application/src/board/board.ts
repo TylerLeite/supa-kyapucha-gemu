@@ -36,6 +36,8 @@ export class Board {
     private disableClass = 'is-disabled';
     /** Whether or not the board is disabled */
     protected boardDisabled: boolean = false;
+    /** Whether or not the board is hidden from view */
+    public boardHidden: boolean = false;
 
     /**
      * This kicks off whenever the layout changes, it prepares the board
@@ -44,9 +46,13 @@ export class Board {
      * decorators
      */
     protected layoutChanged() {
+        this.boardHidden = true;
         this.assignAttributes();
         setTimeout(() => {
             this.disableTiles();
+            setTimeout(() => {
+                this.boardHidden = false;
+            });
         });
     }
 
@@ -137,12 +143,16 @@ export class Board {
 
     /** Reset the board (set all tiles to empty) */
     public reset() {
+        this.boardHidden = true;
         logger.debug("Resetting the board");
         for (let i = 0; i < this.height; i++) {
             for (let j = 0; j < this.width; j++) {
                 this.tiles[i][j].reset();
             }
         }
+        setTimeout(() => {
+            this.boardHidden = false;
+        });
     }
 
     /** 

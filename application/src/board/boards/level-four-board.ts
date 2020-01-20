@@ -19,7 +19,6 @@ export class LevelFourBoard extends AiBoard {
     public constructor() {
         super();
         this.layout.blockedOutTiles = this.getBlockOutList();
-        //this.layoutChanged();
     }
 
     private squareSize: number = 3;
@@ -42,7 +41,7 @@ export class LevelFourBoard extends AiBoard {
      */
     public place(x: number, y: number, isAI: boolean = false): boolean {
         const value: boolean = super.place(x, y, isAI);
-        if (this.emptyCount < (this.squareSize * this.squareSize) / 2) {
+        if (this.emptyCount < ((this.squareSize * this.squareSize) / 4)) {
             if (this.squareSize === this.layout.height) {
                 return value;
             }
@@ -68,6 +67,12 @@ export class LevelFourBoard extends AiBoard {
             }
         }
         return blockedOutTiles;
+    }
+
+    public reset() {
+        this.squareSize = 3;
+        this.layout.blockedOutTiles = this.getBlockOutList();
+        super.reset();
     }
 
 }

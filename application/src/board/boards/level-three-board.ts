@@ -23,7 +23,7 @@ export class LevelThreeBoard extends AiBoard {
         if (this.turn === States.PLAYER1) {
             this.turn = States.PLAYER2;
         } else {
-            if (this.doubleMoveCounter < 4) {
+            if (this.doubleMoveCounter < 5) {
                 this.doubleMoveCounter += 1;
             } else {
                 this.turn = States.PLAYER1;
