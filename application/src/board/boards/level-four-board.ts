@@ -14,7 +14,7 @@ const logger = LogManager.getLogger('level-one-board');
  */
 export class LevelFourBoard extends AiBoard {
 
-    public layout: Layout = Layouts.standard;
+    public layout: Layout = JSON.parse(JSON.stringify(Layouts.standard));
 
     public constructor() {
         super();
