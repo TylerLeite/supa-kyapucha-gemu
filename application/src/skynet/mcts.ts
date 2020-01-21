@@ -47,6 +47,7 @@ export class MonteCarlo extends Skynet {
                 }
             }
             if (weights[l] > weights[bestMoveIndex]) {
+                console.log(weights[l]);
                 bestMoveIndex = l;
             }
         }
@@ -55,7 +56,7 @@ export class MonteCarlo extends Skynet {
         return movesToCheck[bestMoveIndex];
     }
 
-    private spliceSafeMoves (board: Board, possibleMoves: Array<Coordinate>) : Array<Coordinate> {
+    protected spliceSafeMoves (board: Board, possibleMoves: Array<Coordinate>) : Array<Coordinate> {
         let moves: Array<Coordinate> = [];
         let safest = 0;
 
@@ -91,7 +92,7 @@ export class MonteCarlo extends Skynet {
         return moves;
     }
 
-    private spliceTakeMoves (board: Board, possibleMoves: Array<Coordinate>, getAll: boolean = true) : Array<Coordinate> {
+    protected spliceTakeMoves (board: Board, possibleMoves: Array<Coordinate>, getAll: boolean = true) : Array<Coordinate> {
         let moves: Array<Coordinate> = [];
         let rankingIndex: Array<number> = [];
         let highestRank: number = 0;
@@ -146,8 +147,16 @@ export class MonteCarlo extends Skynet {
         return moves;
     }
 
+    protected getPlayer1Score(board: Board): number {
+        return board.player1Count;
+    }
+
+    protected getPlayer2Score(board: Board): number {
+        return board.player2Count;
+    }
+
     // Run a game with moves chosen at random. We can use a small optimization here where we only calculate the possible moves once, since no new moves are ever made possible and the only moves made impossible are the same ones we randomly choose.
-    private randomPlayout (board: Board) : States {
+    protected randomPlayout (board: Board) : States {
         let possibleMoves = this.getPossibleMoves(board)
         // Step 1: make hella random moves
         while (possibleMoves.length > 0) {
@@ -174,8 +183,8 @@ export class MonteCarlo extends Skynet {
         }
 
         // Step 2: check who won
-        const p1Score = board.player1Count;
-        const p2Score = board.player2Count;
+        const p1Score = this.getPlayer1Score(board);
+        const p2Score = this.getPlayer2Score(board);
 
         if (p1Score > p2Score) {
             return States.PLAYER1;

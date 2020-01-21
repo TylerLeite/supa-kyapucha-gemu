@@ -55,6 +55,17 @@ export class Tile {
     /** The state that the tile is currently in */
     private tileState: States = States.EMPTY;
 
+    /**
+     * Takes the passed in attrs and assigns them to the Tile object
+     * @constructor
+     * @param {any} attrs attributes to assign to the tile
+     */
+    constructor(attrs?: any) {
+        if (attrs) {
+            Object.assign(this, attrs);
+        }
+    }
+
     /** Flips a tile over */
     private flip() {
         if (typeof this.tileUi === 'undefined') { return; }

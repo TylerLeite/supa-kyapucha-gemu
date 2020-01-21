@@ -33,12 +33,16 @@ export class AiBoard extends Board {
     }
 
     public attached(): void {
-        //tslint:disable-next-line
-        if (this.boardUi === undefined) {
-            // This is a hack until I can figure out how to pass the board reference in
-            this.boardUi = <HTMLElement>document.getElementsByClassName("board")[0];
+        try {
+            //tslint:disable-next-line
+            if (this.boardUi === undefined) {
+                // This is a hack until I can figure out how to pass the board reference in
+                this.boardUi = <HTMLElement>document.getElementsByClassName("board")[0];
+            }
+            this.layoutChanged();
+        } catch (err) {
+            console.warn(err);
         }
-        this.layoutChanged();
     }
 
     public reset(): void {

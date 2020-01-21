@@ -144,14 +144,16 @@ export class Board {
     /** Reset the board (set all tiles to empty) */
     public reset() {
         this.boardHidden = true;
-        logger.debug("Resetting the board");
-        for (let i = 0; i < this.height; i++) {
-            for (let j = 0; j < this.width; j++) {
-                this.tiles[i][j].reset();
-            }
-        }
         setTimeout(() => {
-            this.boardHidden = false;
+            logger.debug("Resetting the board");
+            for (let i = 0; i < this.height; i++) {
+                for (let j = 0; j < this.width; j++) {
+                    this.tiles[i][j].reset();
+                }
+            }
+            setTimeout(() => {
+                this.boardHidden = false;
+            });
         });
     }
 
@@ -176,7 +178,7 @@ export class Board {
      * assigns it to various internal attributes that can
      * be accessed easier.
      */
-    private assignAttributes() {
+    protected assignAttributes() {
         this.height = this.layout.height;
         this.width = this.layout.width;
         this.blockedOutTiles = this.layout.blockedOutTiles;
@@ -209,7 +211,7 @@ export class Board {
      * Take in a list of coordinates of tiles to disable, check if coordinates are in bounds
      * and if they are, disable the tile at that coordinate.
      */
-    private disableTiles() {
+    protected disableTiles() {
         this.blockedOutTiles.forEach((tile: Coordinate) => {
             if (this.inBounds(tile.x, tile.y)) {
                 this.tiles[tile.y][tile.x].state = States.DISABLED;
