@@ -9,6 +9,8 @@ export class Player {
     public lastName: string;
     /** A path to the image the player is using ie: img/char/bill.png */
     public imageUrl: string;
+    /** The color that represents the player */
+    public color: string;
     /** The full name of the player (first + last) */
     public get fullName(): string {
         return `${this.firstName} ${this.lastName}`;

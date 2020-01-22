@@ -1,5 +1,4 @@
-//import { bindable } from 'aurelia-framework';
-
+import { bindable } from 'aurelia-framework';
 // const logger = LogManager.getLogger('tile');
 
 /**
@@ -25,21 +24,21 @@ export class Tile {
     /** A reference to the UI back of the tile */
     public tileBackUi: HTMLElement;
     /** The color when a tile is empty */
-    public emptyColor: string = "grey";
+    public emptyColor: string = "rgba(150, 150, 150, 0.4)";
     /** The image displayed when a tile is empty */
     public emptyImageUrl: string = "";
     /** The color when a tile is owned by player 1 */
-    public player1Color: string = "blue";
+    @bindable public player1Color: string = "blue";
     /** The image when a tile is owned by player 1 */
     public player1ImageUrl: string = "";
     /** The color when a tile is owned by player 2 */
-    public player2Color: string = "red";
+    @bindable public player2Color: string = "red";
     /** The image when a tile is owned by player 2 */
     public player2ImageUrl: string = "";
     /** The image displayed when a tile is disabled */
     public disabledImageUrl: string = "";
     /** The color when a tile is disabled */
-    public disabledColor: string = "white";
+    public disabledColor: string = "rgba(0, 0, 0, 0)";
     /** The color of the front of the tile */
     public tileFrontColor: string = this.emptyColor;
     /** The color of the back of the tile */

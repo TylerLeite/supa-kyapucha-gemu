@@ -1,6 +1,8 @@
 import { LogManager, BindingEngine, inject } from 'aurelia-framework';
 import { Board } from '../board/board';
 import { Layout, Layouts } from '../board/layouts';
+import { Player } from '../player/player';
+import { NPCs } from '../player/npcs';
 
 const logger = LogManager.getLogger('local');
 
@@ -8,6 +10,10 @@ const logger = LogManager.getLogger('local');
 export class Local {
     /** The game board being used */
     public board: Board;
+    /** Player 1 */
+    public player1: Player;
+    /** Player 2 */
+    public player2: Player;
     /** The aurelia binding engine */
     private bindingEngine: BindingEngine;
     /** The current layout being used */
@@ -19,6 +25,11 @@ export class Local {
      */
     public constructor(be: BindingEngine) {
         this.bindingEngine = be;
+        this.player1 = NPCs.random();
+        this.player2 = NPCs.random();
+        while (this.player1.fullName === this.player2.fullName) {
+            this.player2 = NPCs.random();
+        }
     }
 
     /**
@@ -27,6 +38,8 @@ export class Local {
      */
     public attached() {
         this.bindingEngine.propertyObserver(this.board, 'emptyCount').subscribe(this.handleGameEnd);
+        this.board.player1Color = this.player1.color;
+        this.board.player2Color = this.player2.color;
     }
 
     /**
