@@ -7,13 +7,20 @@ import { States } from '../tile/tile';
 
 export class MonteCarlo extends Skynet {
 
+    /** How many random playthroughs to do */
     private k: number;
 
+    /** Allows different AIs to adjust how smart they are */
     public constructor(k: number = 100) {
         super();
         this.k = k;
     }
 
+    /**
+     * Takes in a board and determines what AI move to make
+     * @param {Board} board the board to make a move on
+     * @returns {Coordinate} the coordinate of the move the AI will make 
+     */
     public makeMove (board: Board) : Coordinate | undefined {
         const possibleMoves = this.getPossibleMoves(board);
         const takeMoves = this.spliceTakeMoves(board, possibleMoves);
@@ -56,6 +63,13 @@ export class MonteCarlo extends Skynet {
         return movesToCheck[bestMoveIndex];
     }
 
+    /**
+     * Gets a list of safe moves from the board (ones with no enemy pieces by it)
+     * Prefers moves that have more safe tiles surrounding them
+     * @param {Board} board the board to look for safe moves on 
+     * @param {Array<Coordinate>} possibleMoves the list of all possible moves
+     * @returns {Array<Coordinate>} the list of safest moves 
+     */
     protected spliceSafeMoves (board: Board, possibleMoves: Array<Coordinate>) : Array<Coordinate> {
         let moves: Array<Coordinate> = [];
         let safest = 0;
@@ -92,6 +106,15 @@ export class MonteCarlo extends Skynet {
         return moves;
     }
 
+    /**
+     * Gets a list of moves from the board that capture other pieces
+     * If getAll is passed as true it will get all of the capture moves but
+     * otherwise it will only return the move(s) that flip the most enemy tiles.
+     * @param {Board} board the board to look for take moves on
+     * @param {Array<Coordinate>} possibleMoves the list of all possible moves
+     * @param {boolean} getAll whether or not to get all of the moves (defaults to true)
+     * @returns {Array<Coordinate>} the list of take moves
+     */
     protected spliceTakeMoves (board: Board, possibleMoves: Array<Coordinate>, getAll: boolean = true) : Array<Coordinate> {
         let moves: Array<Coordinate> = [];
         let rankingIndex: Array<number> = [];
@@ -147,16 +170,33 @@ export class MonteCarlo extends Skynet {
         return moves;
     }
 
+    /**
+     * Determines player 1's score
+     * @param {Board} board the board to get the score for
+     * @returns {number} the score
+     */
     protected getPlayer1Score(board: Board): number {
         return board.player1Count;
     }
 
+    /**
+     * Determines player 2's score
+     * @param {Board} board the board to get the score for
+     * @returns {number} the score
+     */
     protected getPlayer2Score(board: Board): number {
         return board.player2Count;
     }
 
-    // Run a game with moves chosen at random. We can use a small optimization here where we only calculate the possible moves once, since no new moves are ever made possible and the only moves made impossible are the same ones we randomly choose.
-    protected randomPlayout (board: Board) : States {
+    /** 
+     * Run a game with moves chosen at random. We can use a small optimization 
+     * here where we only calculate the possible moves once, since no new moves 
+     * are ever made possible and the only moves made impossible are the same 
+     * ones we randomly choose.
+     * @param {Board} board the board to randomly playout
+     * @returns {States} the winning state (p1 or p2)
+     */
+     protected randomPlayout (board: Board) : States {
         let possibleMoves = this.getPossibleMoves(board)
         // Step 1: make hella random moves
         while (possibleMoves.length > 0) {
