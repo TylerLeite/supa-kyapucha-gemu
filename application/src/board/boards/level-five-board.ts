@@ -4,25 +4,32 @@ import { Layout, Layouts } from '../layouts';
 import { Coordinate } from '../board';
 import { AiBoard } from './ai-board';
 
-const logger = LogManager.getLogger('level-one-board');
+const logger = LogManager.getLogger('level-five-board');
 
 @useView('../board.html')
 
 /**
- * Class defining the gameboard and game logic
+ * Class defining the gameboard and game logic for level 5
  * @class
  */
 export class LevelFiveBoard extends AiBoard {
 
-    public layout: Layout = JSON.parse(JSON.stringify(Layouts.standard));
-
-    public constructor() {
-        super();
-    }
-
+    /** The list of critter tile objects on the board */
     private critterTiles: Array<Tile> = [];
+    /** The list of the coordinates for the critter tiles */
     private critterTileCoordinates: Array<Coordinate> = [];
 
+    /**
+     * Standard layout that is going to be modified so we make a clone
+     */
+    public layout: Layout = JSON.parse(JSON.stringify(Layouts.standard));
+
+    /**
+     * Little bit hacky, but we need to generate the critter tiles
+     * and reset the board after we generate the initial board so that
+     * the critter tiles render correctly.  May revisit this to make it
+     * cleaner in the future.
+     */
     public attached(): void {
         //tslint:disable-next-line
         if (this.boardUi === undefined) {
@@ -31,15 +38,14 @@ export class LevelFiveBoard extends AiBoard {
         }
         this.layoutChanged();
         setTimeout(() => {
-            this.generateRandomCritterTiles();
             this.reset();
         });
     }
 
     /**
-     * Get the number of tiles of a certain type (state)
-     * @param {State} type - the type of tile to count
-     * @returns {number} number of tiles of the type
+     * Get the number of tiles of critter tiles owned by a player
+     * @param {State} type - the player state to count
+     * @returns {number} number of critter tiles owned
      */
     private getCritterCount(type: States): number {
         let count = 0;
@@ -67,14 +73,29 @@ export class LevelFiveBoard extends AiBoard {
         return this.getCritterCount(States.PLAYER2);
     }
 
+    /**
+     * Gets a random integer between 0 and the specified max.
+     * @param {number} max the maximum integer for the random number generated\
+     * @returns {number} a random number between 0 and max
+     */
     private getRandomInt(max: number) {
         return Math.floor(Math.random() * Math.floor(max));
     }
 
+    /**
+     * Returns the list of critter coordinates... used by the AI.
+     * @returns {Array<Coordinate>} an array of critter tile coordinates
+     */
     public getCritterTileCoordinates(): Array<Coordinate> {
         return this.critterTileCoordinates;
     }
 
+    /**
+     * Checks for neighboring tiles to avoid placing all the critters in one
+     * spot.  Also limits one critter per board edge max.
+     * @param {number} x the horizontal coordinate of the potential critter 
+     * @param {number} y the vertical coordinate of the potential critter
+     */
     private checkForNeighbors(x: number, y: number): boolean {
         for (let i = 0; i < this.critterTileCoordinates.length; i++) {
             const coord: Coordinate = this.critterTileCoordinates[i];
@@ -98,6 +119,9 @@ export class LevelFiveBoard extends AiBoard {
         return false;
     }
 
+    /**
+     * Generates random critter tiles on the board
+     */
     private generateRandomCritterTiles() {
         let numCritters: number = 7;
         this.critterTiles = [];
@@ -117,5 +141,13 @@ export class LevelFiveBoard extends AiBoard {
                 numCritters -= 1;
             }
         }
+    }
+
+    /**
+     * Re-select random critters... might need to reset tile images before doing this.
+     */
+    public reset() {
+        this.generateRandomCritterTiles();
+        super.reset();
     }
 }

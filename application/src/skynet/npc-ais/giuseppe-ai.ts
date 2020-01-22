@@ -22,53 +22,6 @@ export class GiuseppeAi extends MonteCarlo {
         return super.makeMove(board);
     }
 
-    protected spliceSafeMoves(board: Board, possibleMoves: Array<Coordinate>): Array<Coordinate> {
-        let moves: Array<Coordinate> = [];
-        let safest = 0;
-
-        for (let m = possibleMoves.length - 1; m >= 0; m--) {
-            const x = possibleMoves[m].x;
-            const y = possibleMoves[m].y;
-
-            // check all adjacent tiles for disabled / out of bounds
-            let unplayableAdjacentTiles = 0;
-            for (let j = -1; j < 2; j++) {
-                for (let i = -1; i < 2; i++) {
-                    if (
-                        y + j < 0 || y + j >= board.height
-                        || x + i < 0 || x + i >= board.width
-                        || board.tiles[y + j][x + i].state === States.DISABLED
-                        || board.tiles[y + j][x + i].state === board.turn
-                    ) {
-                        unplayableAdjacentTiles += 1;
-                    }
-                }
-            }
-
-            for (let i = 0; i < this.critterLocations.length; i++) {
-                if (this.critterLocations[i].x === x && this.critterLocations[i].y === y) {
-                    unplayableAdjacentTiles += 2;
-                    break;
-                }
-                if (this.critterLocations[i].x === x || this.critterLocations[i].y === y) {
-                    unplayableAdjacentTiles += 1;
-                    break;
-                }
-            }
-
-            if (unplayableAdjacentTiles > safest) {
-                safest = unplayableAdjacentTiles;
-                moves = [];
-            }
-
-            if (unplayableAdjacentTiles == safest && unplayableAdjacentTiles > 0) {
-                moves.push({x, y});
-                possibleMoves.splice(m, 1);
-            }
-        }
-        return moves;
-    }
-
     protected randomPlayout(board: Board): States {
         let possibleMoves = this.getPossibleMoves(board);
         // Step 1: make hella random moves
