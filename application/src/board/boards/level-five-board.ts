@@ -18,6 +18,8 @@ export class LevelFiveBoard extends AiBoard {
     private critterTiles: Array<Tile> = [];
     /** The list of the coordinates for the critter tiles */
     private critterTileCoordinates: Array<Coordinate> = [];
+    /** The total number of critters to generate */
+    private numCritters: number = 7;
 
     /**
      * Standard layout that is going to be modified so we make a clone
@@ -123,9 +125,9 @@ export class LevelFiveBoard extends AiBoard {
      * Generates random critter tiles on the board
      */
     private generateRandomCritterTiles() {
-        let numCritters: number = 7;
         this.critterTiles = [];
         this.critterTileCoordinates = [];
+        let numCritters: number = this.numCritters;
         while (numCritters > 0) {
             const randomX = this.getRandomInt(this.layout.width);
             const randomY = this.getRandomInt(this.layout.height);
