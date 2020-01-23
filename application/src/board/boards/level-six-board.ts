@@ -15,7 +15,7 @@ const logger = LogManager.getLogger('level-six-board');
 export class LevelSixBoard extends AiBoard {
 
     /** The number of moves in a row the AI can make */
-    private sequentialMoves: number = 7;
+    private sequentialMoves: number = 9;
     /** The number of tiles to flip back */
     private flipBacks: number = 3;
     /** Keeps track of how many moves in a row the AI has made */
@@ -23,7 +23,7 @@ export class LevelSixBoard extends AiBoard {
     /** Standard layout to not freak out the player too much */
     public layout: Layout = Layouts.standard;
     /** Keeps track of placed tile coordinates so we can sneakily flip them back */
-    public placedTiles: Array<Coordinate>;
+    public placedTiles: Array<Coordinate> = [];
 
 
     public place(x: number, y: number, isAI: boolean = false): boolean {
@@ -32,16 +32,29 @@ export class LevelSixBoard extends AiBoard {
             this.placedTiles.push(<Coordinate>{x, y});
             this.moveCounter += 1;
             if (this.moveCounter === this.sequentialMoves) {
+                console.log("wooow");
                 for (let i = 0; i < this.flipBacks; i++) {
                     const index: number = Math.floor(Math.random() * this.placedTiles.length);
                     const coord: Coordinate = this.placedTiles[index];
-                    this.tiles[coord.y][coord.x].reset();
+                    this.fancyReset(this.tiles[coord.y][coord.x]);
                     this.placedTiles.splice(index, 1);
                 }
                 this.moveCounter = 0;
             }
         }
         return value;
+    }
+
+    private fancyReset(tile: Tile) {
+        if (!tile.isFlipped()) {
+            tile.flip();
+        }
+        setTimeout(() => {
+            tile.flip();
+            setTimeout(() => {
+                tile.reset();
+            }, 500);
+        }, 500);
     }
 
     /**

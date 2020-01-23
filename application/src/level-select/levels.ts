@@ -95,7 +95,7 @@ export namespace Levels {
         description: "",
         npc: NPCs.jiho,
         board: Boards.LevelSixBoard,
-        ai: NPCAIs.BillAi
+        ai: NPCAIs.JihoAi
     });
 
     export const seven: Level = new Level({

@@ -66,7 +66,7 @@ export class Tile {
     }
 
     /** Flips a tile over */
-    private flip() {
+    public flip() {
         if (typeof this.tileUi === 'undefined') { return; }
         this.tileUi.classList.toggle(this.flipClass);
     }
@@ -75,7 +75,7 @@ export class Tile {
      * Returns whether a tile is flipped over or not
      * @returns {boolean} true if the tile is flipped over, false otherwise
      */
-    private isFlipped(): boolean {
+    public isFlipped(): boolean {
         if (typeof this.tileUi === 'undefined') { return false; }
         return this.tileUi.classList.contains(this.flipClass);
     }
