@@ -228,7 +228,7 @@ export class Board {
      * @param {State} type - the type of tile to count
      * @returns {number} number of tiles of the type
      */
-    private getCountOfType(type: States): number {
+    protected getCountOfType(type: States): number {
         let count = 0;
         for (let i = 0; i < this.height; i++) {
             for (let j = 0; j < this.width; j++) {
