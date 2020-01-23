@@ -94,7 +94,7 @@ export namespace NPCs {
         firstName: 'Yeshi',
         lastName: 'Kaw',
         imageUrl: 'img/char/yeshi.png',
-        color: 'ivory',
+        color: 'goldenrod',
         about: 'Something about Yeshi'
     });
 
