@@ -1,7 +1,8 @@
 import { LogManager, BindingEngine, inject, Disposable } from 'aurelia-framework';
 import { AiBoard } from '../board/boards/ai-board';
 import { States } from '../tile/tile';
-import { NPC } from '../player/npcs';
+import { NPC, NPCs } from '../player/npcs';
+import { Player } from '../player/player';
 import { Skynet } from '../skynet/skynet';
 import { Levels, Level } from '../level-select/levels';
 
@@ -15,6 +16,8 @@ export class LevelGame {
     public ai: Skynet;
     /** The NPC that the player is playing against */
     public npc: NPC;
+    /** The Player */
+    public player: Player;
     /** The display status to show the user playing the game */
     public status: string;
     /** The aurelia binding engine */
@@ -43,6 +46,12 @@ export class LevelGame {
         this.board = new this.level.board();
         this.ai = new this.level.ai();
         this.npc = this.level.npc;
+        this.player = NPCs.random();
+        while (this.player.fullName === this.npc.fullName) {
+            this.player = NPCs.random();
+        }
+        this.board.player1Color = this.player.color;
+        this.board.player2Color = this.npc.color;
     }
 
     /**

@@ -2,7 +2,7 @@
     <require from="../board/board"></require>
     <require from="../score/score"></require>
     <require from="../local/local.css"></require>
-    <score player1-score.bind="board.player1Count & debounce:100" player2-score.bind="board.player2Count & debounce:100"></score>
+    <score player1.bind="player1" player2.bind="player2" player1-score.bind="board.player1Count & debounce:100" player2-score.bind="board.player2Count & debounce:100"></score>
     <div class="board-container">
         <board layout.bind="layout" view-model.ref="board" ref="boardUi"></board>
     </div>

@@ -146,9 +146,14 @@ export class LevelFiveBoard extends AiBoard {
     }
 
     /**
-     * Re-select random critters... might need to reset tile images before doing this.
+     * Reset the critter tiles and re-select random critters.
      */
     public reset() {
+        this.critterTiles.forEach((tile: Tile) => {
+            tile.emptyImageUrl = "";
+            tile.player1ImageUrl = "";
+            tile.player2ImageUrl = "";
+        });
         this.generateRandomCritterTiles();
         super.reset();
     }

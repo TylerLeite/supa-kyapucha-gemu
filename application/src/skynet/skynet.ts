@@ -53,6 +53,8 @@ export abstract class Skynet {
     /**
      * Extract the type of each tile, board width, 
      * and current turn. This should be all you need
+     * @param {Board} board the board to extract state from
+     * @returns {AIBoardState} the board state
      */
     protected dumpBoardState(board: Board): AIBoardState {
         const state: AIBoardState = {

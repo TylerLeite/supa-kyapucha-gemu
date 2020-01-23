@@ -38,6 +38,10 @@ export class Board {
     protected boardDisabled: boolean = false;
     /** Whether or not the board is hidden from view */
     public boardHidden: boolean = false;
+    /** The color of player 1 */
+    public player1Color: string = "blue";
+    /** The color of player 2 */
+    public player2Color: string = "red";
 
     /**
      * This kicks off whenever the layout changes, it prepares the board

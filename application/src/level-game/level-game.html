@@ -3,7 +3,7 @@
     <require from="../local/local.css"></require>
     <require from="./level-game.css"></require>
     <span id="online-status">${status}</span>
-    <score player2.bind="npc" player1-score.bind="board.player1Count & debounce:100" player2-score.bind="board.player2Count & debounce:100"></score>
+    <score player2.bind="npc" player1.bind="player" player1-score.bind="board.player1Count & debounce:100" player2-score.bind="board.player2Count & debounce:100"></score>
     <div class="board-container">
         <compose class="board" view-model.bind="board" view="../board/board.html"></compose>
     </div>

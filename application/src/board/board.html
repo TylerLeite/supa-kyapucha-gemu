@@ -2,6 +2,6 @@
     <require from="../tile/tile"></require>
     <require from="./board.css"></require>
     <div class="board-row" show.bind="!boardHidden" repeat.for="i of height">
-        <tile class="board-tile" repeat.for="j of width" view-model.ref="tiles[i][j]" click.trigger="place(j,i)"></tile>
+        <tile class="board-tile" player1-color.bind="player1Color" player2-color.bind="player2Color" repeat.for="j of width" view-model.ref="tiles[i][j]" click.trigger="place(j,i)"></tile>
     </div>
 </template>
