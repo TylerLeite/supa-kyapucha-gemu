@@ -5,3 +5,4 @@ export * from "./level-three-board";
 export * from "./level-four-board";
 export * from "./level-five-board";
 export * from "./level-six-board";
+export * from "./level-seven-board";

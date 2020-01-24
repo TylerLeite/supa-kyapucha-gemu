@@ -78,6 +78,12 @@ export namespace Layouts {
         blockedOutTiles: []
     });
 
+    export const large: Layout = new Layout({
+        height: 9,
+        width: 9,
+        blockedOutTiles: []
+    });
+
     export const cornersCenter: Layout = new Layout({
         height: 7,
         width: 7,
@@ -162,7 +168,8 @@ export namespace Layouts {
             pillars,
             randomFour,
             randomSix,
-            randomEight
+            randomEight,
+            large
         ];
         return layouts[Math.floor(Math.random() * layouts.length)];
     }
