@@ -27,6 +27,8 @@ export class LevelSevenBoard extends AiBoard {
 
     private lives: number = 1;
 
+    private win: number = 0;
+
     /**
      * Little bit hacky, but we need to generate the critter tiles
      * and reset the board after we generate the initial board so that
@@ -42,7 +44,7 @@ export class LevelSevenBoard extends AiBoard {
         this.layoutChanged();
         setTimeout(() => {
             this.reset();
-        }, 1000);
+        });
     }
 
     /**
@@ -51,6 +53,14 @@ export class LevelSevenBoard extends AiBoard {
      */
     public get emptyCount(): number {
         return this.lives;
+    }
+
+    public get player1Count(): number {
+        return this.win;
+    }
+
+    public get player2Count(): number {
+        return (this.getCountOfType(States.PLAYER2) - this.numMines);
     }
 
 
@@ -72,9 +82,9 @@ export class LevelSevenBoard extends AiBoard {
                     || y + j >= this.layout.height || x + i >= this.layout.width) {
                     continue;
                 }
-                const neighborTile: Tile = this.tiles[y+j][x+i];
+                const neighborTile: Tile = this.tiles[y + j][x + i];
                 console.log(neighborTile.player1Color);
-                switch(neighborTile.player1Color) {
+                switch (neighborTile.player1Color) {
                     case 'white': {
                         neighborTile.player1Color = 'yellow';
                         break;
@@ -85,6 +95,13 @@ export class LevelSevenBoard extends AiBoard {
                     }
                     case 'orange': {
                         neighborTile.player1Color = 'red';
+                        break;
+                    }
+                    case 'red': {
+                        neighborTile.player1Color = 'purple';
+                        break;
+                    }
+                    default: {
                         break;
                     }
                 }
@@ -115,7 +132,7 @@ export class LevelSevenBoard extends AiBoard {
     }
 
 
-    private flipSquares(x, y) {
+    private flipSquares(x: number, y: number) {
         /** Flip appropriate tiles */
         const currentTile: Tile = this.tiles[y][x];
         if (currentTile.state !== States.PLAYER2) {
@@ -123,8 +140,8 @@ export class LevelSevenBoard extends AiBoard {
         }
         if (currentTile.player1Color !== "white") {
             if (currentTile.player1Color !== "black") {
-                currentTile.state = States.PLAYER1
-            } 
+                currentTile.state = States.PLAYER1;
+            }
             return;
         }
         currentTile.state = States.PLAYER1;
@@ -134,11 +151,11 @@ export class LevelSevenBoard extends AiBoard {
                     || y + j >= this.layout.height || x + i >= this.layout.width) {
                     continue;
                 }
-                const neighborTile: Tile = this.tiles[y+j][x+i];
+                const neighborTile: Tile = this.tiles[y + j][x + i];
                 if (neighborTile.state === States.PLAYER1 || neighborTile.player1Color === 'black') {
                     continue;
                 } else {
-                    this.flipSquares(x+i, y+j);
+                    this.flipSquares(x + i, y + j);
                 }
             }
         }
@@ -168,22 +185,32 @@ export class LevelSevenBoard extends AiBoard {
         } else {
             this.flipSquares(x, y);
         }
+
+        if (this.player2Count === 0) {
+            this.win += 1;
+            this.lives = 0;
+        }
+
         return true;
     }
 
 
     /** Reset the board (set all tiles to empty) */
     public reset() {
+        logger.debug("Resetting the board");
+        this.win = 0;
+        this.lives = 1;
         this.boardHidden = true;
         for (let i = 0; i < this.height; i++) {
             for (let j = 0; j < this.width; j++) {
                 this.tiles[i][j].player1Color = "white";
                 this.tiles[i][j].player1ImageUrl = "";
+                this.tiles[i][j].player2ImageUrl = "img/pieces/question_mark.png";
             }
         }
         this.generateRandomMineTiles();
+        this.layoutChanged();
         setTimeout(() => {
-            logger.debug("Resetting the board");
             for (let i = 0; i < this.height; i++) {
                 for (let j = 0; j < this.width; j++) {
                     this.tiles[i][j].state = States.PLAYER2;
