@@ -60,7 +60,11 @@ export class LevelSevenBoard extends AiBoard {
     }
 
     public get player2Count(): number {
-        return (this.getCountOfType(States.PLAYER2) - this.numMines);
+        const count: number = this.getCountOfType(States.PLAYER2) - this.numMines;
+        if (this.lives === 0 || count < 0) {
+            return 0;
+        }
+        return count;
     }
 
 
@@ -180,7 +184,7 @@ export class LevelSevenBoard extends AiBoard {
 
         if (this.tiles[y][x].player1Color === 'black') {
             this.tiles[y][x].state = this.turn;
-            this.lives = 0;
+            this.finishGame();
             return true;
         } else {
             this.flipSquares(x, y);
@@ -188,36 +192,59 @@ export class LevelSevenBoard extends AiBoard {
 
         if (this.player2Count === 0) {
             this.win += 1;
-            this.lives = 0;
+            this.finishGame();
         }
 
         return true;
+    }
+
+    private finishGame() {
+        setTimeout(() => {
+            for (let i = 0; i < this.height; i++) {
+                for (let j = 0; j < this.width; j++) {
+                    this.tiles[i][j].state = States.PLAYER1;
+                }
+            }
+            setTimeout(() => {
+                this.lives = 0;
+            }, 3000);
+        }, 1000);
+    }
+
+    private hideMines() {
+        for (let i = 0; i < this.height; i++) {
+            for (let j = 0; j < this.width; j++) {
+                this.tiles[i][j].state = States.PLAYER2;
+            }
+        }
     }
 
 
     /** Reset the board (set all tiles to empty) */
     public reset() {
         logger.debug("Resetting the board");
-        this.win = 0;
-        this.lives = 1;
-        this.boardHidden = true;
         for (let i = 0; i < this.height; i++) {
             for (let j = 0; j < this.width; j++) {
-                this.tiles[i][j].player1Color = "white";
-                this.tiles[i][j].player1ImageUrl = "";
-                this.tiles[i][j].player2ImageUrl = "img/pieces/question_mark.png";
+                this.tiles[i][j].reset();
             }
         }
-        this.generateRandomMineTiles();
-        this.layoutChanged();
         setTimeout(() => {
+            this.lives = 1;
+            this.boardHidden = true;
             for (let i = 0; i < this.height; i++) {
                 for (let j = 0; j < this.width; j++) {
-                    this.tiles[i][j].state = States.PLAYER2;
+                    this.tiles[i][j].player1Color = "white";
+                    this.tiles[i][j].player1ImageUrl = "";
+                    this.tiles[i][j].player2ImageUrl = "img/pieces/question_mark.png";
                 }
             }
+            this.generateRandomMineTiles();
+            this.layoutChanged();
             setTimeout(() => {
-                this.boardHidden = false;
+                this.hideMines();
+                setTimeout(() => {
+                    this.boardHidden = false;
+                });
             });
         });
     }
