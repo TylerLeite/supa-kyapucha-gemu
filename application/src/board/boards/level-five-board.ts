@@ -76,15 +76,6 @@ export class LevelFiveBoard extends AiBoard {
     }
 
     /**
-     * Gets a random integer between 0 and the specified max.
-     * @param {number} max the maximum integer for the random number generated\
-     * @returns {number} a random number between 0 and max
-     */
-    private getRandomInt(max: number) {
-        return Math.floor(Math.random() * Math.floor(max));
-    }
-
-    /**
      * Returns the list of critter coordinates... used by the AI.
      * @returns {Array<Coordinate>} an array of critter tile coordinates
      */

@@ -45,6 +45,15 @@ export class AiBoard extends Board {
         }
     }
 
+    /**
+     * Gets a random integer between 0 and the specified max.
+     * @param {number} max the maximum integer for the random number generated\
+     * @returns {number} a random number between 0 and max
+     */
+    protected getRandomInt(max: number) {
+        return Math.floor(Math.random() * Math.floor(max));
+    }
+
     public reset(): void {
         super.reset();
         this.layoutChanged();
