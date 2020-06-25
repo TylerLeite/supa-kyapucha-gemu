@@ -11,7 +11,7 @@
     "aurelia-animator-css": "^1.0.4",
     "aurelia-bootstrapper": "^2.3.3",
     "bluebird": "^3.7.2",
-    "firebase": "^7.6.2",
+    "firebase": "^7.15.4",
     "firebase-tools": "^7.12.1",
     "requirejs": "^2.3.6",
     "text": "github:requirejs/text#latest",
