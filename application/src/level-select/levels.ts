@@ -1,8 +1,8 @@
-import { AiBoard } from '../board/boards/ai-board';
-import * as Boards from '../board/boards/boards';
-import { NPC, NPCs } from '../player/npcs';
-import { Skynet } from '../skynet/skynet';
-import * as NPCAIs from '../skynet/npc-ais/npc-ais';
+import { AiBoard } from "../board/boards/ai-board";
+import * as Boards from "../board/boards/boards";
+import { NPC, NPCs } from "../player/npcs";
+import { Skynet } from "../skynet/skynet";
+import * as NPCAIs from "../skynet/npc-ais/npc-ais";
 
 /**
  * A class representing a level of SKG
@@ -41,7 +41,7 @@ export namespace Levels {
         name: "Tutorial",
         description: "Tutorial Level",
         npc: NPCs.bohyun,
-        board: Boards.TutorialBoard
+        board: Boards.TutorialBoard,
     });
 
     export const one: Level = new Level({
@@ -50,7 +50,7 @@ export namespace Levels {
         description: "",
         npc: NPCs.rockWithFace,
         board: Boards.LevelOneBoard,
-        ai: NPCAIs.RockWithFaceAi
+        ai: NPCAIs.RockWithFaceAi,
     });
 
     export const two: Level = new Level({
@@ -59,7 +59,7 @@ export namespace Levels {
         description: "",
         npc: NPCs.bill,
         board: Boards.LevelTwoBoard,
-        ai: NPCAIs.BillAi
+        ai: NPCAIs.BillAi,
     });
 
     export const three: Level = new Level({
@@ -68,7 +68,7 @@ export namespace Levels {
         description: "",
         npc: NPCs.rockWithFace,
         board: Boards.LevelThreeBoard,
-        ai: NPCAIs.RockWithFaceAi
+        ai: NPCAIs.RockWithFaceAi,
     });
 
     export const four: Level = new Level({
@@ -77,7 +77,7 @@ export namespace Levels {
         description: "",
         npc: NPCs.bill,
         board: Boards.LevelFourBoard,
-        ai: NPCAIs.BillAi
+        ai: NPCAIs.BillAi,
     });
 
     export const five: Level = new Level({
@@ -86,7 +86,7 @@ export namespace Levels {
         description: "",
         npc: NPCs.giuseppe,
         board: Boards.LevelFiveBoard,
-        ai: NPCAIs.GiuseppeAi
+        ai: NPCAIs.GiuseppeAi,
     });
 
     export const six: Level = new Level({
@@ -95,7 +95,7 @@ export namespace Levels {
         description: "",
         npc: NPCs.jiho,
         board: Boards.LevelSixBoard,
-        ai: NPCAIs.JihoAi
+        ai: NPCAIs.JihoAi,
     });
 
     export const seven: Level = new Level({
@@ -104,15 +104,16 @@ export namespace Levels {
         description: "",
         npc: NPCs.margaret,
         board: Boards.LevelSevenBoard,
-        ai: NPCAIs.RockWithFaceAi
+        ai: NPCAIs.RockWithFaceAi,
     });
 
     export const eight: Level = new Level({
         number: 8,
         name: "Level 8",
         description: "",
-        npc: NPCs.kanako,
-        board: undefined
+        npc: NPCs.giuseppe,
+        ai: NPCAIs.GiuseppeAi,
+        board: Boards.LevelEightBoard,
     });
 
     export const nine: Level = new Level({
@@ -120,7 +121,7 @@ export namespace Levels {
         name: "Level 9",
         description: "",
         npc: NPCs.margaret,
-        board: undefined
+        board: undefined,
     });
 
     export const ten: Level = new Level({
@@ -128,7 +129,7 @@ export namespace Levels {
         name: "Level 10",
         description: "",
         npc: NPCs.giuseppe,
-        board: undefined
+        board: undefined,
     });
 
     export const eleven: Level = new Level({
@@ -136,7 +137,7 @@ export namespace Levels {
         name: "Level 11",
         description: "",
         npc: NPCs.olga,
-        board: undefined
+        board: undefined,
     });
 
     export const twelve: Level = new Level({
@@ -144,7 +145,7 @@ export namespace Levels {
         name: "Level 12",
         description: "",
         npc: NPCs.kent,
-        board: undefined
+        board: undefined,
     });
 
     export const thirteen: Level = new Level({
@@ -152,7 +153,7 @@ export namespace Levels {
         name: "Level 13",
         description: "",
         npc: NPCs.olga,
-        board: undefined
+        board: undefined,
     });
 
     export const fourteen: Level = new Level({
@@ -160,7 +161,7 @@ export namespace Levels {
         name: "Level 14",
         description: "",
         npc: NPCs.kent,
-        board: undefined
+        board: undefined,
     });
 
     export const fifteen: Level = new Level({
@@ -168,7 +169,7 @@ export namespace Levels {
         name: "Level 15",
         description: "",
         npc: NPCs.giuseppe,
-        board: undefined
+        board: undefined,
     });
 
     /** A list of all the levels */
@@ -188,7 +189,7 @@ export namespace Levels {
         twelve,
         thirteen,
         fourteen,
-        fifteen
+        fifteen,
     ];
 
     /**

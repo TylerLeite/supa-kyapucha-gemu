@@ -1,10 +1,15 @@
-import { LogManager, BindingEngine, inject } from 'aurelia-framework';
-import { Board } from '../board/board';
-import { Layout, Layouts } from '../board/layouts';
-import { Player } from '../player/player';
-import { NPCs } from '../player/npcs';
+import {
+    LogManager,
+    BindingEngine,
+    inject,
+    Disposable,
+} from "aurelia-framework";
+import { Board } from "../board/board";
+import { Layout, Layouts } from "../board/layouts";
+import { Player } from "../player/player";
+import { NPCs } from "../player/npcs";
 
-const logger = LogManager.getLogger('local');
+const logger = LogManager.getLogger("local");
 
 @inject(BindingEngine)
 export class Local {
@@ -18,6 +23,8 @@ export class Local {
     private bindingEngine: BindingEngine;
     /** The current layout being used */
     public layout: Layout = Layouts.random();
+    /** The subscription to board events */
+    private subscription: Disposable;
 
     /**
      * The constructor method of the local game
@@ -37,9 +44,16 @@ export class Local {
      * for the count of empty tiles to go to zero.
      */
     public attached() {
-        this.bindingEngine.propertyObserver(this.board, 'emptyCount').subscribe(this.handleGameEnd);
+        this.subscription = this.bindingEngine
+            .propertyObserver(this.board, "emptyCount")
+            .subscribe(this.handleGameEnd);
         this.board.player1Color = this.player1.color;
         this.board.player2Color = this.player2.color;
+    }
+
+    public detached() {
+        this.resetBoard();
+        this.subscription.dispose();
     }
 
     /**
@@ -54,7 +68,7 @@ export class Local {
                 this.resetBoard();
             }, 2000);
         }
-    }
+    };
 
     /**
      * Resets the board... feel free to change the board layout here

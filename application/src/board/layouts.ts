@@ -1,4 +1,4 @@
-import { Coordinate } from './board';
+import { Coordinate } from "./board";
 
 /**
  * A class representing a layout of a board
@@ -26,21 +26,24 @@ export class Layout {
 
 /* tslint:disable-next-line:no-namespace */
 export namespace Layouts {
-
     /**
      * Accepts a width, height, and number and returns that many randomly
      * blocked out coordinates.
-     * @param {number} width the width of the board 
+     * @param {number} width the width of the board
      * @param {number} height the height of the board
-     * @param {number} numToBlock how many blocked out coordinates to return 
+     * @param {number} numToBlock how many blocked out coordinates to return
      */
-    function randomBlockedTiles(width: number, height: number, numToBlock: number) {
+    function randomBlockedTiles(
+        width: number,
+        height: number,
+        numToBlock: number
+    ) {
         const blockedOutTiles: Array<Coordinate> = new Array<Coordinate>();
         const allTiles: Array<Coordinate> = new Array<Coordinate>();
 
         for (let x = 0; x < width; x++) {
             for (let y = 0; y < height; y++) {
-                allTiles.push({x: x, y: y});
+                allTiles.push({ x: x, y: y });
             }
         }
         for (let i = 0; i < numToBlock; i++) {
@@ -48,7 +51,10 @@ export namespace Layouts {
                 break;
             }
             const index = Math.floor(Math.random() * allTiles.length);
-            blockedOutTiles.push({x: allTiles[index].x, y: allTiles[index].y});
+            blockedOutTiles.push({
+                x: allTiles[index].x,
+                y: allTiles[index].y,
+            });
             allTiles.splice(index, 1);
         }
         return blockedOutTiles;
@@ -57,100 +63,124 @@ export namespace Layouts {
     export const randomFour: Layout = new Layout({
         height: 7,
         width: 7,
-        blockedOutTiles: randomBlockedTiles(7, 7, 4)
+        blockedOutTiles: randomBlockedTiles(7, 7, 4),
     });
 
     export const randomSix: Layout = new Layout({
         height: 7,
         width: 7,
-        blockedOutTiles: randomBlockedTiles(7, 7, 6)
+        blockedOutTiles: randomBlockedTiles(7, 7, 6),
     });
 
     export const randomEight: Layout = new Layout({
         height: 7,
         width: 7,
-        blockedOutTiles: randomBlockedTiles(7, 7, 8)
+        blockedOutTiles: randomBlockedTiles(7, 7, 8),
     });
 
     export const standard: Layout = new Layout({
         height: 7,
         width: 7,
-        blockedOutTiles: []
+        blockedOutTiles: [],
     });
 
     export const large: Layout = new Layout({
         height: 9,
         width: 9,
-        blockedOutTiles: []
+        blockedOutTiles: [],
     });
 
     export const cornersCenter: Layout = new Layout({
         height: 7,
         width: 7,
         blockedOutTiles: [
-            {x: 0, y: 0},
-            {x: 0, y: 6},
-            {x: 6, y: 0},
-            {x: 6, y: 6},
-            {x: 3, y: 3}
-        ]
+            { x: 0, y: 0 },
+            { x: 0, y: 6 },
+            { x: 6, y: 0 },
+            { x: 6, y: 6 },
+            { x: 3, y: 3 },
+        ],
+    });
+
+    export const fences: Layout = new Layout({
+        height: 9,
+        width: 9,
+        blockedOutTiles: [
+            { x: 4, y: 0 },
+            { x: 4, y: 1 },
+            { x: 4, y: 2 },
+            { x: 4, y: 3 },
+            { x: 4, y: 4 },
+            { x: 4, y: 5 },
+            { x: 4, y: 6 },
+            { x: 4, y: 7 },
+            { x: 4, y: 8 },
+            { x: 0, y: 4 },
+            { x: 1, y: 4 },
+            { x: 2, y: 4 },
+            { x: 3, y: 4 },
+            { x: 5, y: 4 },
+            { x: 6, y: 4 },
+            { x: 7, y: 4 },
+            { x: 8, y: 4 },
+        ],
     });
 
     export const mini: Layout = new Layout({
         height: 5,
         width: 5,
-        blockedOutTiles: []
+        blockedOutTiles: [],
     });
 
     export const diamond: Layout = new Layout({
         height: 7,
         width: 7,
         blockedOutTiles: [
-            {x: 0, y: 3},
-            {x: 1, y: 4},
-            {x: 1, y: 2},
-            {x: 2, y: 5},
-            {x: 2, y: 1},
-            {x: 3, y: 6},
-            {x: 3, y: 0},
-            {x: 4, y: 5},
-            {x: 4, y: 1},
-            {x: 5, y: 4},
-            {x: 5, y: 2},
-            {x: 6, y: 3}
-        ]
+            { x: 0, y: 3 },
+            { x: 1, y: 4 },
+            { x: 1, y: 2 },
+            { x: 2, y: 5 },
+            { x: 2, y: 1 },
+            { x: 3, y: 6 },
+            { x: 3, y: 0 },
+            { x: 4, y: 5 },
+            { x: 4, y: 1 },
+            { x: 5, y: 4 },
+            { x: 5, y: 2 },
+            { x: 6, y: 3 },
+        ],
     });
 
     export const plus: Layout = new Layout({
         height: 7,
         width: 7,
         blockedOutTiles: [
-            {x: 0, y: 3},
-            {x: 2, y: 3},
-            {x: 3, y: 6},
-            {x: 3, y: 4},
-            {x: 3, y: 2},
-            {x: 3, y: 0},
-            {x: 4, y: 3},
-            {x: 6, y: 3}
-        ]
+            { x: 0, y: 3 },
+            { x: 2, y: 3 },
+            { x: 3, y: 6 },
+            { x: 3, y: 4 },
+            { x: 3, y: 2 },
+            { x: 3, y: 0 },
+            { x: 4, y: 3 },
+            { x: 6, y: 3 },
+        ],
     });
 
     export const pillars: Layout = new Layout({
         height: 7,
         width: 7,
         blockedOutTiles: [
-            {x: 1, y: 1},
-            {x: 5, y: 1},
-            {x: 5, y: 5},
-            {x: 1, y: 5}
-        ]
+            { x: 1, y: 1 },
+            { x: 5, y: 1 },
+            { x: 5, y: 5 },
+            { x: 1, y: 5 },
+        ],
     });
 
     export const tall: Layout = new Layout({
         height: 7,
         width: 5,
-        blockedOutTiles: []
+        blockedOutTiles: [],
     });
 
     /**
@@ -163,13 +193,14 @@ export namespace Layouts {
             cornersCenter,
             mini,
             diamond,
+            fences,
             plus,
             tall,
             pillars,
             randomFour,
             randomSix,
             randomEight,
-            large
+            large,
         ];
         return layouts[Math.floor(Math.random() * layouts.length)];
     }

@@ -1,14 +1,14 @@
-import { MonteCarlo } from '../mcts';
-import { LevelFiveBoard } from '../../board/boards/boards';
-import { Board, Coordinate } from '../../board/board';
-import { States } from '../../tile/tile';
+import { MonteCarlo } from "../mcts";
+import { LevelFiveBoard } from "../../board/boards/boards";
+import { Board, Coordinate } from "../../board/board";
+import { States } from "../../tile/tile";
 
 export class GiuseppeAi extends MonteCarlo {
     /**
      * Giuseppe has a very unique board where only critters count for points
      * therefore he uses a modified monte carlo to encourage him to try to
      * capture critters instead of just capturing the most tiles.
-     * 
+     *
      * Warning... this AI kinda sucks.
      */
 
@@ -17,16 +17,18 @@ export class GiuseppeAi extends MonteCarlo {
 
     /** Try to make G pretty smart */
     public constructor() {
-        super(500);
+        super(400);
     }
 
-    /** 
-     * Save the critter locations before continuing on with the make move method 
+    /**
+     * Save the critter locations before continuing on with the make move method
      * @param {Board} board the game board to make a move on
      * @returns {Coordinate} the coordinate of the move the AI will make
      */
     public makeMove(board: Board): Coordinate | undefined {
-        this.critterLocations = (<LevelFiveBoard>board).getCritterTileCoordinates();
+        this.critterLocations = (<LevelFiveBoard>(
+            board
+        )).getCritterTileCoordinates();
         return super.makeMove(board);
     }
 
