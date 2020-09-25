@@ -47,7 +47,8 @@ export namespace Levels {
     export const one: Level = new Level({
         number: 1,
         name: "Level 1",
-        description: "",
+        description:
+            "Nearly impossible to lose, rock moves completely randomly",
         npc: NPCs.rockWithFace,
         board: Boards.LevelOneBoard,
         ai: NPCAIs.RockWithFaceAi,
@@ -56,7 +57,7 @@ export namespace Levels {
     export const two: Level = new Level({
         number: 2,
         name: "Level 2",
-        description: "",
+        description: "Dumb AI, mildly different board",
         npc: NPCs.bill,
         board: Boards.LevelTwoBoard,
         ai: NPCAIs.BillAi,
@@ -65,7 +66,8 @@ export namespace Levels {
     export const three: Level = new Level({
         number: 3,
         name: "Level 3",
-        description: "",
+        description:
+            "Rock moves 5 times for every one player move but still moves randomly",
         npc: NPCs.rockWithFace,
         board: Boards.LevelThreeBoard,
         ai: NPCAIs.RockWithFaceAi,
@@ -74,7 +76,7 @@ export namespace Levels {
     export const four: Level = new Level({
         number: 4,
         name: "Level 4",
-        description: "",
+        description: "Board gradually expands out from the center",
         npc: NPCs.bill,
         board: Boards.LevelFourBoard,
         ai: NPCAIs.BillAi,
@@ -83,7 +85,8 @@ export namespace Levels {
     export const five: Level = new Level({
         number: 5,
         name: "Level 5",
-        description: "",
+        description:
+            "Must capture randomly placed critters instead of the most spaces",
         npc: NPCs.giuseppe,
         board: Boards.LevelFiveBoard,
         ai: NPCAIs.GiuseppeAi,
@@ -92,7 +95,7 @@ export namespace Levels {
     export const six: Level = new Level({
         number: 6,
         name: "Level 6",
-        description: "",
+        description: "Random tiles flip back to empty on certain turns",
         npc: NPCs.jiho,
         board: Boards.LevelSixBoard,
         ai: NPCAIs.JihoAi,
@@ -101,7 +104,7 @@ export namespace Levels {
     export const seven: Level = new Level({
         number: 7,
         name: "Level 7",
-        description: "",
+        description: "Literally minesweeper (ai doesn't matter) [10 mines]",
         npc: NPCs.margaret,
         board: Boards.LevelSevenBoard,
         ai: NPCAIs.RockWithFaceAi,
@@ -110,7 +113,8 @@ export namespace Levels {
     export const eight: Level = new Level({
         number: 8,
         name: "Level 8",
-        description: "",
+        description:
+            "4x4 mini boards with critters that move around randomly, still most captured wins",
         npc: NPCs.giuseppe,
         ai: NPCAIs.GiuseppeAi,
         board: Boards.LevelEightBoard,
@@ -120,7 +124,7 @@ export namespace Levels {
         number: 9,
         name: "Level 9",
         description: "",
-        npc: NPCs.margaret,
+        npc: NPCs.jiho,
         board: undefined,
     });
 
@@ -128,7 +132,7 @@ export namespace Levels {
         number: 10,
         name: "Level 10",
         description: "",
-        npc: NPCs.giuseppe,
+        npc: NPCs.margaret,
         board: undefined,
     });
 
@@ -168,7 +172,7 @@ export namespace Levels {
         number: 15,
         name: "Level 15",
         description: "",
-        npc: NPCs.giuseppe,
+        npc: NPCs.yeshi,
         board: undefined,
     });
 
