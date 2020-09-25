@@ -1,6 +1,6 @@
 {
     "rules": {
-        "adjacent-overload-signatures": true,
+        "adjacent-overload-signatures": false,
         "align": [true, "parameters", "statements"],
         //"array-type": [true, "array"],
         "arrow-parens": true,
