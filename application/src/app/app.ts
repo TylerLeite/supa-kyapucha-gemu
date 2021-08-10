@@ -12,7 +12,8 @@ export class App {
             { route: 'online', name: 'online', moduleId: 'online/online' },
             { route: 'local', name: 'local', moduleId: 'local/local' },
             { route: 'adventure', name: 'adventure', moduleId: 'adventure/adventure' },
-            { route: 'skynet', name: 'skynet', moduleId: 'aigame/aigame' }
+            { route: 'skynet', name: 'skynet', moduleId: 'aigame/aigame' },
+            { route: 'training', name: 'training', moduleId: 'training-game/training-game'}
         ]);
         config.mapUnknownRoutes('home/home');
     }
