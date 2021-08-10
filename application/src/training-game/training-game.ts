@@ -1,4 +1,4 @@
-import { LogManager, BindingEngine, inject, Disposable } from 'aurelia-framework';
+import { LogManager, BindingEngine, inject } from 'aurelia-framework';
 import { AiBoard } from '../board/boards/ai-board';
 import { States } from '../tile/tile';
 import { Skynet } from '../skynet/skynet';
@@ -74,9 +74,11 @@ export class TrainingGame {
         this.totalGamesPlayed += 1;
         if (this.board.player1Count > this.board.player2Count) {
             this.totalWins += 1;
+            (<DQN>this.student).reward(1);
             this.lastTenQueue.push(1);
         } else {
             this.totalLosses += 1;
+            (<DQN>this.student).reward(-1);
             this.lastTenQueue.push(0);
         }
         if (this.lastTenQueue.length > 10) {
