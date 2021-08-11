@@ -12,14 +12,11 @@ export class DQN extends Skynet {
     private agent: any;
 
     /** Allows different AIs to adjust how smart they are */
-    public constructor(width: number, height: number) {
+    public constructor(width: number, height: number, spec) {
         super();
         const env = {
-            getNumStates: () => { return width * height * 4 },
+            getNumStates: () => { return width * height * 3 },
             getMaxNumActions: () => { return width * height }
-        }
-        const spec = {
-            alpha: 0.01
         }
         this.agent = new RL.DQNAgent(env, spec);
     }
@@ -46,12 +43,11 @@ export class DQN extends Skynet {
             if (state.tiles[States.EMPTY].includes(action)) {
                 break;
             } else {
-                console.log("bad move, retrying...")
+                this.reward(-1);
             }
         }
         const y = Math.floor(action / state.width);
         const x = action - (y * state.width);
-        console.log(action, x, y);
 
         // make the move that had the most victories from random playouts
         return <Coordinate> {
@@ -63,22 +59,31 @@ export class DQN extends Skynet {
     private generateLayersFromState(state: AIBoardState, height: number): Array<number> {
         const playerOneLayer = new Array<number>();
         const playerTwoLayer = new Array<number>();
-        const disabledLayer = new Array<number>();
+        // const disabledLayer = new Array<number>();
         const emptyLayer = new Array<number>();
         for (let y = 0; y < height; y++) {
             for (let x = 0; x < state.width; x++) {
                 const i = y * state.width + x;
                 playerOneLayer.push(state.tiles[States.PLAYER1].includes(i) ? 1 : 0)
                 playerTwoLayer.push(state.tiles[States.PLAYER2].includes(i) ? 1 : 0)
-                disabledLayer.push(state.tiles[States.DISABLED].includes(i) ? 1 : 0)
+                // disabledLayer.push(state.tiles[States.DISABLED].includes(i) ? 1 : 0)
                 emptyLayer.push(state.tiles[States.EMPTY].includes(i) ? 1 : 0)
             }
         }
-        return playerOneLayer.concat(playerTwoLayer, disabledLayer, emptyLayer)
+        return playerOneLayer.concat(playerTwoLayer, /*disabledLayer,*/ emptyLayer)
     }
 
     public reward(amount: number) {
         this.agent.learn(amount);
+    }
+
+    public lockLearning() {
+        this.agent.alpha = 0;
+        this.agent.epsilon = 0.05;
+    }
+
+    public getJSON() {
+        return this.agent.toJSON();
     }
 }
 

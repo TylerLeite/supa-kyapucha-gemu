@@ -182,7 +182,7 @@ export class Board {
      * assigns it to various internal attributes that can
      * be accessed easier.
      */
-    protected assignAttributes() {
+    public assignAttributes() {
         this.height = this.layout.height;
         this.width = this.layout.width;
         this.blockedOutTiles = this.layout.blockedOutTiles;

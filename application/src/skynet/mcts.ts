@@ -54,7 +54,7 @@ export class MonteCarlo extends Skynet {
                 }
             }
             if (weights[l] > weights[bestMoveIndex]) {
-                console.log(weights[l]);
+                //console.log(weights[l]);
                 bestMoveIndex = l;
             }
         }

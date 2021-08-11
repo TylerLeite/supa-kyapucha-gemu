@@ -11,7 +11,7 @@ export interface AIBoardState {
     tiles: {
         0: Array<number>, // player 1
         1: Array<number>, // player 2
-        // EMPTY is implicit
+        2: Array<number>, // empty
         3: Array<number> // disabled
     };
     turn: States;
@@ -62,6 +62,7 @@ export abstract class Skynet {
             tiles: {
                 0: [],
                 1: [],
+                2: [],
                 3: []
             },
             turn: States.EMPTY
@@ -73,9 +74,6 @@ export abstract class Skynet {
         for (let y = 0; y < board.height; y++) {
             for (let x = 0; x < board.width; x++) {
                 const tileType: States = board.tiles[y][x].state;
-                if (tileType === States.EMPTY) {
-                    continue; // idc about empty tiles, they suck
-                }
                 // we only really need 1 number to specify the position, if we also have the width
                 const i = y * board.width + x;
                 state.tiles[tileType].push(i);

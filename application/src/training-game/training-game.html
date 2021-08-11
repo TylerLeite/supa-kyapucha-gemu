@@ -1,6 +1,23 @@
 <template>
-    <p><b>Games Played: </b>${totalGamesPlayed}</p><br>
-    <p><b>Wins: </b>${totalWins}</p><br>
-    <p><b>Losses: </b>${totalLosses}</p><br>
-    <p><b>Last 10: </b>${lastTenGames}</p>
+    <p><b>Games Played: </b> ${totalGamesPlayed}</p>
+    <p><b>Total Wins: </b> ${totalWins}</p>
+    <p><b>Total Losses: </b> ${totalLosses}</p><br>
+    <p><b>Wins in Last 10: </b> ${lastTenWins}</p>
+    <p><b>Wins in Last 100: </b> ${last100Wins}</p>
+    <p><b>Wins in Last 1000: </b> ${last1000Wins}</p>
+    <p><b>Average Reward: </b> ${averageReward}</p>
+    <table style="width:100%">
+        <tr><th>score</th><th># training games</th><th>alpha</th><th>gamma</th><th>epsilon</th><th>experience size</th><th>experience add every</th><th>learning steps</th><th>hidden nodes</th></tr>
+        <tr repeat.for="result of results">
+            <td>${result.score}</td>
+            <td>${result.total_games_played}</td>
+            <td>${result.alpha}</td>
+            <td>${result.gamma}</td>
+            <td>${result.epsilon}</td>
+            <td>${result.experience_size}</td>
+            <td>${result.experience_add_every}</td>
+            <td>${result.learning_steps_per_iteration}</td>
+            <td>${result.num_hidden_units}</td>
+        </tr>
+    </table>
 </template>
