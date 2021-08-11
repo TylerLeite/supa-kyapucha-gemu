@@ -120,7 +120,7 @@ export class TrainingGame {
             experience_size: 50000,
             experience_add_every: 5,
             learning_steps_per_iteration: 5,
-            num_hidden_units: 100
+            num_hidden_units: 150
         }
     }
 
@@ -178,9 +178,6 @@ export class TrainingGame {
             this.lastTenWins = this.last1000Queue.slice(-10).reduce((a, b) => { return a + b }, 0);
         }
         this.board.reset();
-        if (this.averageReward > 0) {
-            (<BillAi>this.teacher).changeRandomness(false);
-        }
     }
 
     /**
