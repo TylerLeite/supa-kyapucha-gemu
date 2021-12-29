@@ -22,6 +22,8 @@ export class LevelSelect {
         levelButton.jello();
         // More animations?
         // Go to the level...
-        this.router.navigateToRoute('level', {id: level.number});
+        setTimeout(() => {
+            this.router.navigateToRoute('level', {id: level.number});
+        })
     }
 }

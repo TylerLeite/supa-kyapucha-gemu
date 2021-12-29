@@ -1,4 +1,7 @@
 <template>
     <require from="./level-button.css"></require>
-    <button ref="levelButtonUi" class="level-button">${levelName}</button>
+    <button ref="levelButtonUi" class="level-button">
+        <img class="level-button-image" src.bind="levelImage">
+        <p class="level-button-text">${levelName}</p>
+    </button>
 </template>

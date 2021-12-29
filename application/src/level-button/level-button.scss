@@ -1,9 +1,29 @@
+.level-button-image {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+.level-button-text {
+    position: absolute;
+    height: 10%;
+    width: 100%;
+    bottom: 10%;
+    margin-left: -1px;
+    background-color: white;
+    box-shadow: 2px 2px grey;
+}
+
 .level-button {
     height: 200px;
     width: 200px;
     margin: auto;
     margin-top: 5px;
     margin-bottom: 5px;
+    position: relative;
+    padding: 0px;
 }
 
 /* Credit: animate.css */
