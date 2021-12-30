@@ -8,12 +8,14 @@ import { Tile, States } from '../tile/tile';
  */
 export interface AIBoardState {
     width: number;
+    height: number;
     tiles: {
         0: Array<number>, // player 1
         1: Array<number>, // player 2
-        // EMPTY is implicit
+        2: Array<number>, // empty
         3: Array<number> // disabled
     };
+    moveHistory: Array<Coordinate>;
     turn: States;
 }
 
@@ -59,28 +61,31 @@ export abstract class Skynet {
     protected dumpBoardState(board: Board): AIBoardState {
         const state: AIBoardState = {
             width: 0,
+            height: 0,
             tiles: {
                 0: [],
                 1: [],
+                2: [],
                 3: []
             },
+            moveHistory: [],
             turn: States.EMPTY
         };
 
         state.width = board.width;
+        state.height = board.height;
         state.turn = board.turn;
 
         for (let y = 0; y < board.height; y++) {
             for (let x = 0; x < board.width; x++) {
                 const tileType: States = board.tiles[y][x].state;
-                if (tileType === States.EMPTY) {
-                    continue; // idc about empty tiles, they suck
-                }
                 // we only really need 1 number to specify the position, if we also have the width
                 const i = y * board.width + x;
                 state.tiles[tileType].push(i);
             }
         }
+
+        state.moveHistory = [...board.moveHistory];
         return state;
     }
 
@@ -94,6 +99,8 @@ export abstract class Skynet {
     protected loadBoardState(state: AIBoardState, board: Board): Board {
         board.tiles = [];
         board.blockedOutTiles = [];
+        board.height = state.height;
+        board.width = state.width;
         board.turn = state.turn;
         for (let y = 0; y < board.height; y++) {
             board.tiles[y] = [];
@@ -114,7 +121,7 @@ export abstract class Skynet {
                 }
             }
         }
-
+        board.moveHistory = [...state.moveHistory];
         return board;
     }
 

@@ -17,7 +17,7 @@ export class GiuseppeAi extends MonteCarlo {
 
     /** Try to make G pretty smart */
     public constructor() {
-        super(400);
+        super(490);
     }
 
     /**

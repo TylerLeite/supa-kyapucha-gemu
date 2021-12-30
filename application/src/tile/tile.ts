@@ -51,6 +51,8 @@ export class Tile {
     private flipClass: string = "is-flipped";
     /** The css class that can be toggled to push in a tile */
     private pushClass: string = "push";
+    /** The css class for disabling animations */
+    private disableAnimationClass: string = "disable-animation";
     /** The state that the tile is currently in */
     private tileState: States = States.EMPTY;
 
@@ -103,6 +105,20 @@ export class Tile {
             return;
         }
         this.tileUi.classList.toggle(this.pushClass);
+    }
+
+    public disableAnimations() {
+        if (typeof this.tileUi === "undefined") {
+            return;
+        }
+        this.tileUi.classList.add(this.disableAnimationClass);
+    }
+
+    public enableAnimations() {
+        if (typeof this.tileUi === "undefined") {
+            return;
+        }
+        this.tileUi.classList.remove(this.disableAnimationClass);
     }
 
     /**
