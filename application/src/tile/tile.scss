@@ -17,6 +17,10 @@
     transform-style: preserve-3d;
 }
 
+.tile.disable-animation {
+    transition: transform 0s;
+}
+
 .tile-face {
     position: absolute;
     height: 100%;

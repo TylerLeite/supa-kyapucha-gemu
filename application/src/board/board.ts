@@ -30,8 +30,6 @@ export class Board {
     public boardUi: HTMLElement;
     /** The current turn */
     public turn: States = States.PLAYER1;
-    /** The last move that was made */
-    public lastMove?: Coordinate;
     /** The class for enabling or disabling the UI */
     private disableClass = 'is-disabled';
     /** Whether or not the board is disabled */
@@ -42,6 +40,8 @@ export class Board {
     public player1Color: string = "blue";
     /** The color of player 2 */
     public player2Color: string = "red";
+    /** The history of moves made on this board */
+    public moveHistory: Array<Coordinate> = new Array<Coordinate>();
 
     /**
      * This kicks off whenever the layout changes, it prepares the board
@@ -104,6 +104,41 @@ export class Board {
         return this.getCountOfType(States.PLAYER2);
     }
 
+    /**
+     * Shortcut to get the last move made on this board
+     * @returns {Coordnate} - the coordinate of the last move made
+     */
+    public get lastMove(): Coordinate | undefined {
+        return this.moveHistory[this.moveHistory.length - 1];
+    }
+
+
+    /**
+     * Shortcut to set the last move... only used in a few weird levels, shouldn't normally be called
+     * @param {Coordinate} coordinate - the coordinate to set for the last move
+     */
+    public set lastMove(coordinate: Coordinate | undefined) {
+        if (coordinate !== undefined) {
+            this.moveHistory[this.moveHistory.length - 1] = coordinate;
+        }
+    }
+
+    /**
+     * Gets a hash of the current board that can be used to determine if the board
+     * state is unique, based on the history of moves made.
+     * @returns {string} a hash of this board state (used for AI)
+     */
+    public get boardHash(): string {
+        let hash = ""
+        for (const move of this.moveHistory) {
+            if (hash !== "") {
+                hash += "-";
+            }
+            hash += (move.y * this.width + move.x).toString();
+        }
+        return hash
+    }
+
     /** 
      * Place a tile on a particular coordinate on the board
      * @returns {boolean} true if placement succeeded, false otherwise
@@ -129,7 +164,7 @@ export class Board {
         this.toggleTurn();
 
         /** Update other stats */
-        this.lastMove = {x: x, y: y};
+        this.moveHistory.push({x: x, y: y})
         return true;
     }
 
@@ -150,6 +185,7 @@ export class Board {
         this.boardHidden = true;
         setTimeout(() => {
             logger.debug("Resetting the board");
+            this.moveHistory = new Array<Coordinate>();
             for (let i = 0; i < this.height; i++) {
                 for (let j = 0; j < this.width; j++) {
                     this.tiles[i][j].reset();
